@@ -18,7 +18,6 @@ abstract class _ShoppingCartStore with Store {
   @computed
   int get countItems => items.length;
 
-  // Hasta aquí
   @action
   void addItem(CartItemStore cartItem) {
     final itemAlreadyExist =

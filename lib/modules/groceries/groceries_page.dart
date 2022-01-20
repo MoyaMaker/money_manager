@@ -4,7 +4,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 import 'package:money_manager/modules/groceries/utils/math_double_utils.dart';
-import 'package:money_manager/modules/groceries/widgets/quantity_widget.dart';
 
 class GroceriesPage extends StatefulWidget {
   const GroceriesPage({Key? key}) : super(key: key);
@@ -17,7 +16,8 @@ class _GroceriesPageState extends State<GroceriesPage> {
   late ShoppingCartStore _shoppingCartStore;
   late GroceryListStore _groceryListStore;
 
-  final quantityController = <TextEditingController>[];
+  final priceController = TextEditingController();
+  final quantityController = TextEditingController(text: '1');
 
   @override
   Widget build(BuildContext context) {
@@ -63,19 +63,7 @@ class _GroceriesPageState extends State<GroceriesPage> {
         tooltip: 'Nuevo producto',
         onPressed: () => Navigator.pushNamed(context, 'groceries-new-product'),
       ),
-      body: Column(
-        children: [
-          const TextField(
-            decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search), hintText: 'Buscar'),
-          ),
-          Expanded(
-              child: SizedBox(
-                  width: double.infinity,
-                  height: 300.0,
-                  child: Observer(builder: (_) => gridItems()))),
-        ],
-      ),
+      body: Observer(builder: (_) => gridItems()),
     );
   }
 
@@ -85,17 +73,14 @@ class _GroceriesPageState extends State<GroceriesPage> {
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 300,
             crossAxisSpacing: 5.0,
-            childAspectRatio: 1,
+            childAspectRatio: 1.5,
             mainAxisSpacing: 5.0),
         itemBuilder: (ctx, index) {
-          quantityController.add(TextEditingController(text: '1.0'));
-          return itemWidget(
-              ctx, _groceryListStore.items[index], quantityController[index]);
+          return itemWidget(ctx, _groceryListStore.items[index]);
         });
   }
 
-  Widget itemWidget(BuildContext context, GroceryItemStore item,
-      TextEditingController textEditingController) {
+  Widget itemWidget(BuildContext context, GroceryItemStore item) {
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -107,47 +92,8 @@ class _GroceriesPageState extends State<GroceriesPage> {
             subtitle: Text(item.unitPriceFormatted,
                 style: const TextStyle(fontSize: 14.0, color: Colors.blueGrey)),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: QuantityWidget(
-                item: item,
-                quantity: stringToDouble(textEditingController.text),
-                textEditingController: textEditingController,
-                onSave: () {
-                  final quantity = stringToDouble(textEditingController.text);
-                  _shoppingCartStore
-                      .addItem(CartItemStore(item: item, quantity: quantity));
-                  textEditingController.text = quantity.toString();
-                  setState(() {});
-                  Navigator.pop(context);
-                },
-                onSubmitted: (String newValue) {
-                  final quantity = stringToDouble(newValue);
-                  _shoppingCartStore
-                      .addItem(CartItemStore(item: item, quantity: quantity));
-                  textEditingController.text = quantity.toString();
-                  setState(() {});
-                  Navigator.pop(context);
-                },
-                onAdd: () {
-                  double quantity = double.parse(textEditingController.text);
-                  quantity = roundDouble(quantity + 1);
-                  textEditingController.text = quantity.toString();
-                  setState(() {});
-                },
-                onRemove: () {
-                  double quantity = double.parse(textEditingController.text);
-                  if (quantity > 1) {
-                    quantity = roundDouble(quantity - 1);
-                    textEditingController.text = quantity.toString();
-                    setState(() {});
-                  }
-                }),
-          ),
           OutlinedButton.icon(
-              onPressed: () => _shoppingCartStore.addItem(CartItemStore(
-                  item: item,
-                  quantity: double.parse(textEditingController.text))),
+              onPressed: () => openForm(item),
               icon: const Icon(Icons.add),
               label: const Text('Agregar'))
         ],
@@ -155,11 +101,57 @@ class _GroceriesPageState extends State<GroceriesPage> {
     );
   }
 
-  Widget buttonQuantity({required Icon icon, required void Function() onTap}) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(20.0),
-      child: Container(padding: const EdgeInsets.all(10.0), child: icon),
-      onTap: onTap,
+  void openForm(GroceryItemStore item) {
+    priceController.text = item.unitPrice.toString();
+
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          contentPadding: const EdgeInsets.all(15.0),
+          children: [
+            Text(item.name,
+                style: const TextStyle(
+                    fontSize: 16.0, fontWeight: FontWeight.bold)),
+            TextField(
+              controller: priceController,
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
+              decoration:
+                  const InputDecoration(prefixIcon: Icon(Icons.attach_money)),
+            ),
+            TextField(
+              controller: quantityController,
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
+              autofocus: true,
+              decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.shopping_basket)),
+              onSubmitted: (String newValue) => addToShoppingCart(item),
+            ),
+            OutlinedButton.icon(
+                onPressed: () => addToShoppingCart(item),
+                icon: const Icon(Icons.add),
+                label: const Text('Agregar'))
+          ],
+        );
+      },
     );
+  }
+
+  void addToShoppingCart(GroceryItemStore item) {
+    final cartItem = CartItemStore(
+        item: GroceryItemStore(
+            id: item.id,
+            name: item.name,
+            unitPrice: stringToDouble(priceController.text)),
+        quantity: stringToDouble(quantityController.text));
+
+    _shoppingCartStore.addItem(cartItem);
+
+    Navigator.pop(context);
+
+    // Reset `quantityController`
+    quantityController.text = '1';
   }
 }

@@ -33,10 +33,14 @@ class GroceriesNewProductPage extends StatelessWidget {
             child: Column(children: [
               TextFormField(
                 controller: _productNameController,
+                textInputAction: TextInputAction.next,
+                autofocus: true,
+                textCapitalization: TextCapitalization.sentences,
                 decoration: const InputDecoration(label: Text('Producto')),
               ),
               TextFormField(
                 controller: _unitPriceController,
+                textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                     label: Text('Precio unitario'),
                     icon: Text(r'$',
@@ -45,6 +49,7 @@ class GroceriesNewProductPage extends StatelessWidget {
               ),
               TextFormField(
                 controller: _quantityController,
+                textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(label: Text('Cantidad')),
               ),
