@@ -31,23 +31,33 @@ class GroceriesNewProductPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(children: [
+              // Product name
               TextFormField(
                 controller: _productNameController,
+                textInputAction: TextInputAction.next,
+                autofocus: true,
+                textCapitalization: TextCapitalization.sentences,
                 decoration: const InputDecoration(label: Text('Producto')),
               ),
+              // Unit price
               TextFormField(
                 controller: _unitPriceController,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                     label: Text('Precio unitario'),
-                    icon: Text(r'$',
-                        style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold))),
+                    icon: Icon(Icons.attach_money)),
               ),
+              // Quantity
               TextFormField(
                 controller: _quantityController,
+                textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(label: Text('Cantidad')),
+                decoration: const InputDecoration(
+                    label: Text('Cantidad'), icon: Icon(Icons.shopping_basket)),
+                onFieldSubmitted: (String value) => onSave(context),
               ),
+              // Save button
               Container(
                 width: double.infinity,
                 height: 55.0,
