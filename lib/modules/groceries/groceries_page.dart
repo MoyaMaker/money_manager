@@ -117,22 +117,24 @@ class _GroceriesPageState extends State<GroceriesPage> {
               controller: priceController,
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
-              decoration:
-                  const InputDecoration(prefixIcon: Icon(Icons.attach_money)),
+              decoration: const InputDecoration(icon: Icon(Icons.attach_money)),
             ),
             TextField(
               controller: quantityController,
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.done,
               autofocus: true,
-              decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.shopping_basket)),
+              decoration:
+                  const InputDecoration(icon: Icon(Icons.shopping_basket)),
               onSubmitted: (String newValue) => addToShoppingCart(item),
             ),
-            OutlinedButton.icon(
-                onPressed: () => addToShoppingCart(item),
-                icon: const Icon(Icons.add),
-                label: const Text('Agregar'))
+            Container(
+              margin: const EdgeInsets.only(top: 15.0),
+              child: OutlinedButton.icon(
+                  onPressed: () => addToShoppingCart(item),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Agregar')),
+            )
           ],
         );
       },

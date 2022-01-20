@@ -43,9 +43,7 @@ class GroceriesNewProductPage extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                     label: Text('Precio unitario'),
-                    icon: Text(r'$',
-                        style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold))),
+                    icon: Icon(Icons.attach_money)),
               ),
               TextFormField(
                 controller: _quantityController,

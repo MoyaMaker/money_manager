@@ -1,6 +1,8 @@
 # money_manager
 
-A new Flutter project.
+The idea of the app is have a record of bank accounts, wallet, credit card, services, and grocery app.
+
+For now, only works for groceries app, in the future I want to add the all stuff
 
 ## Getting Started
 
