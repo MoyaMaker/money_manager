@@ -18,6 +18,18 @@ abstract class _ShoppingCartStore with Store {
   @computed
   int get countItems => items.length;
 
+  @computed
+  String get total {
+    double subtotal = 0.0;
+
+    for (var item in items) {
+      subtotal += item.price;
+    }
+
+    return NumberFormat.currency(locale: 'es_MX', symbol: r'$')
+        .format(subtotal);
+  }
+
   @action
   void addItem(CartItemStore cartItem) {
     final itemAlreadyExist =
@@ -26,6 +38,7 @@ abstract class _ShoppingCartStore with Store {
     if (itemAlreadyExist.isEmpty) {
       items.add(cartItem);
     } else {
+      itemAlreadyExist.first.item.unitPrice = cartItem.item.unitPrice;
       itemAlreadyExist.first.quantity = cartItem.quantity;
     }
   }
@@ -46,7 +59,10 @@ abstract class _CartItemStore with Store {
   double quantity;
 
   @computed
-  String get price {
+  double get price => item.unitPrice * quantity;
+
+  @computed
+  String get priceFormatted {
     final priceDouble = item.unitPrice * quantity;
     return NumberFormat.currency(locale: 'es_MX', symbol: r'$')
         .format(priceDouble);

@@ -23,6 +23,12 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
       (_$countItemsComputed ??= Computed<int>(() => super.countItems,
               name: '_ShoppingCartStore.countItems'))
           .value;
+  Computed<String>? _$totalComputed;
+
+  @override
+  String get total => (_$totalComputed ??=
+          Computed<String>(() => super.total, name: '_ShoppingCartStore.total'))
+      .value;
 
   final _$itemsAtom = Atom(name: '_ShoppingCartStore.items');
 
@@ -69,18 +75,26 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     return '''
 items: ${items},
 hasItems: ${hasItems},
-countItems: ${countItems}
+countItems: ${countItems},
+total: ${total}
     ''';
   }
 }
 
 mixin _$CartItemStore on _CartItemStore, Store {
-  Computed<String>? _$priceComputed;
+  Computed<double>? _$priceComputed;
 
   @override
-  String get price => (_$priceComputed ??=
-          Computed<String>(() => super.price, name: '_CartItemStore.price'))
+  double get price => (_$priceComputed ??=
+          Computed<double>(() => super.price, name: '_CartItemStore.price'))
       .value;
+  Computed<String>? _$priceFormattedComputed;
+
+  @override
+  String get priceFormatted =>
+      (_$priceFormattedComputed ??= Computed<String>(() => super.priceFormatted,
+              name: '_CartItemStore.priceFormatted'))
+          .value;
 
   final _$itemAtom = Atom(name: '_CartItemStore.item');
 
@@ -153,7 +167,8 @@ mixin _$CartItemStore on _CartItemStore, Store {
     return '''
 item: ${item},
 quantity: ${quantity},
-price: ${price}
+price: ${price},
+priceFormatted: ${priceFormatted}
     ''';
   }
 }

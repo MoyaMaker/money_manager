@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager/modules/groceries/widgets/form_cart_item_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
-import 'package:money_manager/modules/groceries/utils/math_double_utils.dart';
 
-class GroceriesPage extends StatefulWidget {
+class GroceriesPage extends StatelessWidget {
   const GroceriesPage({Key? key}) : super(key: key);
 
-  @override
-  State<GroceriesPage> createState() => _GroceriesPageState();
-}
-
-class _GroceriesPageState extends State<GroceriesPage> {
-  late ShoppingCartStore _shoppingCartStore;
-  late GroceryListStore _groceryListStore;
-
-  final priceController = TextEditingController();
-  final quantityController = TextEditingController(text: '1');
+  static late ShoppingCartStore _shoppingCartStore;
+  static late GroceryListStore _groceryListStore;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +25,7 @@ class _GroceriesPageState extends State<GroceriesPage> {
                 Navigator.pushNamed(context, 'groceries-shopping-cart'),
             child: Stack(alignment: Alignment.center, children: [
               const Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(10.0),
                 child: Icon(Icons.shopping_cart, size: 24.0),
               ),
               Positioned(
@@ -73,8 +65,9 @@ class _GroceriesPageState extends State<GroceriesPage> {
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 300,
             crossAxisSpacing: 5.0,
-            childAspectRatio: 1.5,
+            childAspectRatio: 1.4,
             mainAxisSpacing: 5.0),
+        padding: const EdgeInsets.all(10.0),
         itemBuilder: (ctx, index) {
           return itemWidget(ctx, _groceryListStore.items[index]);
         });
@@ -93,67 +86,22 @@ class _GroceriesPageState extends State<GroceriesPage> {
                 style: const TextStyle(fontSize: 14.0, color: Colors.blueGrey)),
           ),
           OutlinedButton.icon(
-              onPressed: () => openForm(item),
               icon: const Icon(Icons.add),
-              label: const Text('Agregar'))
+              label: const Text('Agregar'),
+              onPressed: () => showDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return FormCartItem(
+                          item: item,
+                          onSave: (CartItemStore cartItem) {
+                            _shoppingCartStore.addItem(cartItem);
+
+                            Navigator.pop(context);
+                          });
+                    },
+                  ))
         ],
       ),
     );
-  }
-
-  void openForm(GroceryItemStore item) {
-    priceController.text = item.unitPrice.toString();
-
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          contentPadding: const EdgeInsets.all(15.0),
-          children: [
-            Text(item.name,
-                style: const TextStyle(
-                    fontSize: 16.0, fontWeight: FontWeight.bold)),
-            TextField(
-              controller: priceController,
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(icon: Icon(Icons.attach_money)),
-            ),
-            TextField(
-              controller: quantityController,
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.done,
-              autofocus: true,
-              decoration:
-                  const InputDecoration(icon: Icon(Icons.shopping_basket)),
-              onSubmitted: (String newValue) => addToShoppingCart(item),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 15.0),
-              child: OutlinedButton.icon(
-                  onPressed: () => addToShoppingCart(item),
-                  icon: const Icon(Icons.add),
-                  label: const Text('Agregar')),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  void addToShoppingCart(GroceryItemStore item) {
-    final cartItem = CartItemStore(
-        item: GroceryItemStore(
-            id: item.id,
-            name: item.name,
-            unitPrice: stringToDouble(priceController.text)),
-        quantity: stringToDouble(quantityController.text));
-
-    _shoppingCartStore.addItem(cartItem);
-
-    Navigator.pop(context);
-
-    // Reset `quantityController`
-    quantityController.text = '1';
   }
 }
