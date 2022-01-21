@@ -58,14 +58,48 @@ abstract class _CartItemStore with Store {
   @observable
   double quantity;
 
+  @observable
+  bool showDetails = false;
+
+  @observable
+  Promotions? promotion = Promotions.notSelected;
+
+  @observable
+  double? discount;
+
   @computed
-  double get price => item.unitPrice * quantity;
+  double get price {
+    final _price = item.unitPrice * quantity;
+    switch (promotion) {
+      case Promotions.percentage:
+        if (discount == null) return _price;
+
+        final percentageDiscount = discount! / 100;
+
+        final moneyDiscount = _price * percentageDiscount;
+
+        return _price - moneyDiscount;
+      case Promotions.quantity4UniquePrice:
+        if (discount == null) return _price;
+        return discount!;
+      case Promotions.points:
+        if (discount == null) return _price;
+        return _price - discount!;
+      case Promotions.notSelected:
+      default:
+        return _price;
+    }
+  }
+
+  @computed
+  String get basePriceFormatted {
+    final _price = item.unitPrice * quantity;
+    return NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(_price);
+  }
 
   @computed
   String get priceFormatted {
-    final priceDouble = item.unitPrice * quantity;
-    return NumberFormat.currency(locale: 'es_MX', symbol: r'$')
-        .format(priceDouble);
+    return NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(price);
   }
 
   @action
@@ -78,6 +112,45 @@ abstract class _CartItemStore with Store {
   void remove() {
     if (quantity > 1) {
       quantity = roundDouble(quantity - 1);
+    }
+  }
+
+  @action
+  void setShowDetails(bool value) => showDetails = value;
+
+  @action
+  void setPromotion(Promotions? value) => promotion = value;
+
+  @action
+  void setDiscount(double? value) => discount = value;
+}
+
+enum Promotions { notSelected, quantity4UniquePrice, percentage, points }
+
+extension PromotionExtension on Promotions {
+  String get value {
+    switch (this) {
+      case Promotions.points:
+        return 'Pago con puntos';
+      case Promotions.quantity4UniquePrice:
+        return r'x$$';
+      case Promotions.percentage:
+        return '%';
+      case Promotions.notSelected:
+      default:
+        return 'No seleccionado';
+    }
+  }
+
+  bool get showTextField {
+    switch (this) {
+      case Promotions.quantity4UniquePrice:
+      case Promotions.percentage:
+      case Promotions.points:
+        return true;
+      case Promotions.notSelected:
+      default:
+        return false;
     }
   }
 }

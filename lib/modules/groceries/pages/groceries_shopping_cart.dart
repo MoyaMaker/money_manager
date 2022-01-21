@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager/modules/groceries/widgets/cart_item_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
-import 'package:money_manager/modules/groceries/widgets/form_cart_item_widget.dart';
 
 class GroceriesShoppingCartPage extends StatelessWidget {
   const GroceriesShoppingCartPage({Key? key}) : super(key: key);
@@ -42,93 +42,15 @@ class GroceriesShoppingCartPage extends StatelessWidget {
   }
 
   Widget cartItem(BuildContext context, CartItemStore cartItem) {
-    return Observer(
-      builder: (_) => Dismissible(
+    return CartItem(
         key: Key(cartItem.item.id),
-        direction: DismissDirection.endToStart,
-        background: Container(
-          padding: const EdgeInsets.all(15.0),
-          color: Colors.red,
-          alignment: Alignment.centerRight,
-          child: const Icon(Icons.delete, size: 40.0, color: Colors.white),
-        ),
+        cartItem: cartItem,
         onDismissed: (direction) => _shoppingCartStore.removeItem(cartItem),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Name
-                    Text(cartItem.item.name,
-                        style: const TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold)),
-                    // Unit price
-                    Text(cartItem.item.unitPriceFormatted,
-                        style:
-                            TextStyle(fontSize: 13.0, color: Colors.grey[600])),
-                    // Subtotal Price
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(cartItem.priceFormatted,
-                          style: const TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black)),
-                    ),
-                  ],
-                ),
-              ),
+        onSave: (CartItemStore cartItem) {
+          _shoppingCartStore.addItem(cartItem);
 
-              // Quantity
-              Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    Text('Cantidad',
-                        style:
-                            TextStyle(fontSize: 13.0, color: Colors.grey[600])),
-                    Container(
-                        width: 70.0,
-                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                        padding: const EdgeInsets.all(5.0),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(15.0)),
-                        child: Text(cartItem.quantity.toString(),
-                            style: const TextStyle(
-                                fontSize: 16.0, fontWeight: FontWeight.bold))),
-                  ],
-                ),
-              ),
-
-              // Edit button
-              IconButton(
-                  icon: const Icon(Icons.edit, color: Colors.blue),
-                  onPressed: () => showDialog<void>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return FormCartItem(
-                              item: cartItem.item,
-                              quantity: cartItem.quantity,
-                              onSave: (CartItemStore cartItem) {
-                                _shoppingCartStore.addItem(cartItem);
-
-                                Navigator.pop(context);
-                              });
-                        },
-                      ))
-            ],
-          ),
-        ),
-      ),
-    );
+          Navigator.pop(context);
+        });
   }
 
   Widget bottomSheetTotal() {
