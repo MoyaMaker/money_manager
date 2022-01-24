@@ -9,6 +9,14 @@ part of 'grocery_item_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$GroceryListStore on _GroceryListStore, Store {
+  Computed<List<GroceryItemStore>>? _$filteredItemsComputed;
+
+  @override
+  List<GroceryItemStore> get filteredItems => (_$filteredItemsComputed ??=
+          Computed<List<GroceryItemStore>>(() => super.filteredItems,
+              name: '_GroceryListStore.filteredItems'))
+      .value;
+
   final _$itemsAtom = Atom(name: '_GroceryListStore.items');
 
   @override
@@ -21,6 +29,21 @@ mixin _$GroceryListStore on _GroceryListStore, Store {
   set items(ObservableList<GroceryItemStore> value) {
     _$itemsAtom.reportWrite(value, super.items, () {
       super.items = value;
+    });
+  }
+
+  final _$searchQueryAtom = Atom(name: '_GroceryListStore.searchQuery');
+
+  @override
+  String get searchQuery {
+    _$searchQueryAtom.reportRead();
+    return super.searchQuery;
+  }
+
+  @override
+  set searchQuery(String value) {
+    _$searchQueryAtom.reportWrite(value, super.searchQuery, () {
+      super.searchQuery = value;
     });
   }
 
@@ -50,9 +73,22 @@ mixin _$GroceryListStore on _GroceryListStore, Store {
   }
 
   @override
+  void setSearchQuery(String value) {
+    final _$actionInfo = _$_GroceryListStoreActionController.startAction(
+        name: '_GroceryListStore.setSearchQuery');
+    try {
+      return super.setSearchQuery(value);
+    } finally {
+      _$_GroceryListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-items: ${items}
+items: ${items},
+searchQuery: ${searchQuery},
+filteredItems: ${filteredItems}
     ''';
   }
 }
