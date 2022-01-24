@@ -23,6 +23,20 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
       (_$countItemsComputed ??= Computed<int>(() => super.countItems,
               name: '_ShoppingCartStore.countItems'))
           .value;
+  Computed<String>? _$subtotalComputed;
+
+  @override
+  String get subtotal =>
+      (_$subtotalComputed ??= Computed<String>(() => super.subtotal,
+              name: '_ShoppingCartStore.subtotal'))
+          .value;
+  Computed<String>? _$discountComputed;
+
+  @override
+  String get discount =>
+      (_$discountComputed ??= Computed<String>(() => super.discount,
+              name: '_ShoppingCartStore.discount'))
+          .value;
   Computed<String>? _$totalComputed;
 
   @override
@@ -76,32 +90,55 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
 items: ${items},
 hasItems: ${hasItems},
 countItems: ${countItems},
+subtotal: ${subtotal},
+discount: ${discount},
 total: ${total}
     ''';
   }
 }
 
 mixin _$CartItemStore on _CartItemStore, Store {
-  Computed<double>? _$priceComputed;
+  Computed<double>? _$totalComputed;
 
   @override
-  double get price => (_$priceComputed ??=
-          Computed<double>(() => super.price, name: '_CartItemStore.price'))
+  double get total => (_$totalComputed ??=
+          Computed<double>(() => super.total, name: '_CartItemStore.total'))
       .value;
-  Computed<String>? _$basePriceFormattedComputed;
+  Computed<double>? _$subtotalComputed;
 
   @override
-  String get basePriceFormatted => (_$basePriceFormattedComputed ??=
-          Computed<String>(() => super.basePriceFormatted,
-              name: '_CartItemStore.basePriceFormatted'))
-      .value;
-  Computed<String>? _$priceFormattedComputed;
-
-  @override
-  String get priceFormatted =>
-      (_$priceFormattedComputed ??= Computed<String>(() => super.priceFormatted,
-              name: '_CartItemStore.priceFormatted'))
+  double get subtotal =>
+      (_$subtotalComputed ??= Computed<double>(() => super.subtotal,
+              name: '_CartItemStore.subtotal'))
           .value;
+  Computed<double>? _$discountQuantityComputed;
+
+  @override
+  double get discountQuantity => (_$discountQuantityComputed ??=
+          Computed<double>(() => super.discountQuantity,
+              name: '_CartItemStore.discountQuantity'))
+      .value;
+  Computed<String>? _$subtotalFormattedComputed;
+
+  @override
+  String get subtotalFormatted => (_$subtotalFormattedComputed ??=
+          Computed<String>(() => super.subtotalFormatted,
+              name: '_CartItemStore.subtotalFormatted'))
+      .value;
+  Computed<String>? _$totalFormattedComputed;
+
+  @override
+  String get totalFormatted =>
+      (_$totalFormattedComputed ??= Computed<String>(() => super.totalFormatted,
+              name: '_CartItemStore.totalFormatted'))
+          .value;
+  Computed<bool>? _$basePriceWhenHasDiscountComputed;
+
+  @override
+  bool get basePriceWhenHasDiscount => (_$basePriceWhenHasDiscountComputed ??=
+          Computed<bool>(() => super.basePriceWhenHasDiscount,
+              name: '_CartItemStore.basePriceWhenHasDiscount'))
+      .value;
 
   final _$itemAtom = Atom(name: '_CartItemStore.item');
 
@@ -182,11 +219,11 @@ mixin _$CartItemStore on _CartItemStore, Store {
       ActionController(name: '_CartItemStore');
 
   @override
-  void setValue(double newValue) {
+  void setQuantity(double newValue) {
     final _$actionInfo = _$_CartItemStoreActionController.startAction(
-        name: '_CartItemStore.setValue');
+        name: '_CartItemStore.setQuantity');
     try {
-      return super.setValue(newValue);
+      return super.setQuantity(newValue);
     } finally {
       _$_CartItemStoreActionController.endAction(_$actionInfo);
     }
@@ -248,6 +285,17 @@ mixin _$CartItemStore on _CartItemStore, Store {
   }
 
   @override
+  void removeDiscount() {
+    final _$actionInfo = _$_CartItemStoreActionController.startAction(
+        name: '_CartItemStore.removeDiscount');
+    try {
+      return super.removeDiscount();
+    } finally {
+      _$_CartItemStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 item: ${item},
@@ -255,9 +303,12 @@ quantity: ${quantity},
 showDetails: ${showDetails},
 promotion: ${promotion},
 discount: ${discount},
-price: ${price},
-basePriceFormatted: ${basePriceFormatted},
-priceFormatted: ${priceFormatted}
+total: ${total},
+subtotal: ${subtotal},
+discountQuantity: ${discountQuantity},
+subtotalFormatted: ${subtotalFormatted},
+totalFormatted: ${totalFormatted},
+basePriceWhenHasDiscount: ${basePriceWhenHasDiscount}
     ''';
   }
 }

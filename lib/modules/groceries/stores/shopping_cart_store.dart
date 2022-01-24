@@ -19,11 +19,35 @@ abstract class _ShoppingCartStore with Store {
   int get countItems => items.length;
 
   @computed
+  String get subtotal {
+    double subtotal = 0.0;
+
+    for (var item in items) {
+      subtotal += item.subtotal;
+    }
+
+    return NumberFormat.currency(locale: 'es_MX', symbol: r'$')
+        .format(subtotal);
+  }
+
+  @computed
+  String get discount {
+    double discount = 0.0;
+
+    for (var item in items) {
+      discount += item.discountQuantity;
+    }
+
+    return NumberFormat.currency(locale: 'es_MX', symbol: r'$')
+        .format(discount);
+  }
+
+  @computed
   String get total {
     double subtotal = 0.0;
 
     for (var item in items) {
-      subtotal += item.price;
+      subtotal += item.total;
     }
 
     return NumberFormat.currency(locale: 'es_MX', symbol: r'$')
@@ -58,52 +82,85 @@ abstract class _CartItemStore with Store {
   @observable
   double quantity;
 
+  /// Displays discount container
+  /// or any other detail in the cart item box
   @observable
   bool showDetails = false;
 
+  /// Select promotion type
   @observable
   Promotions? promotion = Promotions.notSelected;
 
+  /// Input discount
   @observable
   double? discount;
 
   @computed
-  double get price {
-    final _price = item.unitPrice * quantity;
+  double get total {
+    if (promotion!.showTextField && discount == null) {
+      return subtotal;
+    }
+
     switch (promotion) {
       case Promotions.percentage:
-        if (discount == null) return _price;
-
         final percentageDiscount = discount! / 100;
 
-        final moneyDiscount = _price * percentageDiscount;
+        final moneyDiscount = subtotal * percentageDiscount;
 
-        return _price - moneyDiscount;
+        return subtotal - moneyDiscount;
       case Promotions.quantity4UniquePrice:
-        if (discount == null) return _price;
         return discount!;
       case Promotions.points:
-        if (discount == null) return _price;
-        return _price - discount!;
+        return subtotal - discount!;
+      // TODO: Check if this should add normal price when the quantity is over 2
+      case Promotions.p2x1:
+        return item.unitPrice;
+      // TODO: Check if this should add normal price when the quantity is over 3
+      case Promotions.p3x2:
+        return item.unitPrice * 2;
+      // TODO: Check if this should add normal price when the quantity is over 4
+      case Promotions.p4x3:
+        return item.unitPrice * 3;
+      // TODO: Check if this should add normal price when the quantity is over 2
+      case Promotions.q1x70percentage:
+        final secondItem = item.unitPrice * 0.7;
+        final secondItemPrice = item.unitPrice - secondItem;
+
+        return item.unitPrice + secondItemPrice;
+      // TODO: Check if this should add normal price when the quantity is over 2
+      case Promotions.q1AndHalf:
+        final secondItem = item.unitPrice * 0.5;
+        final secondItemPrice = item.unitPrice - secondItem;
+
+        return item.unitPrice + secondItemPrice;
       case Promotions.notSelected:
       default:
-        return _price;
+        return subtotal;
     }
   }
 
   @computed
-  String get basePriceFormatted {
-    final _price = item.unitPrice * quantity;
-    return NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(_price);
-  }
+  double get subtotal => item.unitPrice * quantity;
 
   @computed
-  String get priceFormatted {
-    return NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(price);
-  }
+  double get discountQuantity => subtotal - total;
+
+  @computed
+  String get subtotalFormatted =>
+      NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(subtotal);
+
+  @computed
+  String get totalFormatted =>
+      NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(total);
+
+  @computed
+  bool get basePriceWhenHasDiscount =>
+      promotion != null &&
+      promotion! != Promotions.notSelected &&
+      discount != null;
 
   @action
-  void setValue(double newValue) => quantity = roundDouble(newValue);
+  void setQuantity(double newValue) => quantity = roundDouble(newValue);
 
   @action
   void add() => quantity = roundDouble(quantity + 1);
@@ -123,9 +180,25 @@ abstract class _CartItemStore with Store {
 
   @action
   void setDiscount(double? value) => discount = value;
+
+  @action
+  void removeDiscount() {
+    promotion = Promotions.notSelected;
+    discount = null;
+  }
 }
 
-enum Promotions { notSelected, quantity4UniquePrice, percentage, points }
+enum Promotions {
+  notSelected,
+  quantity4UniquePrice,
+  percentage,
+  points,
+  p2x1,
+  p3x2,
+  p4x3,
+  q1x70percentage,
+  q1AndHalf
+}
 
 extension PromotionExtension on Promotions {
   String get value {
@@ -136,6 +209,16 @@ extension PromotionExtension on Promotions {
         return r'x$$';
       case Promotions.percentage:
         return '%';
+      case Promotions.p2x1:
+        return '2x1';
+      case Promotions.p3x2:
+        return '3x2';
+      case Promotions.p4x3:
+        return '4x3';
+      case Promotions.q1x70percentage:
+        return '1 y 70% precio';
+      case Promotions.q1AndHalf:
+        return '1 y 1/2 precio';
       case Promotions.notSelected:
       default:
         return 'No seleccionado';

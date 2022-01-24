@@ -54,28 +54,67 @@ class GroceriesShoppingCartPage extends StatelessWidget {
   }
 
   Widget bottomSheetTotal() {
+    const subtotalStyles =
+        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, height: 1.25);
+
+    const totalStyles = TextStyle(
+        fontSize: 20.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        height: 1.25);
+
     return InkWell(
       onTap: () {},
-      child: Container(
-        padding: const EdgeInsets.all(15.0),
-        color: Colors.blue,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Total',
-                style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
-            Observer(
-              builder: (_) => Text(_shoppingCartStore.total,
-                  style: const TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white)),
-            )
-          ],
-        ),
+      child: Column(
+        children: [
+          const Divider(
+            height: 0.0,
+            indent: 0.0,
+            thickness: 0.0,
+          ),
+
+          // Subtotal
+          // Discount
+          Observer(
+            builder: (_) => Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Subtotal', style: subtotalStyles),
+                      Text(_shoppingCartStore.subtotal, style: subtotalStyles),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Descuento', style: subtotalStyles),
+                      Text(_shoppingCartStore.discount, style: subtotalStyles),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Total
+          Container(
+            padding: const EdgeInsets.all(15.0),
+            color: Colors.blue,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Total', style: totalStyles),
+                Observer(
+                  builder: (_) =>
+                      Text(_shoppingCartStore.total, style: totalStyles),
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

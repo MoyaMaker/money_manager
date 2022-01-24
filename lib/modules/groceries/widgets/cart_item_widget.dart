@@ -53,16 +53,16 @@ class _CartItemState extends State<CartItem> {
         child: const Icon(Icons.delete, size: 40.0, color: Colors.white),
       ),
       onDismissed: widget.onDismissed,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            Observer(
-              builder: (_) => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
+      child: Column(
+        children: [
+          Observer(
+            builder: (_) => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,13 +80,13 @@ class _CartItemState extends State<CartItem> {
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Row(
                             children: [
+                              // Show when has discount
                               Visibility(
-                                visible: widget.cartItem.promotion != null &&
-                                    widget.cartItem.discount != null,
+                                visible:
+                                    widget.cartItem.basePriceWhenHasDiscount,
                                 child: Container(
                                   margin: const EdgeInsets.only(right: 5.0),
-                                  child: Text(
-                                      widget.cartItem.basePriceFormatted,
+                                  child: Text(widget.cartItem.subtotalFormatted,
                                       style: const TextStyle(
                                           decoration:
                                               TextDecoration.lineThrough,
@@ -95,7 +95,8 @@ class _CartItemState extends State<CartItem> {
                                           color: Colors.black)),
                                 ),
                               ),
-                              Text(widget.cartItem.priceFormatted,
+                              // Subtotal price
+                              Text(widget.cartItem.totalFormatted,
                                   style: const TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold,
@@ -106,60 +107,67 @@ class _CartItemState extends State<CartItem> {
                       ],
                     ),
                   ),
+                ),
 
-                  // Quantity
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: [
-                        Text('Cantidad',
-                            style: TextStyle(
-                                fontSize: 13.0, color: Colors.grey[600])),
-                        Container(
-                            width: 70.0,
-                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                            padding: const EdgeInsets.all(5.0),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(15.0)),
-                            child: Text(widget.cartItem.quantity.toString(),
-                                style: const TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold))),
-                      ],
-                    ),
+                // Quantity
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      Text('Cantidad',
+                          style: TextStyle(
+                              fontSize: 13.0, color: Colors.grey[600])),
+                      Container(
+                          width: 70.0,
+                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          padding: const EdgeInsets.all(5.0),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(15.0)),
+                          child: Text(widget.cartItem.quantity.toString(),
+                              style: const TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold))),
+                    ],
                   ),
+                ),
 
-                  // Edit button
-                  IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue),
-                      onPressed: () => showDialog<void>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return FormCartItem(
-                                  item: widget.cartItem.item,
-                                  quantity: widget.cartItem.quantity,
-                                  onSave: widget.onSave);
-                            },
-                          )),
+                // Edit button
+                IconButton(
+                    icon: const Icon(Icons.edit, color: Colors.blue),
+                    onPressed: () => showDialog<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return FormCartItem(
+                                item: widget.cartItem.item,
+                                quantity: widget.cartItem.quantity,
+                                onSave: widget.onSave);
+                          },
+                        )),
 
-                  // Add promotion
-                  IconButton(
-                      onPressed: () => widget.cartItem
-                          .setShowDetails(!widget.cartItem.showDetails),
-                      icon: widget.cartItem.showDetails
-                          ? const Icon(Icons.keyboard_arrow_up)
-                          : const Icon(Icons.keyboard_arrow_down))
-                ],
-              ),
+                // Show promotion container
+                IconButton(
+                    onPressed: () => widget.cartItem
+                        .setShowDetails(!widget.cartItem.showDetails),
+                    icon: widget.cartItem.showDetails
+                        ? const Icon(Icons.keyboard_arrow_up)
+                        : const Icon(Icons.keyboard_arrow_down))
+              ],
             ),
+          ),
 
-            // Promotion container
-            Observer(
-              builder: (_) => Visibility(
-                visible: widget.cartItem.showDetails,
-                child: Row(
+          // Promotion container
+          Observer(
+            builder: (_) => Visibility(
+              visible: widget.cartItem.showDetails,
+              child: Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration:
+                    const BoxDecoration(color: Color.fromRGBO(0, 0, 0, 0.1)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Title label
                     Container(
@@ -168,49 +176,69 @@ class _CartItemState extends State<CartItem> {
                           style: TextStyle(
                               fontSize: 16.0, fontWeight: FontWeight.w600)),
                     ),
-                    // Dropdown
-                    PromotionDropdown(
-                      initialValue: widget.cartItem.promotion,
-                      items: Promotions.values,
-                      onChanged: (value) {
-                        widget.cartItem.setPromotion(value);
+                    Row(
+                      children: [
+                        // Dropdown
+                        PromotionDropdown(
+                          initialValue: widget.cartItem.promotion,
+                          items: Promotions.values,
+                          onChanged: (value) {
+                            widget.cartItem.setPromotion(value);
 
-                        if (widget.cartItem.promotion!.showTextField) {
-                          _discountTextField.requestFocus();
-                        } else {
-                          _discountController.text = '';
-                        }
-                      },
+                            if (widget.cartItem.promotion!.showTextField) {
+                              _discountTextField.requestFocus();
+                            } else {
+                              _discountController.text = '';
+                            }
+                          },
+                        ),
+
+                        // Input discount
+                        SizedBox(
+                          width: 80.0,
+                          height: 32.0,
+                          child: Visibility(
+                            visible: widget.cartItem.promotion!.showTextField,
+                            child: TextField(
+                                controller: _discountController,
+                                focusNode: _discountTextField,
+                                keyboardType: TextInputType.number,
+                                onSubmitted: (value) {
+                                  final discount =
+                                      double.tryParse(_discountController.text);
+                                  widget.cartItem.setDiscount(discount);
+                                },
+                                decoration: const InputDecoration(
+                                    contentPadding: EdgeInsets.all(10.0),
+                                    isDense: true)),
+                          ),
+                        ),
+
+                        // Add discount
+                        IconButton(
+                            color: Colors.green,
+                            icon: const Icon(Icons.check),
+                            onPressed: () {
+                              final discount =
+                                  double.tryParse(_discountController.text);
+                              widget.cartItem.setDiscount(discount);
+                            }),
+                        // Delete discount
+                        IconButton(
+                            color: Colors.red,
+                            onPressed: () {
+                              _discountController.clear();
+                              widget.cartItem.removeDiscount();
+                            },
+                            icon: const Icon(Icons.delete))
+                      ],
                     ),
-
-                    // Input discount
-                    SizedBox(
-                      width: 80.0,
-                      height: 32.0,
-                      child: TextField(
-                          controller: _discountController,
-                          focusNode: _discountTextField,
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.all(10.0),
-                              isDense: true)),
-                    ),
-
-                    // Add discount
-                    IconButton(
-                        color: Colors.blue,
-                        onPressed: () {
-                          final discount =
-                              double.tryParse(_discountController.text);
-                          widget.cartItem.setDiscount(discount);
-                        },
-                        icon: const Icon(Icons.add))
                   ],
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
