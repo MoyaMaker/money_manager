@@ -55,13 +55,41 @@ class GroceriesPage extends StatelessWidget {
         tooltip: 'Nuevo producto',
         onPressed: () => Navigator.pushNamed(context, 'groceries-new-product'),
       ),
-      body: Observer(builder: (_) => gridItems()),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: TextField(
+              onChanged: (String value) =>
+                  _groceryListStore.setSearchQuery(value),
+              decoration: const InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+                  hintText: 'Buscar',
+                  icon: Icon(Icons.search)),
+            ),
+          ),
+          Expanded(
+              child: SizedBox(
+                  width: double.infinity,
+                  height: 100.0,
+                  child: Observer(builder: (_) => gridItems()))),
+        ],
+      ),
     );
   }
 
   Widget gridItems() {
+    final items = _groceryListStore.filteredItems;
+
+    if (items.isEmpty) {
+      return const Center(
+        child: Text('No hay elementos en lista'),
+      );
+    }
+
     return GridView.builder(
-        itemCount: _groceryListStore.items.length,
+        itemCount: items.length,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 300,
             crossAxisSpacing: 5.0,
@@ -69,7 +97,7 @@ class GroceriesPage extends StatelessWidget {
             mainAxisSpacing: 5.0),
         padding: const EdgeInsets.all(10.0),
         itemBuilder: (ctx, index) {
-          return itemWidget(ctx, _groceryListStore.items[index]);
+          return itemWidget(ctx, items[index]);
         });
   }
 

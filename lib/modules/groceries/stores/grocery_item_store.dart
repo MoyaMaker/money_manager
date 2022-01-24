@@ -13,11 +13,27 @@ abstract class _GroceryListStore with Store {
     GroceryItemStore(id: '3', name: 'Plátano', unitPrice: 23.0)
   ]);
 
+  @observable
+  String searchQuery = '';
+
+  @computed
+  List<GroceryItemStore> get filteredItems {
+    if (searchQuery.isEmpty) return items;
+
+    return items
+        .where((element) =>
+            element.name.toLowerCase().contains(searchQuery.toLowerCase()))
+        .toList();
+  }
+
   @action
   void add(GroceryItemStore item) => items.add(item);
 
   @action
   void remove(GroceryItemStore item) => items.remove(item);
+
+  @action
+  void setSearchQuery(String value) => searchQuery = value;
 }
 
 class GroceryItemStore = _GroceryItemStore with _$GroceryItemStore;
