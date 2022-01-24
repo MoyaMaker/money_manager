@@ -154,10 +154,18 @@ abstract class _CartItemStore with Store {
       NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(total);
 
   @computed
-  bool get basePriceWhenHasDiscount =>
-      promotion != null &&
-      promotion! != Promotions.notSelected &&
-      discount != null;
+  bool get basePriceWhenHasDiscount {
+    if (promotion! != Promotions.notSelected &&
+        promotion!.showTextField &&
+        discount != null) {
+      return true;
+    } else if (promotion! != Promotions.notSelected &&
+        !promotion!.showTextField) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   @action
   void setQuantity(double newValue) => quantity = roundDouble(newValue);

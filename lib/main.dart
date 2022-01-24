@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
         Provider<ShoppingCartStore>(create: (_) => ShoppingCartStore()),
       ],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
         title: 'Money Manager',
         theme: ThemeData(
           primarySwatch: Colors.blue,
