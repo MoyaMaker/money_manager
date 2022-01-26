@@ -112,31 +112,43 @@ abstract class _CartItemStore with Store {
         return discount!;
       case Promotions.points:
         return subtotal - discount!;
-      // TODO: Check if this should add normal price when the quantity is over 2
       case Promotions.p2x1:
-        return item.unitPrice;
-      // TODO: Check if this should add normal price when the quantity is over 3
+        return _calculatePromotion(quantity, item.unitPrice,
+            moduleQuantity: 2, promo: 0.5);
       case Promotions.p3x2:
-        return item.unitPrice * 2;
-      // TODO: Check if this should add normal price when the quantity is over 4
+        return _calculatePromotion(quantity, item.unitPrice,
+            moduleQuantity: 3, promo: 0.33);
       case Promotions.p4x3:
-        return item.unitPrice * 3;
-      // TODO: Check if this should add normal price when the quantity is over 2
+        return _calculatePromotion(quantity, item.unitPrice,
+            moduleQuantity: 4, promo: 0.25);
       case Promotions.q1x70percentage:
-        final secondItem = item.unitPrice * 0.7;
-        final secondItemPrice = item.unitPrice - secondItem;
-
-        return item.unitPrice + secondItemPrice;
-      // TODO: Check if this should add normal price when the quantity is over 2
+        return _calculatePromotion(quantity, item.unitPrice,
+            moduleQuantity: 1, promo: 0.7, applyModule: false);
       case Promotions.q1AndHalf:
-        final secondItem = item.unitPrice * 0.5;
-        final secondItemPrice = item.unitPrice - secondItem;
-
-        return item.unitPrice + secondItemPrice;
+        return _calculatePromotion(quantity, item.unitPrice,
+            moduleQuantity: 1, promo: 0.5, applyModule: false);
       case Promotions.notSelected:
       default:
         return subtotal;
     }
+  }
+
+  @action
+  double _calculatePromotion(double q, double uPrice,
+      {required int moduleQuantity,
+      required double promo,
+      bool applyModule = true}) {
+    final itemsWithoutPromo = applyModule ? q % moduleQuantity : moduleQuantity;
+    final itemPromoApply = q - itemsWithoutPromo;
+
+    final discount =
+        double.parse(((itemPromoApply * uPrice) * promo).toStringAsFixed(2));
+
+    final subtotal = q * uPrice;
+
+    final total = subtotal - discount;
+
+    return total;
   }
 
   @computed
