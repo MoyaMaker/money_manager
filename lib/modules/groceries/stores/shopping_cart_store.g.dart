@@ -219,6 +219,23 @@ mixin _$CartItemStore on _CartItemStore, Store {
       ActionController(name: '_CartItemStore');
 
   @override
+  double _calculatePromotion(double q, double uPrice,
+      {required int moduleQuantity,
+      required double promo,
+      bool applyModule = true}) {
+    final _$actionInfo = _$_CartItemStoreActionController.startAction(
+        name: '_CartItemStore._calculatePromotion');
+    try {
+      return super._calculatePromotion(q, uPrice,
+          moduleQuantity: moduleQuantity,
+          promo: promo,
+          applyModule: applyModule);
+    } finally {
+      _$_CartItemStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setQuantity(double newValue) {
     final _$actionInfo = _$_CartItemStoreActionController.startAction(
         name: '_CartItemStore.setQuantity');
