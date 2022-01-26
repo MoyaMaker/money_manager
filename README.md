@@ -22,3 +22,13 @@ samples, guidance on mobile development, and a full API reference.
 To update the files generated, example: `**.g.dart`
 
 Run this command: `flutter pub run build_runner build --delete-conflicting-outputs`
+
+## Flutter Launcher Icons
+
+Run the package
+```
+flutter pub get
+flutter pub run flutter_launcher_icons:main
+```
+
+[Package page](https://pub.dev/packages/flutter_launcher_icons)
