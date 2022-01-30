@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -5,6 +6,8 @@ import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 import 'package:money_manager/modules/groceries/widgets/form_cart_item_widget.dart';
 import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
+
+import 'widgets/bottom_navigation_bar_widget.dart';
 
 class GroceriesPage extends StatelessWidget {
   const GroceriesPage({Key? key}) : super(key: key);
@@ -18,54 +21,15 @@ class GroceriesPage extends StatelessWidget {
     _groceryListStore = Provider.of<GroceryListStore>(context, listen: false);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Despensa'),
-        actions: [
-          InkWell(
-            onTap: () =>
-                Navigator.pushNamed(context, 'groceries/shopping-cart'),
-            child: Stack(alignment: Alignment.center, children: [
-              const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Icon(Icons.shopping_cart, size: 24.0),
-              ),
-              Positioned(
-                  top: 5.0,
-                  right: 2.0,
-                  child: Observer(
-                    builder: (_) => Visibility(
-                      visible: _shoppingCartStore.hasItems,
-                      child: Container(
-                          width: 20.0,
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(3.0),
-                          decoration: const BoxDecoration(
-                              color: Colors.red,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15.0))),
-                          child: Text(_shoppingCartStore.countItems.toString(),
-                              style: const TextStyle(fontSize: 12.0))),
-                    ),
-                  ))
-            ]),
-          )
-        ],
+      appBar: const CupertinoNavigationBar(
+        middle: Text('Despensa'),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => Navigator.pushNamed(context, 'groceries/new-product'),
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // bottomNavigationBar: BottomAppBar(
-      //     shape: const CircularNotchedRectangle(),
-      //     child: Row(
-      //         mainAxisSize: MainAxisSize.max,
-      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //         children: [
-      //           IconButton(icon: const Icon(Icons.home), onPressed: () {}),
-      //           IconButton(
-      //               icon: const Icon(Icons.shopping_cart), onPressed: () {}),
-      //         ])),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: const GroceriesBottomNavigation(),
       body: Column(
         children: [
           Padding(

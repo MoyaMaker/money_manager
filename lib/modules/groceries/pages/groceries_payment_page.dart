@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +22,8 @@ class GroceriesPaymentPage extends StatelessWidget {
         TextEditingController(text: _shoppingCartStore.storeName);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pago'),
+      appBar: const CupertinoNavigationBar(
+        middle: Text('Pago'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),

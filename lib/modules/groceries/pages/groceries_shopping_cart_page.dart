@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 import 'package:money_manager/modules/groceries/widgets/cart_item_widget.dart';
@@ -15,7 +16,9 @@ class GroceriesShoppingCartPage extends StatelessWidget {
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Lista de compras')),
+      appBar: const CupertinoNavigationBar(
+        middle: Text('Lista de compras'),
+      ),
       body: Column(
         children: [
           Expanded(child: Observer(builder: (_) => listItems())),
