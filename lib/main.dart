@@ -8,6 +8,7 @@ import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart'
 import 'package:money_manager/modules/recipes/recipes_page.dart';
 import 'package:money_manager/modules/services/services_page.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,6 +29,15 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', ''),
+          Locale('es', ''),
+        ],
         initialRoute: 'groceries',
         routes: <String, Widget Function(BuildContext)>{
           '/': (_) => const HomePage(),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
+import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 
 import 'form_cart_item_widget.dart';
 
