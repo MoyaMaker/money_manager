@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -13,16 +14,14 @@ class GroceriesPaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _shoppingCartStore.initBuy();
-
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
 
     _storeNameController =
         TextEditingController(text: _shoppingCartStore.storeName);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pago'),
+      appBar: const CupertinoNavigationBar(
+        middle: Text('Pago'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -69,8 +68,9 @@ class GroceriesPaymentPage extends StatelessWidget {
                         ? () {
                             // TODO: Save this in store
                             _shoppingCartStore.cleanCart();
+                            _storeNameController.clear();
                             Navigator.pushNamedAndRemoveUntil(
-                                context, 'groceries', (route) => false);
+                                context, '/', (route) => false);
                           }
                         : null,
                     child: const Text('Guardar',

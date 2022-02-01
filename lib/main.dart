@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money_manager/home_page.dart';
 import 'package:money_manager/modules/accounts/accounts_page.dart';
 import 'package:money_manager/modules/expenses_control/expenses_control_page.dart';
 import 'package:money_manager/modules/groceries/routes/routes.dart';
@@ -38,9 +37,9 @@ class MyApp extends StatelessWidget {
           Locale('en', ''),
           Locale('es', ''),
         ],
-        initialRoute: 'groceries',
+        initialRoute: '/',
         routes: <String, Widget Function(BuildContext)>{
-          '/': (_) => const HomePage(),
+          // '/': (_) => const HomePage(),
           'expenses': (_) => const ExpensesControlPage(),
           'accounts': (_) => const AccountsPage(),
           'services': (_) => const ServicesPage(),

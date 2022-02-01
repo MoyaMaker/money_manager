@@ -122,17 +122,6 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
-  void initBuy() {
-    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
-        name: '_ShoppingCartStore.initBuy');
-    try {
-      return super.initBuy();
-    } finally {
-      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void setBuyDate(DateTime value) {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.setBuyDate');
