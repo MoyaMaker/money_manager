@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money_manager/home_page.dart';
 import 'package:money_manager/modules/accounts/accounts_page.dart';
 import 'package:money_manager/modules/expenses_control/expenses_control_page.dart';
 import 'package:money_manager/modules/groceries/routes/routes.dart';
