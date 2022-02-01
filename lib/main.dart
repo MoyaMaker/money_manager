@@ -38,9 +38,9 @@ class MyApp extends StatelessWidget {
           Locale('en', ''),
           Locale('es', ''),
         ],
-        initialRoute: 'groceries',
+        initialRoute: '/',
         routes: <String, Widget Function(BuildContext)>{
-          '/': (_) => const HomePage(),
+          // '/': (_) => const HomePage(),
           'expenses': (_) => const ExpensesControlPage(),
           'accounts': (_) => const AccountsPage(),
           'services': (_) => const ServicesPage(),

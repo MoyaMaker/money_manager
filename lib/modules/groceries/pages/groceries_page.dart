@@ -7,8 +7,6 @@ import 'package:money_manager/modules/groceries/widgets/form_cart_item_widget.da
 import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 
-import 'widgets/bottom_navigation_bar_widget.dart';
-
 class GroceriesPage extends StatelessWidget {
   const GroceriesPage({Key? key}) : super(key: key);
 
@@ -20,6 +18,8 @@ class GroceriesPage extends StatelessWidget {
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
     _groceryListStore = Provider.of<GroceryListStore>(context, listen: false);
 
+    final _searchTextController = TextEditingController();
+
     return Scaffold(
       appBar: const CupertinoNavigationBar(
         middle: Text('Despensa'),
@@ -28,22 +28,19 @@ class GroceriesPage extends StatelessWidget {
         child: const Icon(Icons.add),
         onPressed: () => Navigator.pushNamed(context, 'groceries/new-product'),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: const GroceriesBottomNavigation(),
       body: Column(
         children: [
+          // Search bar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: TextField(
+            padding: const EdgeInsets.all(8.0),
+            child: CupertinoSearchTextField(
               onChanged: (String value) =>
                   _groceryListStore.setSearchQuery(value),
-              decoration: const InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
-                  hintText: 'Buscar',
-                  icon: Icon(Icons.search)),
+              controller: _searchTextController,
+              placeholder: 'Buscar',
             ),
           ),
+          // Items list view
           Expanded(
               child: SizedBox(
                   width: double.infinity,

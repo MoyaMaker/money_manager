@@ -12,10 +12,10 @@ abstract class _ShoppingCartStore with Store {
   ObservableList<CartItemStore> items = ObservableList.of([]);
 
   @observable
-  late DateTime buyDate;
+  DateTime buyDate = DateTime.now();
 
   @observable
-  late String storeName;
+  String storeName = '';
 
   @computed
   bool get hasItems => items.isNotEmpty;
@@ -79,12 +79,6 @@ abstract class _ShoppingCartStore with Store {
   void removeItem(CartItemStore cartItem) => items.remove(cartItem);
 
   @action
-  void initBuy() {
-    setBuyDate(DateTime.now());
-    setStoreName('');
-  }
-
-  @action
   void setBuyDate(DateTime value) => buyDate = value;
 
   @action
@@ -93,5 +87,7 @@ abstract class _ShoppingCartStore with Store {
   @action
   void cleanCart() {
     items = items = ObservableList.of([]);
+    storeName = '';
+    buyDate = DateTime.now();
   }
 }

@@ -14,8 +14,6 @@ class GroceriesPaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _shoppingCartStore.initBuy();
-
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
 
     _storeNameController =
@@ -70,8 +68,9 @@ class GroceriesPaymentPage extends StatelessWidget {
                         ? () {
                             // TODO: Save this in store
                             _shoppingCartStore.cleanCart();
+                            _storeNameController.clear();
                             Navigator.pushNamedAndRemoveUntil(
-                                context, 'groceries', (route) => false);
+                                context, '/', (route) => false);
                           }
                         : null,
                     child: const Text('Guardar',
