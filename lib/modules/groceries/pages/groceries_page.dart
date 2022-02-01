@@ -63,9 +63,9 @@ class GroceriesPage extends StatelessWidget {
     return GridView.builder(
         itemCount: items.length,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 300,
+            maxCrossAxisExtent: 200,
+            childAspectRatio: 2.08,
             crossAxisSpacing: 5.0,
-            childAspectRatio: 1.4,
             mainAxisSpacing: 5.0),
         padding: const EdgeInsets.all(10.0),
         itemBuilder: (ctx, index) {
@@ -75,32 +75,34 @@ class GroceriesPage extends StatelessWidget {
 
   Widget itemWidget(BuildContext context, GroceryItemStore item) {
     return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ListTile(
-            title: Text(item.name,
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(8.0),
+        title: Text(item.name,
+            style: const TextStyle(
+                fontSize: 16.0, fontWeight: FontWeight.bold, height: 1.0)),
+        subtitle: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(item.unitPriceFormatted,
                 style: const TextStyle(
-                    fontSize: 16.0, fontWeight: FontWeight.bold)),
-            subtitle: Text(item.unitPriceFormatted,
-                style: const TextStyle(fontSize: 14.0, color: Colors.blueGrey)),
-          ),
-          OutlinedButton.icon(
-              icon: const Icon(Icons.add),
-              label: const Text('Agregar'),
-              onPressed: () => showDialog<void>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return FormCartItem(
-                          item: item,
-                          onSave: (CartItemStore cartItem) {
-                            _shoppingCartStore.addItem(cartItem);
+                    fontSize: 14.0, color: Colors.blueGrey, height: 1.25)),
+            OutlinedButton(
+                onPressed: () => showDialog<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return FormCartItem(
+                            item: item,
+                            onSave: (CartItemStore cartItem) {
+                              _shoppingCartStore.addItem(cartItem);
 
-                            Navigator.pop(context);
-                          });
-                    },
-                  ))
-        ],
+                              Navigator.pop(context);
+                            });
+                      },
+                    ),
+                child: const Icon(Icons.add_shopping_cart)),
+          ],
+        ),
       ),
     );
   }
