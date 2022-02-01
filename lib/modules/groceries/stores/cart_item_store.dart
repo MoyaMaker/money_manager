@@ -9,7 +9,11 @@ part 'cart_item_store.g.dart';
 class CartItemStore = _CartItemStore with _$CartItemStore;
 
 abstract class _CartItemStore with Store {
-  _CartItemStore({required this.item, this.quantity = 1.0});
+  _CartItemStore(
+      {required this.item,
+      this.quantity = 1.0,
+      this.promotion = Promotions.notSelected,
+      this.discount});
 
   @observable
   late GroceryItemStore item;
@@ -24,7 +28,7 @@ abstract class _CartItemStore with Store {
 
   /// Select promotion type
   @observable
-  Promotions? promotion = Promotions.notSelected;
+  Promotions? promotion;
 
   /// Input discount
   @observable
@@ -90,7 +94,8 @@ abstract class _CartItemStore with Store {
   double get subtotal => item.unitPrice * quantity;
 
   @computed
-  double get discountQuantity => subtotal - total;
+  double get discountQuantity =>
+      double.parse((subtotal - total).toStringAsFixed(2));
 
   @computed
   String get subtotalFormatted =>

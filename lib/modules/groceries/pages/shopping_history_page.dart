@@ -17,7 +17,8 @@ class GroceriesShoppingHistoryPage extends StatelessWidget {
                 title: Text('0${index + 1} diciembre 2021'),
                 subtitle: const Text('Soriana'),
                 trailing: const Icon(Icons.keyboard_arrow_right),
-                onTap: () {},
+                onTap: () =>
+                    Navigator.pushNamed(context, 'groceries/shopping-detail'),
               );
             }));
   }
