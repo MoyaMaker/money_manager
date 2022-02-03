@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
-import 'package:money_manager/modules/groceries/utils/math_double_utils.dart';
+import 'package:money_manager/utils/math_double_utils.dart';
 
 import 'grocery_item_store.dart';
 
