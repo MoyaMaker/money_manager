@@ -15,7 +15,13 @@ class GroceriesShoppingHistoryPage extends StatelessWidget {
             itemBuilder: (_, int index) {
               return ListTile(
                 title: Text('0${index + 1} diciembre 2021'),
-                subtitle: const Text('Soriana'),
+                subtitle: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text('Soriana'),
+                    Text(r'$234.95'),
+                  ],
+                ),
                 trailing: const Icon(Icons.keyboard_arrow_right),
                 onTap: () =>
                     Navigator.pushNamed(context, 'groceries/shopping-detail'),
