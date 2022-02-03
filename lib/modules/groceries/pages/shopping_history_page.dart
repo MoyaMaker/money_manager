@@ -17,11 +17,19 @@ class GroceriesShoppingHistoryPage extends StatelessWidget {
         appBar: const CupertinoNavigationBar(
           middle: Text('Historial de compras'),
         ),
-        body: ListView.builder(
-            itemCount: _shoppingHistoryStore.countItems,
-            itemBuilder: (_, int index) => Observer(
-                builder: (_) => historyItem(
-                    context, _shoppingHistoryStore.shopItems[index]))));
+        body: listItems(context));
+  }
+
+  Widget listItems(BuildContext context) {
+    if (!_shoppingHistoryStore.hasItems) {
+      return const Center(child: Text('No hay registros de compras'));
+    }
+
+    return ListView.builder(
+        itemCount: _shoppingHistoryStore.countItems,
+        itemBuilder: (_, int index) => Observer(
+            builder: (_) =>
+                historyItem(context, _shoppingHistoryStore.shopItems[index])));
   }
 
   Widget historyItem(BuildContext context, ShoppingCartStore cartItem) {

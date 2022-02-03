@@ -16,12 +16,12 @@ mixin _$ShoppingHistoryStore on _ShoppingHistoryStore, Store {
       (_$countItemsComputed ??= Computed<int>(() => super.countItems,
               name: '_ShoppingHistoryStore.countItems'))
           .value;
-  Computed<bool>? _$hasValuesComputed;
+  Computed<bool>? _$hasItemsComputed;
 
   @override
-  bool get hasValues =>
-      (_$hasValuesComputed ??= Computed<bool>(() => super.hasValues,
-              name: '_ShoppingHistoryStore.hasValues'))
+  bool get hasItems =>
+      (_$hasItemsComputed ??= Computed<bool>(() => super.hasItems,
+              name: '_ShoppingHistoryStore.hasItems'))
           .value;
 
   final _$shopItemsAtom = Atom(name: '_ShoppingHistoryStore.shopItems');
@@ -44,7 +44,7 @@ mixin _$ShoppingHistoryStore on _ShoppingHistoryStore, Store {
     return '''
 shopItems: ${shopItems},
 countItems: ${countItems},
-hasValues: ${hasValues}
+hasItems: ${hasItems}
     ''';
   }
 }

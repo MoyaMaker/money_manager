@@ -40,5 +40,5 @@ abstract class _ShoppingHistoryStore with Store {
   int get countItems => shopItems.length;
 
   @computed
-  bool get hasValues => shopItems.isNotEmpty;
+  bool get hasItems => shopItems.isNotEmpty;
 }
