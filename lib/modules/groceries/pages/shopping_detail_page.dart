@@ -22,36 +22,37 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
             // Store name
             Center(
               child: Text(shopItem.storeName,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      height: 1.25)),
+                      height: lineHeight(fontSize: 20.0, height: 22.0))),
             ),
+
             // Buy date
             Center(
                 child: Container(
-              margin: const EdgeInsets.only(bottom: 5.0),
+              margin: const EdgeInsets.only(bottom: 15.0),
               child: Text(shopItem.buyDateFormatted,
-                  style: const TextStyle(fontSize: 18.0, height: 1.25)),
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      height: lineHeight(fontSize: 18.0, height: 20.0))),
             )),
+
             // Table
-            Table(children: [
-              TableRow(
-                  decoration: const BoxDecoration(
-                      border: Border(top: BorderSide(), bottom: BorderSide())),
-                  children: [
-                    tableHeader('Cant.'),
-                    tableHeader('Artículo.'),
-                    tableHeader('P. unit.', TextAlign.right),
-                    tableHeader('Total.', TextAlign.right)
-                  ])
-            ]),
             Expanded(
               child: SingleChildScrollView(
                 child: Table(
                   children: [
-                    // ...List.generate(
-                    //     50, (index) => listItem(shopItem.items[0])),
+                    TableRow(
+                        decoration: const BoxDecoration(
+                            border: Border(
+                                top: BorderSide(), bottom: BorderSide())),
+                        children: [
+                          tableHeader('Cant.'),
+                          tableHeader('Artículo.'),
+                          tableHeader('P. unit.', TextAlign.right),
+                          tableHeader('Total.', TextAlign.right)
+                        ]),
                     ...shopItem.items
                         .map((element) => listItem(element))
                         .toList()
@@ -62,94 +63,33 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
 
             // Total
             Container(
-              margin: const EdgeInsets.only(bottom: 25.0),
+              margin: const EdgeInsets.only(bottom: 15.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   const Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                          'Subtotal:',
-                          style: TextStyle(
-                              fontSize: 16.0,
-                              height: lineHeight(fontSize: 16.0, height: 18.0)),
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          shopItem.subtotal,
-                          style: TextStyle(
-                              fontSize: 16.0,
-                              height: lineHeight(fontSize: 16.0, height: 18.0)),
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                          'Descuento:',
-                          style: TextStyle(
-                              color: const Color(0xFF0E6DFD),
-                              fontSize: 16.0,
-                              height: lineHeight(fontSize: 16.0, height: 18.0)),
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          '-' + shopItem.discount,
-                          style: TextStyle(
-                              color: const Color(0xFF0E6DFD),
-                              fontSize: 16.0,
-                              height: lineHeight(fontSize: 16.0, height: 18.0)),
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Discount
+                  bottomTotal('Subtotal:', shopItem.subtotal),
+                  // Subtotal
+                  bottomTotal('Descuento:', '-' + shopItem.discount,
+                      const Color(0xFF0E6DFD)),
                   const Divider(),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: Text('Total:',
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                                height:
-                                    lineHeight(fontSize: 16.0, height: 18.0)),
-                            textAlign: TextAlign.right),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(shopItem.total,
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                                height:
-                                    lineHeight(fontSize: 16.0, height: 18.0)),
-                            textAlign: TextAlign.right),
-                      ),
-                    ],
-                  ),
+                  // Total
+                  bottomTotal(
+                      'Total:', shopItem.total, Colors.black, FontWeight.bold),
                 ],
               ),
-            )
+            ),
+
+            // Back button
+            SizedBox(
+                width: double.infinity,
+                height: 45.0,
+                child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child:
+                        const Text('Volver', style: TextStyle(fontSize: 16.0))))
           ],
         ),
       ),
@@ -158,28 +98,24 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
 
   TableCell tableHeader(String title, [TextAlign align = TextAlign.center]) {
     return TableCell(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Text(title,
-                style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                    height: lineHeight(fontSize: 16.0, height: 18.0)),
-                textAlign: align),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Text(title,
+            style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w600,
+                height: lineHeight(fontSize: 16.0, height: 18.0)),
+            textAlign: align),
       ),
     );
   }
 
   TableRow listItem(CartItemStore cartItem) {
     final style = TextStyle(
-        fontSize: 14.0, height: lineHeight(fontSize: 14.0, height: 16.0));
+        fontSize: 16.0, height: lineHeight(fontSize: 16.0, height: 20.0));
     final promotionsStyle = TextStyle(
-        fontSize: 14.0,
-        height: lineHeight(fontSize: 14.0, height: 16.0),
+        fontSize: 16.0,
+        height: lineHeight(fontSize: 16.0, height: 20.0),
         color: const Color(0xFF0E6DFD));
 
     return TableRow(
@@ -215,6 +151,41 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
                     style: promotionsStyle, textAlign: TextAlign.right))
           ],
         )
+      ],
+    );
+  }
+
+  Widget bottomTotal(String text, String value,
+      [Color textColor = Colors.black,
+      FontWeight fontWeight = FontWeight.normal]) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Expanded(
+          flex: 3,
+          child: Text(
+            text,
+            style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: fontWeight,
+                color: textColor,
+                height: lineHeight(fontSize: 18.0, height: 20.0)),
+            textAlign: TextAlign.right,
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Text(
+            value,
+            style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: fontWeight,
+                color: textColor,
+                height: lineHeight(fontSize: 18.0, height: 20.0)),
+            textAlign: TextAlign.right,
+          ),
+        ),
       ],
     );
   }

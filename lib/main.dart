@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<GroceryListStore>(create: (_) => GroceryListStore()),
-        Provider<ShoppingCartStore>(create: (_) => ShoppingCartStore()),
+        Provider<ShoppingCartStore>(create: (_) => ShoppingCartStore())
       ],
       child: MaterialApp(
         title: 'Money Manager',
