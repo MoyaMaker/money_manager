@@ -82,8 +82,8 @@ class _CartItemState extends State<CartItem> {
                             children: [
                               // Show when has discount
                               Visibility(
-                                visible:
-                                    widget.cartItem.basePriceWhenHasDiscount,
+                                visible: widget
+                                    .cartItem.showBasePriceWhenHasDiscount,
                                 child: Container(
                                   margin: const EdgeInsets.only(right: 5.0),
                                   child: Text(widget.cartItem.subtotalFormatted,

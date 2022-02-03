@@ -30,7 +30,7 @@ class GroceriesShoppingCartPage extends StatelessWidget {
 
   Widget listItems() {
     if (!_shoppingCartStore.hasItems) {
-      return const Center(child: Text('No hay elementos en lista'));
+      return const Center(child: Text('No hay productos en carrito'));
     }
 
     return ListView.separated(

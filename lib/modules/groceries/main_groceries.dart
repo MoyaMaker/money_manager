@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:money_manager/modules/groceries/pages/groceries_page.dart';
-import 'package:money_manager/modules/groceries/pages/groceries_shopping_cart_page.dart';
+import 'package:money_manager/modules/groceries/pages/shopping_cart_page.dart';
+import 'package:money_manager/modules/groceries/pages/shopping_history_page.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 import 'package:provider/provider.dart';
 
@@ -57,22 +58,33 @@ class _MainGroceriesState extends State<MainGroceries> {
                       ? const Icon(Icons.home)
                       : const Icon(Icons.home_outlined),
                   label: 'Inicio'),
-              BottomNavigationBarItem(icon: _shoppingCart(), label: 'Carrito'),
+              BottomNavigationBarItem(icon: _shoppingCart(1), label: 'Carrito'),
+              BottomNavigationBarItem(
+                  icon: _activePage == 2
+                      ? const Icon(Icons.history)
+                      : const Icon(Icons.history_outlined),
+                  label: 'Historial'),
             ]),
         body: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
           onPageChanged: (value) => setState(() => _activePage = value),
-          children: const [GroceriesPage(), GroceriesShoppingCartPage()],
+          children: const [
+            GroceriesPage(),
+            GroceriesShoppingCartPage(),
+            GroceriesShoppingHistoryPage()
+          ],
         ),
       ),
     );
   }
 
-  Widget _shoppingCart() {
+  Widget _shoppingCart(int activeIndex) {
     return Stack(alignment: Alignment.center, children: [
       Icon(
-          _activePage == 1 ? Icons.shopping_cart : Icons.shopping_cart_outlined,
+          _activePage == activeIndex
+              ? Icons.shopping_cart
+              : Icons.shopping_cart_outlined,
           semanticLabel: 'Shopping cart'),
       Positioned(
           top: 0.0,

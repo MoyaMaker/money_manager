@@ -23,6 +23,13 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
       (_$countItemsComputed ??= Computed<int>(() => super.countItems,
               name: '_ShoppingCartStore.countItems'))
           .value;
+  Computed<String>? _$buyDateFormattedComputed;
+
+  @override
+  String get buyDateFormatted => (_$buyDateFormattedComputed ??=
+          Computed<String>(() => super.buyDateFormatted,
+              name: '_ShoppingCartStore.buyDateFormatted'))
+      .value;
   Computed<String>? _$subtotalComputed;
 
   @override
@@ -50,6 +57,21 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
       (_$canContinueBuyComputed ??= Computed<bool>(() => super.canContinueBuy,
               name: '_ShoppingCartStore.canContinueBuy'))
           .value;
+
+  final _$idAtom = Atom(name: '_ShoppingCartStore.id');
+
+  @override
+  String? get id {
+    _$idAtom.reportRead();
+    return super.id;
+  }
+
+  @override
+  set id(String? value) {
+    _$idAtom.reportWrite(value, super.id, () {
+      super.id = value;
+    });
+  }
 
   final _$itemsAtom = Atom(name: '_ShoppingCartStore.items');
 
@@ -157,11 +179,13 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   @override
   String toString() {
     return '''
+id: ${id},
 items: ${items},
 buyDate: ${buyDate},
 storeName: ${storeName},
 hasItems: ${hasItems},
 countItems: ${countItems},
+buyDateFormatted: ${buyDateFormatted},
 subtotal: ${subtotal},
 discount: ${discount},
 total: ${total},

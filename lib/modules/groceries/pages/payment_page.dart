@@ -66,9 +66,13 @@ class GroceriesPaymentPage extends StatelessWidget {
                         padding: const EdgeInsets.all(15.0)),
                     onPressed: _shoppingCartStore.canContinueBuy
                         ? () {
-                            // TODO: Save this in store
+                            // TODO: Save in local storage
+
+                            // Clear cart
                             _shoppingCartStore.cleanCart();
+                            // Clear inputs
                             _storeNameController.clear();
+
                             Navigator.pushNamedAndRemoveUntil(
                                 context, '/', (route) => false);
                           }

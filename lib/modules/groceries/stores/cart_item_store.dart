@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
-import 'package:money_manager/modules/groceries/utils/math_double_utils.dart';
+import 'package:money_manager/utils/math_double_utils.dart';
 
 import 'grocery_item_store.dart';
 
@@ -9,7 +9,11 @@ part 'cart_item_store.g.dart';
 class CartItemStore = _CartItemStore with _$CartItemStore;
 
 abstract class _CartItemStore with Store {
-  _CartItemStore({required this.item, this.quantity = 1.0});
+  _CartItemStore(
+      {required this.item,
+      this.quantity = 1.0,
+      this.promotion = Promotions.notSelected,
+      this.discount});
 
   @observable
   late GroceryItemStore item;
@@ -24,7 +28,7 @@ abstract class _CartItemStore with Store {
 
   /// Select promotion type
   @observable
-  Promotions? promotion = Promotions.notSelected;
+  Promotions? promotion;
 
   /// Input discount
   @observable
@@ -90,7 +94,13 @@ abstract class _CartItemStore with Store {
   double get subtotal => item.unitPrice * quantity;
 
   @computed
-  double get discountQuantity => subtotal - total;
+  double get discountQuantity =>
+      double.parse((subtotal - total).toStringAsFixed(2));
+
+  @computed
+  String get discountQuantityFormatted =>
+      NumberFormat.currency(locale: 'es_MX', symbol: r'$')
+          .format(subtotal - total);
 
   @computed
   String get subtotalFormatted =>
@@ -101,7 +111,7 @@ abstract class _CartItemStore with Store {
       NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(total);
 
   @computed
-  bool get basePriceWhenHasDiscount {
+  bool get showBasePriceWhenHasDiscount {
     if (promotion! != Promotions.notSelected &&
         promotion!.showTextField &&
         discount != null) {

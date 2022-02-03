@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
-import 'package:money_manager/modules/groceries/utils/math_double_utils.dart';
+import 'package:money_manager/utils/math_double_utils.dart';
 
 class FormCartItem extends StatelessWidget {
   final GroceryItemStore item;
