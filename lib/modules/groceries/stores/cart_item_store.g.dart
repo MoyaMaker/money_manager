@@ -29,6 +29,14 @@ mixin _$CartItemStore on _CartItemStore, Store {
           Computed<double>(() => super.discountQuantity,
               name: '_CartItemStore.discountQuantity'))
       .value;
+  Computed<String>? _$discountQuantityFormattedComputed;
+
+  @override
+  String get discountQuantityFormatted =>
+      (_$discountQuantityFormattedComputed ??= Computed<String>(
+              () => super.discountQuantityFormatted,
+              name: '_CartItemStore.discountQuantityFormatted'))
+          .value;
   Computed<String>? _$subtotalFormattedComputed;
 
   @override
@@ -43,13 +51,14 @@ mixin _$CartItemStore on _CartItemStore, Store {
       (_$totalFormattedComputed ??= Computed<String>(() => super.totalFormatted,
               name: '_CartItemStore.totalFormatted'))
           .value;
-  Computed<bool>? _$basePriceWhenHasDiscountComputed;
+  Computed<bool>? _$showBasePriceWhenHasDiscountComputed;
 
   @override
-  bool get basePriceWhenHasDiscount => (_$basePriceWhenHasDiscountComputed ??=
-          Computed<bool>(() => super.basePriceWhenHasDiscount,
-              name: '_CartItemStore.basePriceWhenHasDiscount'))
-      .value;
+  bool get showBasePriceWhenHasDiscount =>
+      (_$showBasePriceWhenHasDiscountComputed ??= Computed<bool>(
+              () => super.showBasePriceWhenHasDiscount,
+              name: '_CartItemStore.showBasePriceWhenHasDiscount'))
+          .value;
 
   final _$itemAtom = Atom(name: '_CartItemStore.item');
 
@@ -234,9 +243,10 @@ discount: ${discount},
 total: ${total},
 subtotal: ${subtotal},
 discountQuantity: ${discountQuantity},
+discountQuantityFormatted: ${discountQuantityFormatted},
 subtotalFormatted: ${subtotalFormatted},
 totalFormatted: ${totalFormatted},
-basePriceWhenHasDiscount: ${basePriceWhenHasDiscount}
+showBasePriceWhenHasDiscount: ${showBasePriceWhenHasDiscount}
     ''';
   }
 }

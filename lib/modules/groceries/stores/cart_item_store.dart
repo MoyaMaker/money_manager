@@ -98,6 +98,11 @@ abstract class _CartItemStore with Store {
       double.parse((subtotal - total).toStringAsFixed(2));
 
   @computed
+  String get discountQuantityFormatted =>
+      NumberFormat.currency(locale: 'es_MX', symbol: r'$')
+          .format(subtotal - total);
+
+  @computed
   String get subtotalFormatted =>
       NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(subtotal);
 
@@ -106,7 +111,7 @@ abstract class _CartItemStore with Store {
       NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(total);
 
   @computed
-  bool get basePriceWhenHasDiscount {
+  bool get showBasePriceWhenHasDiscount {
     if (promotion! != Promotions.notSelected &&
         promotion!.showTextField &&
         discount != null) {

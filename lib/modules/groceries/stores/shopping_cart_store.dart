@@ -8,20 +8,35 @@ part 'shopping_cart_store.g.dart';
 class ShoppingCartStore = _ShoppingCartStore with _$ShoppingCartStore;
 
 abstract class _ShoppingCartStore with Store {
-  @observable
-  ObservableList<CartItemStore> items = ObservableList.of([]);
+  _ShoppingCartStore(
+      {this.id,
+      ObservableList<CartItemStore>? items,
+      this.storeName = '',
+      DateTime? buyDate})
+      : buyDate = buyDate ?? DateTime.now(),
+        items = items ?? ObservableList<CartItemStore>.of([]);
 
   @observable
-  DateTime buyDate = DateTime.now();
+  String? id;
 
   @observable
-  String storeName = '';
+  ObservableList<CartItemStore> items;
+
+  @observable
+  DateTime buyDate;
+
+  @observable
+  String storeName;
 
   @computed
   bool get hasItems => items.isNotEmpty;
 
   @computed
   int get countItems => items.length;
+
+  @computed
+  String get buyDateFormatted =>
+      DateFormat('dd MMMM yyyy', 'es_MX').format(buyDate);
 
   @computed
   String get subtotal {

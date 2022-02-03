@@ -1,30 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
-import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
+import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
+import 'package:money_manager/utils/font_height.dart';
 
 class GroceriesShoppingDetailPage extends StatelessWidget {
-  const GroceriesShoppingDetailPage({Key? key}) : super(key: key);
-
-  static final gItems = [
-    GroceryItemStore(id: '1', name: 'Manzana', unitPrice: 15.0),
-    GroceryItemStore(id: '2', name: 'Aguacate', unitPrice: 83.5),
-    GroceryItemStore(id: '3', name: 'Plátano', unitPrice: 23.0),
-    GroceryItemStore(id: '4', name: 'Cereal', unitPrice: 65.0)
-  ];
+  final ShoppingCartStore shopItem;
+  const GroceriesShoppingDetailPage({Key? key, required this.shopItem})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final itemsList = [
-      CartItemStore(item: gItems[0], quantity: 1.0),
-      CartItemStore(item: gItems[1], quantity: 0.3),
-      CartItemStore(item: gItems[2], quantity: 3.0, promotion: Promotions.p3x2),
-      CartItemStore(
-          item: gItems[3],
-          quantity: 2.0,
-          promotion: Promotions.quantity4UniquePrice,
-          discount: 85.0),
-    ];
     return Scaffold(
       appBar: const CupertinoNavigationBar(
         middle: Text('Detalle de compra'),
@@ -34,29 +20,134 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
         child: Column(
           children: [
             // Store name
-            const Center(
-              child: Text('Soriana',
-                  style: TextStyle(
+            Center(
+              child: Text(shopItem.storeName,
+                  style: const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                       height: 1.25)),
             ),
             // Buy date
-            const Center(
-                child: Text('02 marzo 2021',
-                    style: TextStyle(fontSize: 14.0, height: 1.25))),
-            // Products
-
+            Center(
+                child: Container(
+              margin: const EdgeInsets.only(bottom: 5.0),
+              child: Text(shopItem.buyDateFormatted,
+                  style: const TextStyle(fontSize: 18.0, height: 1.25)),
+            )),
+            // Table
+            Table(children: [
+              TableRow(
+                  decoration: const BoxDecoration(
+                      border: Border(top: BorderSide(), bottom: BorderSide())),
+                  children: [
+                    tableHeader('Cant.'),
+                    tableHeader('Artículo.'),
+                    tableHeader('P. unit.', TextAlign.right),
+                    tableHeader('Total.', TextAlign.right)
+                  ])
+            ]),
             Expanded(
-              child: Container(
-                height: 100.0,
-                margin: const EdgeInsets.only(top: 20.0),
-                child: ListView.builder(
-                    itemCount: itemsList.length,
-                    itemBuilder: (_, int index) {
-                      final item = itemsList[index];
-                      return listItem(item);
-                    }),
+              child: SingleChildScrollView(
+                child: Table(
+                  children: [
+                    // ...List.generate(
+                    //     50, (index) => listItem(shopItem.items[0])),
+                    ...shopItem.items
+                        .map((element) => listItem(element))
+                        .toList()
+                  ],
+                ),
+              ),
+            ),
+
+            // Total
+            Container(
+              margin: const EdgeInsets.only(bottom: 25.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          'Subtotal:',
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              height: lineHeight(fontSize: 16.0, height: 18.0)),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          shopItem.subtotal,
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              height: lineHeight(fontSize: 16.0, height: 18.0)),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          'Descuento:',
+                          style: TextStyle(
+                              color: const Color(0xFF0E6DFD),
+                              fontSize: 16.0,
+                              height: lineHeight(fontSize: 16.0, height: 18.0)),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          '-' + shopItem.discount,
+                          style: TextStyle(
+                              color: const Color(0xFF0E6DFD),
+                              fontSize: 16.0,
+                              height: lineHeight(fontSize: 16.0, height: 18.0)),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Divider(),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Text('Total:',
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                height:
+                                    lineHeight(fontSize: 16.0, height: 18.0)),
+                            textAlign: TextAlign.right),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(shopItem.total,
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                height:
+                                    lineHeight(fontSize: 16.0, height: 18.0)),
+                            textAlign: TextAlign.right),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             )
           ],
@@ -65,46 +156,64 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
     );
   }
 
-  Widget listItem(CartItemStore cartItem) {
-    return Column(
+  TableCell tableHeader(String title, [TextAlign align = TextAlign.center]) {
+    return TableCell(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Text(title,
+                style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    height: lineHeight(fontSize: 16.0, height: 18.0)),
+                textAlign: align),
+          ),
+        ],
+      ),
+    );
+  }
+
+  TableRow listItem(CartItemStore cartItem) {
+    final style = TextStyle(
+        fontSize: 14.0, height: lineHeight(fontSize: 14.0, height: 16.0));
+    final promotionsStyle = TextStyle(
+        fontSize: 14.0,
+        height: lineHeight(fontSize: 14.0, height: 16.0),
+        color: const Color(0xFF0E6DFD));
+
+    return TableRow(
       children: [
-        // Main info
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // Quantity
+        Text(cartItem.quantity.toString(),
+            style: style, textAlign: TextAlign.center),
+        // Product
+        Text(cartItem.item.name, style: style, textAlign: TextAlign.center),
+        // Unit price
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            // Item name and price
-            Expanded(
-              flex: 1,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(cartItem.item.name,
-                      style: const TextStyle(
-                          fontSize: 16.0, fontWeight: FontWeight.bold)),
-                  Text(cartItem.item.unitPriceFormatted)
-                ],
-              ),
-            ),
-
-            // Quantity
-            Expanded(flex: 1, child: Text(cartItem.quantity.toString())),
-
-            // Total
-            Text(cartItem.totalFormatted)
+            Text(cartItem.item.unitPriceFormatted,
+                style: style, textAlign: TextAlign.right),
+            Visibility(
+                visible: cartItem.showBasePriceWhenHasDiscount,
+                child: Text(cartItem.promotion!.value,
+                    style: promotionsStyle, textAlign: TextAlign.right))
           ],
         ),
-        // Discount
-        Visibility(
-          visible: cartItem.basePriceWhenHasDiscount,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(cartItem.promotion!.value),
-              const SizedBox(width: 20.0),
-              Text('-' + cartItem.discountQuantity.toString()),
-            ],
-          ),
+        // Subtotal
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(cartItem.subtotalFormatted,
+                style: style, textAlign: TextAlign.right),
+            Visibility(
+                visible: cartItem.showBasePriceWhenHasDiscount,
+                child: Text('-' + cartItem.discountQuantity.toString(),
+                    style: promotionsStyle, textAlign: TextAlign.right))
+          ],
         )
       ],
     );
