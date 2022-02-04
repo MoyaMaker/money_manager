@@ -7,11 +7,7 @@ class GroceryListStore = _GroceryListStore with _$GroceryListStore;
 
 abstract class _GroceryListStore with Store {
   @observable
-  ObservableList<GroceryItemStore> items = ObservableList.of([
-    GroceryItemStore(id: '1', name: 'Manzana', unitPrice: 15.0),
-    GroceryItemStore(id: '2', name: 'Aguacate', unitPrice: 83.5),
-    GroceryItemStore(id: '3', name: 'Plátano', unitPrice: 23.0)
-  ]);
+  ObservableList<GroceryItemStore> items = ObservableList.of([]);
 
   @observable
   String searchQuery = '';
