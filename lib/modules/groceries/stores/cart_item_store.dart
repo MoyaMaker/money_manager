@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:money_manager/utils/math_double_util.dart';
 
-import 'grocery_item_store.dart';
+import 'product_store.dart';
 
 part 'cart_item_store.g.dart';
 
@@ -10,13 +10,13 @@ class CartItemStore = _CartItemStore with _$CartItemStore;
 
 abstract class _CartItemStore with Store {
   _CartItemStore(
-      {required this.item,
+      {required this.product,
       this.quantity = 1.0,
       this.promotion = Promotions.notSelected,
       this.discount});
 
   @observable
-  late GroceryItemStore item;
+  late ProductStore product;
 
   @observable
   double quantity;
@@ -52,19 +52,19 @@ abstract class _CartItemStore with Store {
       case Promotions.points:
         return subtotal - discount!;
       case Promotions.p2x1:
-        return _calculatePromotion(quantity, item.unitPrice,
+        return _calculatePromotion(quantity, product.unitPrice,
             moduleQuantity: 2, promo: 0.5);
       case Promotions.p3x2:
-        return _calculatePromotion(quantity, item.unitPrice,
+        return _calculatePromotion(quantity, product.unitPrice,
             moduleQuantity: 3, promo: 0.3333);
       case Promotions.p4x3:
-        return _calculatePromotion(quantity, item.unitPrice,
+        return _calculatePromotion(quantity, product.unitPrice,
             moduleQuantity: 4, promo: 0.25);
       case Promotions.q1x70percentage:
-        return _calculatePromotion(quantity, item.unitPrice,
+        return _calculatePromotion(quantity, product.unitPrice,
             moduleQuantity: 1, promo: 0.7, applyModule: false);
       case Promotions.q1AndHalf:
-        return _calculatePromotion(quantity, item.unitPrice,
+        return _calculatePromotion(quantity, product.unitPrice,
             moduleQuantity: 1, promo: 0.5, applyModule: false);
       case Promotions.notSelected:
       default:
@@ -91,14 +91,14 @@ abstract class _CartItemStore with Store {
   }
 
   @computed
-  double get subtotal => item.unitPrice * quantity;
+  double get subtotal => product.unitPrice * quantity;
 
   @computed
-  double get discountQuantity =>
+  double get discountAmount =>
       double.parse((subtotal - total).toStringAsFixed(2));
 
   @computed
-  String get discountQuantityFormatted =>
+  String get discountAmountFormatted =>
       NumberFormat.currency(locale: 'es_MX', symbol: r'$')
           .format(subtotal - total);
 
@@ -111,7 +111,7 @@ abstract class _CartItemStore with Store {
       NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(total);
 
   @computed
-  bool get showBasePriceWhenHasDiscount {
+  bool get hasSomeDiscount {
     if (promotion! != Promotions.notSelected &&
         promotion!.showTextField &&
         discount != null) {

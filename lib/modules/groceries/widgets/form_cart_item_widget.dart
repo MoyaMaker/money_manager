@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
-import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
+import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/utils/math_double_util.dart';
 
 class FormCartItem extends StatelessWidget {
-  final GroceryItemStore item;
+  final ProductStore product;
   final double? quantity;
   final ValueChanged<CartItemStore> onSave;
 
   const FormCartItem(
-      {Key? key, required this.item, this.quantity, required this.onSave})
+      {Key? key, required this.product, this.quantity, required this.onSave})
       : super(key: key);
 
   static late TextEditingController _priceController;
@@ -18,14 +18,15 @@ class FormCartItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double quantity = this.quantity ?? 1;
-    _priceController = TextEditingController(text: item.unitPrice.toString());
+    _priceController =
+        TextEditingController(text: product.unitPrice.toString());
     _quantityController = TextEditingController(text: quantity.toString());
 
     return SimpleDialog(
       contentPadding: const EdgeInsets.all(15.0),
       children: [
         // Item name
-        Text(item.name,
+        Text(product.name,
             style:
                 const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
         // Price
@@ -58,9 +59,9 @@ class FormCartItem extends StatelessWidget {
   }
 
   CartItemStore get _cartItem => CartItemStore(
-      item: GroceryItemStore(
-          id: item.id,
-          name: item.name,
+      product: ProductStore(
+          id: product.id,
+          name: product.name,
           unitPrice: stringToDouble(_priceController.text)),
       quantity: stringToDouble(_quantityController.text));
 }

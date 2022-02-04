@@ -28,8 +28,8 @@ class GroceriesShoppingHistoryPage extends StatelessWidget {
     return ListView.builder(
         itemCount: _shoppingHistoryStore.countItems,
         itemBuilder: (_, int index) => Observer(
-            builder: (_) =>
-                historyItem(context, _shoppingHistoryStore.shopItems[index])));
+            builder: (_) => historyItem(
+                context, _shoppingHistoryStore.shoppedItems[index])));
   }
 
   Widget historyItem(BuildContext context, ShoppingCartStore cartItem) {

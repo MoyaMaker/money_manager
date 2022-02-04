@@ -1,41 +1,41 @@
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
-part 'grocery_item_store.g.dart';
+part 'product_store.g.dart';
 
-class GroceryListStore = _GroceryListStore with _$GroceryListStore;
+class ProductListStore = _ProductListStore with _$ProductListStore;
 
-abstract class _GroceryListStore with Store {
+abstract class _ProductListStore with Store {
   @observable
-  ObservableList<GroceryItemStore> items = ObservableList.of([]);
+  ObservableList<ProductStore> products = ObservableList.of([]);
 
   @observable
   String searchQuery = '';
 
   @computed
-  List<GroceryItemStore> get filteredItems {
-    if (searchQuery.isEmpty) return items;
+  List<ProductStore> get filteredProducts {
+    if (searchQuery.isEmpty) return products;
 
-    return items
+    return products
         .where((element) =>
             element.name.toLowerCase().contains(searchQuery.toLowerCase()))
         .toList();
   }
 
   @action
-  void add(GroceryItemStore item) => items.add(item);
+  void add(ProductStore item) => products.add(item);
 
   @action
-  void remove(GroceryItemStore item) => items.remove(item);
+  void remove(ProductStore item) => products.remove(item);
 
   @action
   void setSearchQuery(String value) => searchQuery = value;
 }
 
-class GroceryItemStore = _GroceryItemStore with _$GroceryItemStore;
+class ProductStore = _ProductStore with _$ProductStore;
 
-abstract class _GroceryItemStore with Store {
-  _GroceryItemStore(
+abstract class _ProductStore with Store {
+  _ProductStore(
       {required this.id, required this.name, required this.unitPrice});
 
   @observable
