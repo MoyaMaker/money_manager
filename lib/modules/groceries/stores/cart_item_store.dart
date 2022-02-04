@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:money_manager/utils/math_double_util.dart';
 
-import 'grocery_item_store.dart';
+import 'product_store.dart';
 
 part 'cart_item_store.g.dart';
 
@@ -16,7 +16,7 @@ abstract class _CartItemStore with Store {
       this.discount});
 
   @observable
-  late GroceryItemStore item;
+  late ProductStore item;
 
   @observable
   double quantity;

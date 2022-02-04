@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'grocery_item_store.dart';
+part of 'product_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,31 +8,31 @@ part of 'grocery_item_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$GroceryListStore on _GroceryListStore, Store {
-  Computed<List<GroceryItemStore>>? _$filteredItemsComputed;
+mixin _$ProductListStore on _ProductListStore, Store {
+  Computed<List<ProductStore>>? _$filteredItemsComputed;
 
   @override
-  List<GroceryItemStore> get filteredItems => (_$filteredItemsComputed ??=
-          Computed<List<GroceryItemStore>>(() => super.filteredItems,
-              name: '_GroceryListStore.filteredItems'))
+  List<ProductStore> get filteredItems => (_$filteredItemsComputed ??=
+          Computed<List<ProductStore>>(() => super.filteredItems,
+              name: '_ProductListStore.filteredItems'))
       .value;
 
-  final _$itemsAtom = Atom(name: '_GroceryListStore.items');
+  final _$itemsAtom = Atom(name: '_ProductListStore.items');
 
   @override
-  ObservableList<GroceryItemStore> get items {
+  ObservableList<ProductStore> get items {
     _$itemsAtom.reportRead();
     return super.items;
   }
 
   @override
-  set items(ObservableList<GroceryItemStore> value) {
+  set items(ObservableList<ProductStore> value) {
     _$itemsAtom.reportWrite(value, super.items, () {
       super.items = value;
     });
   }
 
-  final _$searchQueryAtom = Atom(name: '_GroceryListStore.searchQuery');
+  final _$searchQueryAtom = Atom(name: '_ProductListStore.searchQuery');
 
   @override
   String get searchQuery {
@@ -47,39 +47,39 @@ mixin _$GroceryListStore on _GroceryListStore, Store {
     });
   }
 
-  final _$_GroceryListStoreActionController =
-      ActionController(name: '_GroceryListStore');
+  final _$_ProductListStoreActionController =
+      ActionController(name: '_ProductListStore');
 
   @override
-  void add(GroceryItemStore item) {
-    final _$actionInfo = _$_GroceryListStoreActionController.startAction(
-        name: '_GroceryListStore.add');
+  void add(ProductStore item) {
+    final _$actionInfo = _$_ProductListStoreActionController.startAction(
+        name: '_ProductListStore.add');
     try {
       return super.add(item);
     } finally {
-      _$_GroceryListStoreActionController.endAction(_$actionInfo);
+      _$_ProductListStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void remove(GroceryItemStore item) {
-    final _$actionInfo = _$_GroceryListStoreActionController.startAction(
-        name: '_GroceryListStore.remove');
+  void remove(ProductStore item) {
+    final _$actionInfo = _$_ProductListStoreActionController.startAction(
+        name: '_ProductListStore.remove');
     try {
       return super.remove(item);
     } finally {
-      _$_GroceryListStoreActionController.endAction(_$actionInfo);
+      _$_ProductListStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   void setSearchQuery(String value) {
-    final _$actionInfo = _$_GroceryListStoreActionController.startAction(
-        name: '_GroceryListStore.setSearchQuery');
+    final _$actionInfo = _$_ProductListStoreActionController.startAction(
+        name: '_ProductListStore.setSearchQuery');
     try {
       return super.setSearchQuery(value);
     } finally {
-      _$_GroceryListStoreActionController.endAction(_$actionInfo);
+      _$_ProductListStoreActionController.endAction(_$actionInfo);
     }
   }
 
@@ -93,16 +93,16 @@ filteredItems: ${filteredItems}
   }
 }
 
-mixin _$GroceryItemStore on _GroceryItemStore, Store {
+mixin _$ProductStore on _ProductStore, Store {
   Computed<String>? _$unitPriceFormattedComputed;
 
   @override
   String get unitPriceFormatted => (_$unitPriceFormattedComputed ??=
           Computed<String>(() => super.unitPriceFormatted,
-              name: '_GroceryItemStore.unitPriceFormatted'))
+              name: '_ProductStore.unitPriceFormatted'))
       .value;
 
-  final _$idAtom = Atom(name: '_GroceryItemStore.id');
+  final _$idAtom = Atom(name: '_ProductStore.id');
 
   @override
   String get id {
@@ -117,7 +117,7 @@ mixin _$GroceryItemStore on _GroceryItemStore, Store {
     });
   }
 
-  final _$nameAtom = Atom(name: '_GroceryItemStore.name');
+  final _$nameAtom = Atom(name: '_ProductStore.name');
 
   @override
   String get name {
@@ -132,7 +132,7 @@ mixin _$GroceryItemStore on _GroceryItemStore, Store {
     });
   }
 
-  final _$unitPriceAtom = Atom(name: '_GroceryItemStore.unitPrice');
+  final _$unitPriceAtom = Atom(name: '_ProductStore.unitPrice');
 
   @override
   double get unitPrice {

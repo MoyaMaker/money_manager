@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mobx/mobx.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
-import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
+import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 
 void main() {
@@ -22,13 +22,13 @@ void main() {
       shoppingCartStore = ShoppingCartStore(
           items: ObservableList.of([
         CartItemStore(
-            item: GroceryItemStore(id: '1', name: 'Manzana', unitPrice: 15.0),
+            item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
             quantity: 2,
             promotion: Promotions.p2x1),
         CartItemStore(
-            item: GroceryItemStore(id: '2', name: 'Aguacate', unitPrice: 83.5)),
+            item: ProductStore(id: '2', name: 'Aguacate', unitPrice: 83.5)),
         CartItemStore(
-            item: GroceryItemStore(id: '3', name: 'Plátano', unitPrice: 23.0))
+            item: ProductStore(id: '3', name: 'Plátano', unitPrice: 23.0))
       ]));
     });
 
@@ -97,14 +97,14 @@ void main() {
       shoppingCartStore = ShoppingCartStore(
           items: ObservableList.of([
         CartItemStore(
-            item: GroceryItemStore(id: '1', name: 'Manzana', unitPrice: 15.0)),
+            item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0)),
       ]));
     });
 
     test('add item in cart', () {
       // Arrange
       final cartItem = CartItemStore(
-          item: GroceryItemStore(id: '0', name: 'Item', unitPrice: 15.0));
+          item: ProductStore(id: '0', name: 'Item', unitPrice: 15.0));
       // Act
       shoppingCartStore.addItem(cartItem);
       // Expect
@@ -116,7 +116,7 @@ void main() {
       // Arrange
       final cartItem = CartItemStore(
           quantity: 4,
-          item: GroceryItemStore(id: '1', name: 'Manzana', unitPrice: 15.0));
+          item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0));
       // Act
       shoppingCartStore.addItem(cartItem);
       // Expect
@@ -132,13 +132,13 @@ void main() {
       shoppingCartStore = ShoppingCartStore(
           items: ObservableList.of([
         CartItemStore(
-            item: GroceryItemStore(id: '1', name: 'Manzana', unitPrice: 15.0),
+            item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
             quantity: 2,
             promotion: Promotions.p2x1),
         CartItemStore(
-            item: GroceryItemStore(id: '2', name: 'Aguacate', unitPrice: 83.5)),
+            item: ProductStore(id: '2', name: 'Aguacate', unitPrice: 83.5)),
         CartItemStore(
-            item: GroceryItemStore(id: '3', name: 'Plátano', unitPrice: 23.0))
+            item: ProductStore(id: '3', name: 'Plátano', unitPrice: 23.0))
       ]));
     });
 

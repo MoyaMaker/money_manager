@@ -4,19 +4,19 @@ import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 import 'package:money_manager/modules/groceries/widgets/form_cart_item_widget.dart';
-import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
+import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 
 class GroceriesPage extends StatelessWidget {
   const GroceriesPage({Key? key}) : super(key: key);
 
   static late ShoppingCartStore _shoppingCartStore;
-  static late GroceryListStore _groceryListStore;
+  static late ProductListStore _groceryListStore;
 
   @override
   Widget build(BuildContext context) {
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
-    _groceryListStore = Provider.of<GroceryListStore>(context, listen: false);
+    _groceryListStore = Provider.of<ProductListStore>(context, listen: false);
 
     final _searchTextController = TextEditingController();
 
@@ -73,7 +73,7 @@ class GroceriesPage extends StatelessWidget {
         });
   }
 
-  Widget itemWidget(BuildContext context, GroceryItemStore item) {
+  Widget itemWidget(BuildContext context, ProductStore item) {
     return Card(
       child: ListTile(
         contentPadding: const EdgeInsets.all(8.0),

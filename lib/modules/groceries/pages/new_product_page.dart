@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
-import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
+import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 import 'package:money_manager/utils/math_double_util.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 class GroceriesNewProductPage extends StatelessWidget {
   const GroceriesNewProductPage({Key? key}) : super(key: key);
 
-  static late GroceryListStore _groceryListStore;
+  static late ProductListStore _groceryListStore;
   static late ShoppingCartStore _shoppingCartStore;
 
   static final _formKey = GlobalKey<FormState>();
@@ -21,7 +21,7 @@ class GroceriesNewProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _groceryListStore = Provider.of<GroceryListStore>(context, listen: false);
+    _groceryListStore = Provider.of<ProductListStore>(context, listen: false);
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
 
     return Scaffold(
@@ -76,7 +76,7 @@ class GroceriesNewProductPage extends StatelessWidget {
   }
 
   void onSave(BuildContext context) {
-    final item = GroceryItemStore(
+    final item = ProductStore(
         id: const Uuid().v1(),
         name: _productNameController.text,
         unitPrice: stringToDouble(_unitPriceController.text));

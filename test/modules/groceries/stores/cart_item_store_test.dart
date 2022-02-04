@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
-import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
+import 'package:money_manager/modules/groceries/stores/product_store.dart';
 
 void main() {
   group('check total with promotion', () {
@@ -11,7 +11,7 @@ void main() {
       cartItemStore = CartItemStore(
           promotion: Promotions.p2x1,
           quantity: 2,
-          item: GroceryItemStore(id: '1', name: 'Manzana', unitPrice: 15.0));
+          item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0));
 
       cartItemStore.setShowDetails(true);
 
@@ -128,7 +128,7 @@ void main() {
     setUp(() {
       cartItemStore = CartItemStore(
           quantity: 2,
-          item: GroceryItemStore(id: '1', name: 'Manzana', unitPrice: 15.0),
+          item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
           promotion: Promotions.p2x1);
       quantity = 2.0;
       itemPrice = 15.0;

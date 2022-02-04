@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
-import 'package:money_manager/modules/groceries/stores/grocery_item_store.dart';
+import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/utils/math_double_util.dart';
 
 class FormCartItem extends StatelessWidget {
-  final GroceryItemStore item;
+  final ProductStore item;
   final double? quantity;
   final ValueChanged<CartItemStore> onSave;
 
@@ -58,7 +58,7 @@ class FormCartItem extends StatelessWidget {
   }
 
   CartItemStore get _cartItem => CartItemStore(
-      item: GroceryItemStore(
+      item: ProductStore(
           id: item.id,
           name: item.name,
           unitPrice: stringToDouble(_priceController.text)),

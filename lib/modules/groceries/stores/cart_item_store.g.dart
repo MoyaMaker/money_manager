@@ -63,13 +63,13 @@ mixin _$CartItemStore on _CartItemStore, Store {
   final _$itemAtom = Atom(name: '_CartItemStore.item');
 
   @override
-  GroceryItemStore get item {
+  ProductStore get item {
     _$itemAtom.reportRead();
     return super.item;
   }
 
   @override
-  set item(GroceryItemStore value) {
+  set item(ProductStore value) {
     _$itemAtom.reportWrite(value, super.item, () {
       super.item = value;
     });
