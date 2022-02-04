@@ -32,3 +32,21 @@ flutter pub run flutter_launcher_icons:main
 ```
 
 [Package page](https://pub.dev/packages/flutter_launcher_icons)
+
+# Testing
+
+Run command `flutter test --coverage`, this will run the all test in folder `test/` and generate new file in `coverage/lcov.info`
+
+I'm generate a html files with genhtml reading the lcov.info
+
+````
+# Remove output to update all files
+rm -R coverage/output
+
+# Update lcov.info to remove *g.dart
+# Files generated from `flutter pub run build_runner`
+lcov --remove coverage/lcov.info 'lib/modules/**/*.g.dart' -o coverage/lcov.info
+
+# Generate new output for coverage
+genhtml coverage/lcov.info -o coverage/output
+```

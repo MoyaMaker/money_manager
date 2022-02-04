@@ -167,28 +167,6 @@ mixin _$CartItemStore on _CartItemStore, Store {
   }
 
   @override
-  void add() {
-    final _$actionInfo = _$_CartItemStoreActionController.startAction(
-        name: '_CartItemStore.add');
-    try {
-      return super.add();
-    } finally {
-      _$_CartItemStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void remove() {
-    final _$actionInfo = _$_CartItemStoreActionController.startAction(
-        name: '_CartItemStore.remove');
-    try {
-      return super.remove();
-    } finally {
-      _$_CartItemStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void setShowDetails(bool value) {
     final _$actionInfo = _$_CartItemStoreActionController.startAction(
         name: '_CartItemStore.setShowDetails');

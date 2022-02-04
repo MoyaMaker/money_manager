@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
-import 'package:money_manager/utils/math_double_utils.dart';
+import 'package:money_manager/utils/math_double_util.dart';
 
 import 'grocery_item_store.dart';
 
@@ -56,7 +56,7 @@ abstract class _CartItemStore with Store {
             moduleQuantity: 2, promo: 0.5);
       case Promotions.p3x2:
         return _calculatePromotion(quantity, item.unitPrice,
-            moduleQuantity: 3, promo: 0.33);
+            moduleQuantity: 3, promo: 0.3333);
       case Promotions.p4x3:
         return _calculatePromotion(quantity, item.unitPrice,
             moduleQuantity: 4, promo: 0.25);
@@ -126,16 +126,6 @@ abstract class _CartItemStore with Store {
 
   @action
   void setQuantity(double newValue) => quantity = roundDouble(newValue);
-
-  @action
-  void add() => quantity = roundDouble(quantity + 1);
-
-  @action
-  void remove() {
-    if (quantity > 1) {
-      quantity = roundDouble(quantity - 1);
-    }
-  }
 
   @action
   void setShowDetails(bool value) => showDetails = value;
