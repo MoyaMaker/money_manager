@@ -11,12 +11,12 @@ class GroceriesPage extends StatelessWidget {
   const GroceriesPage({Key? key}) : super(key: key);
 
   static late ShoppingCartStore _shoppingCartStore;
-  static late ProductListStore _groceryListStore;
+  static late ProductListStore _productListStore;
 
   @override
   Widget build(BuildContext context) {
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
-    _groceryListStore = Provider.of<ProductListStore>(context, listen: false);
+    _productListStore = Provider.of<ProductListStore>(context, listen: false);
 
     final _searchTextController = TextEditingController();
 
@@ -35,7 +35,7 @@ class GroceriesPage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: CupertinoSearchTextField(
               onChanged: (String value) =>
-                  _groceryListStore.setSearchQuery(value),
+                  _productListStore.setSearchQuery(value),
               controller: _searchTextController,
               placeholder: 'Buscar',
             ),
@@ -52,7 +52,7 @@ class GroceriesPage extends StatelessWidget {
   }
 
   Widget gridItems() {
-    final items = _groceryListStore.filteredProducts;
+    final items = _productListStore.filteredProducts;
 
     if (items.isEmpty) {
       return const Center(
