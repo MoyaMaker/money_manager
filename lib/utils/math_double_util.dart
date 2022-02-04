@@ -3,6 +3,4 @@ double stringToDouble(String value) {
   return (_stringToDouble).toDouble();
 }
 
-double roundDouble(double value) {
-  return double.parse(value.toStringAsFixed(2));
-}
+double roundDouble(double value) => double.parse(value.toStringAsFixed(2));

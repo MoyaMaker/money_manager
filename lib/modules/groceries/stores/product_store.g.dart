@@ -9,26 +9,26 @@ part of 'product_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ProductListStore on _ProductListStore, Store {
-  Computed<List<ProductStore>>? _$filteredItemsComputed;
+  Computed<List<ProductStore>>? _$filteredProductsComputed;
 
   @override
-  List<ProductStore> get filteredItems => (_$filteredItemsComputed ??=
-          Computed<List<ProductStore>>(() => super.filteredItems,
-              name: '_ProductListStore.filteredItems'))
+  List<ProductStore> get filteredProducts => (_$filteredProductsComputed ??=
+          Computed<List<ProductStore>>(() => super.filteredProducts,
+              name: '_ProductListStore.filteredProducts'))
       .value;
 
-  final _$itemsAtom = Atom(name: '_ProductListStore.items');
+  final _$productsAtom = Atom(name: '_ProductListStore.products');
 
   @override
-  ObservableList<ProductStore> get items {
-    _$itemsAtom.reportRead();
-    return super.items;
+  ObservableList<ProductStore> get products {
+    _$productsAtom.reportRead();
+    return super.products;
   }
 
   @override
-  set items(ObservableList<ProductStore> value) {
-    _$itemsAtom.reportWrite(value, super.items, () {
-      super.items = value;
+  set products(ObservableList<ProductStore> value) {
+    _$productsAtom.reportWrite(value, super.products, () {
+      super.products = value;
     });
   }
 
@@ -86,9 +86,9 @@ mixin _$ProductListStore on _ProductListStore, Store {
   @override
   String toString() {
     return '''
-items: ${items},
+products: ${products},
 searchQuery: ${searchQuery},
-filteredItems: ${filteredItems}
+filteredProducts: ${filteredProducts}
     ''';
   }
 }

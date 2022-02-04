@@ -22,13 +22,13 @@ void main() {
       shoppingCartStore = ShoppingCartStore(
           items: ObservableList.of([
         CartItemStore(
-            item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
+            product: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
             quantity: 2,
             promotion: Promotions.p2x1),
         CartItemStore(
-            item: ProductStore(id: '2', name: 'Aguacate', unitPrice: 83.5)),
+            product: ProductStore(id: '2', name: 'Aguacate', unitPrice: 83.5)),
         CartItemStore(
-            item: ProductStore(id: '3', name: 'Plátano', unitPrice: 23.0))
+            product: ProductStore(id: '3', name: 'Plátano', unitPrice: 23.0))
       ]));
     });
 
@@ -97,14 +97,14 @@ void main() {
       shoppingCartStore = ShoppingCartStore(
           items: ObservableList.of([
         CartItemStore(
-            item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0)),
+            product: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0)),
       ]));
     });
 
     test('add item in cart', () {
       // Arrange
       final cartItem = CartItemStore(
-          item: ProductStore(id: '0', name: 'Item', unitPrice: 15.0));
+          product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0));
       // Act
       shoppingCartStore.addItem(cartItem);
       // Expect
@@ -116,7 +116,7 @@ void main() {
       // Arrange
       final cartItem = CartItemStore(
           quantity: 4,
-          item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0));
+          product: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0));
       // Act
       shoppingCartStore.addItem(cartItem);
       // Expect
@@ -132,13 +132,13 @@ void main() {
       shoppingCartStore = ShoppingCartStore(
           items: ObservableList.of([
         CartItemStore(
-            item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
+            product: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
             quantity: 2,
             promotion: Promotions.p2x1),
         CartItemStore(
-            item: ProductStore(id: '2', name: 'Aguacate', unitPrice: 83.5)),
+            product: ProductStore(id: '2', name: 'Aguacate', unitPrice: 83.5)),
         CartItemStore(
-            item: ProductStore(id: '3', name: 'Plátano', unitPrice: 23.0))
+            product: ProductStore(id: '3', name: 'Plátano', unitPrice: 23.0))
       ]));
     });
 

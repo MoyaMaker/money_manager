@@ -76,15 +76,15 @@ class GroceriesNewProductPage extends StatelessWidget {
   }
 
   void onSave(BuildContext context) {
-    final item = ProductStore(
+    final product = ProductStore(
         id: const Uuid().v1(),
         name: _productNameController.text,
         unitPrice: stringToDouble(_unitPriceController.text));
 
-    _groceryListStore.add(item);
+    _groceryListStore.add(product);
 
     final cartItem = CartItemStore(
-        item: item, quantity: stringToDouble(_quantityController.text));
+        product: product, quantity: stringToDouble(_quantityController.text));
 
     _shoppingCartStore.addItem(cartItem);
 

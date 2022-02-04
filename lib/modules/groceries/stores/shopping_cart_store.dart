@@ -55,7 +55,7 @@ abstract class _ShoppingCartStore with Store {
     double discount = 0.0;
 
     for (var item in items) {
-      discount += item.discountQuantity;
+      discount += item.discountAmount;
     }
 
     return NumberFormat.currency(locale: 'es_MX', symbol: r'$')
@@ -79,13 +79,14 @@ abstract class _ShoppingCartStore with Store {
 
   @action
   void addItem(CartItemStore cartItem) {
-    final itemAlreadyExist =
-        items.where((element) => element.item.id == cartItem.item.id).toList();
+    final itemAlreadyExist = items
+        .where((element) => element.product.id == cartItem.product.id)
+        .toList();
 
     if (itemAlreadyExist.isEmpty) {
       items.add(cartItem);
     } else {
-      itemAlreadyExist.first.item.unitPrice = cartItem.item.unitPrice;
+      itemAlreadyExist.first.product.unitPrice = cartItem.product.unitPrice;
       itemAlreadyExist.first.quantity = cartItem.quantity;
     }
   }

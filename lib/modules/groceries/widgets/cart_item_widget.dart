@@ -44,7 +44,7 @@ class _CartItemState extends State<CartItem> {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: Key(widget.cartItem.item.id),
+      key: Key(widget.cartItem.product.id),
       direction: DismissDirection.endToStart,
       background: Container(
         padding: const EdgeInsets.all(15.0),
@@ -68,11 +68,11 @@ class _CartItemState extends State<CartItem> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Name
-                        Text(widget.cartItem.item.name,
+                        Text(widget.cartItem.product.name,
                             style: const TextStyle(
                                 fontSize: 18.0, fontWeight: FontWeight.bold)),
                         // Unit price
-                        Text(widget.cartItem.item.unitPriceFormatted,
+                        Text(widget.cartItem.product.unitPriceFormatted,
                             style: TextStyle(
                                 fontSize: 13.0, color: Colors.grey[600])),
                         // Subtotal Price
@@ -82,8 +82,7 @@ class _CartItemState extends State<CartItem> {
                             children: [
                               // Show when has discount
                               Visibility(
-                                visible: widget
-                                    .cartItem.showBasePriceWhenHasDiscount,
+                                visible: widget.cartItem.hasSomeDiscount,
                                 child: Container(
                                   margin: const EdgeInsets.only(right: 5.0),
                                   child: Text(widget.cartItem.subtotalFormatted,
@@ -140,7 +139,7 @@ class _CartItemState extends State<CartItem> {
                           context: context,
                           builder: (BuildContext context) {
                             return FormCartItem(
-                                item: widget.cartItem.item,
+                                product: widget.cartItem.product,
                                 quantity: widget.cartItem.quantity,
                                 onSave: widget.onSave);
                           },

@@ -18,7 +18,7 @@ void main() {
     setUp(() {
       groceryListStore = ProductListStore();
 
-      groceryListStore.items = ObservableList.of([
+      groceryListStore.products = ObservableList.of([
         ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
         ProductStore(id: '2', name: 'Aguacate', unitPrice: 83.5),
         ProductStore(id: '3', name: 'Plátano', unitPrice: 23.0)
@@ -33,7 +33,7 @@ void main() {
       groceryListStore.add(newItem);
 
       // Assert
-      expect(groceryListStore.items.length, 4);
+      expect(groceryListStore.products.length, 4);
     });
 
     test('remove item from list', () {
@@ -44,7 +44,7 @@ void main() {
       groceryListStore.remove(oldItem);
 
       // Assert
-      expect(groceryListStore.items.length, 3);
+      expect(groceryListStore.products.length, 3);
     });
   });
 
@@ -54,7 +54,7 @@ void main() {
     setUp(() {
       groceryListStore = ProductListStore();
 
-      groceryListStore.items = ObservableList.of([
+      groceryListStore.products = ObservableList.of([
         ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
         ProductStore(id: '2', name: 'Aguacate', unitPrice: 83.5),
         ProductStore(id: '3', name: 'Plátano', unitPrice: 23.0)
@@ -71,9 +71,9 @@ void main() {
       groceryListStore.setSearchQuery(query);
 
       // Assert
-      expect(groceryListStore.filteredItems.first.id, expectedSearch.id);
-      expect(groceryListStore.filteredItems.first.name, expectedSearch.name);
-      expect(groceryListStore.filteredItems.first.unitPrice,
+      expect(groceryListStore.filteredProducts.first.id, expectedSearch.id);
+      expect(groceryListStore.filteredProducts.first.name, expectedSearch.name);
+      expect(groceryListStore.filteredProducts.first.unitPrice,
           expectedSearch.unitPrice);
     });
 
@@ -85,7 +85,7 @@ void main() {
       groceryListStore.setSearchQuery(query);
 
       // Assert
-      expect(groceryListStore.filteredItems.length, 3);
+      expect(groceryListStore.filteredProducts.length, 3);
     });
   });
 }

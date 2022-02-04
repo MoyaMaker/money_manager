@@ -11,7 +11,7 @@ void main() {
       cartItemStore = CartItemStore(
           promotion: Promotions.p2x1,
           quantity: 2,
-          item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0));
+          product: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0));
 
       cartItemStore.setShowDetails(true);
 
@@ -128,7 +128,7 @@ void main() {
     setUp(() {
       cartItemStore = CartItemStore(
           quantity: 2,
-          item: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
+          product: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
           promotion: Promotions.p2x1);
       quantity = 2.0;
       itemPrice = 15.0;
@@ -140,8 +140,8 @@ void main() {
       final expectedResultFormatted = '\$$expectedResult' '0';
       // Act
       // Assert
-      expect(cartItemStore.discountQuantity, expectedResult);
-      expect(cartItemStore.discountQuantityFormatted, expectedResultFormatted);
+      expect(cartItemStore.discountAmount, expectedResult);
+      expect(cartItemStore.discountAmountFormatted, expectedResultFormatted);
     });
 
     test('get subtotal', () {
@@ -169,7 +169,7 @@ void main() {
       // Act
       cartItemStore.setPromotion(Promotions.notSelected);
       // Assert
-      expect(cartItemStore.showBasePriceWhenHasDiscount, false);
+      expect(cartItemStore.hasSomeDiscount, false);
     });
 
     test('show total and hide subtotal with line through', () {
@@ -177,7 +177,7 @@ void main() {
       // Act
       cartItemStore.setPromotion(Promotions.points);
       // Assert
-      expect(cartItemStore.showBasePriceWhenHasDiscount, false);
+      expect(cartItemStore.hasSomeDiscount, false);
     });
 
     test('show subtotal with line through', () {
@@ -186,7 +186,7 @@ void main() {
       cartItemStore.setPromotion(Promotions.points);
       cartItemStore.setDiscount(10.0);
       // Assert
-      expect(cartItemStore.showBasePriceWhenHasDiscount, true);
+      expect(cartItemStore.hasSomeDiscount, true);
     });
   });
 

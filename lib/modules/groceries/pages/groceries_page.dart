@@ -52,7 +52,7 @@ class GroceriesPage extends StatelessWidget {
   }
 
   Widget gridItems() {
-    final items = _groceryListStore.filteredItems;
+    final items = _groceryListStore.filteredProducts;
 
     if (items.isEmpty) {
       return const Center(
@@ -92,7 +92,7 @@ class GroceriesPage extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return FormCartItem(
-                            item: item,
+                            product: item,
                             onSave: (CartItemStore cartItem) {
                               _shoppingCartStore.addItem(cartItem);
 

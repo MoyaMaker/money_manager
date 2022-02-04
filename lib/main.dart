@@ -10,11 +10,11 @@ import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MoneyManagerApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MoneyManagerApp extends StatelessWidget {
+  const MoneyManagerApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

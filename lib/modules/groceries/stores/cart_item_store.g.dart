@@ -22,21 +22,20 @@ mixin _$CartItemStore on _CartItemStore, Store {
       (_$subtotalComputed ??= Computed<double>(() => super.subtotal,
               name: '_CartItemStore.subtotal'))
           .value;
-  Computed<double>? _$discountQuantityComputed;
+  Computed<double>? _$discountAmountComputed;
 
   @override
-  double get discountQuantity => (_$discountQuantityComputed ??=
-          Computed<double>(() => super.discountQuantity,
-              name: '_CartItemStore.discountQuantity'))
-      .value;
-  Computed<String>? _$discountQuantityFormattedComputed;
-
-  @override
-  String get discountQuantityFormatted =>
-      (_$discountQuantityFormattedComputed ??= Computed<String>(
-              () => super.discountQuantityFormatted,
-              name: '_CartItemStore.discountQuantityFormatted'))
+  double get discountAmount =>
+      (_$discountAmountComputed ??= Computed<double>(() => super.discountAmount,
+              name: '_CartItemStore.discountAmount'))
           .value;
+  Computed<String>? _$discountAmountFormattedComputed;
+
+  @override
+  String get discountAmountFormatted => (_$discountAmountFormattedComputed ??=
+          Computed<String>(() => super.discountAmountFormatted,
+              name: '_CartItemStore.discountAmountFormatted'))
+      .value;
   Computed<String>? _$subtotalFormattedComputed;
 
   @override
@@ -51,27 +50,26 @@ mixin _$CartItemStore on _CartItemStore, Store {
       (_$totalFormattedComputed ??= Computed<String>(() => super.totalFormatted,
               name: '_CartItemStore.totalFormatted'))
           .value;
-  Computed<bool>? _$showBasePriceWhenHasDiscountComputed;
+  Computed<bool>? _$hasSomeDiscountComputed;
 
   @override
-  bool get showBasePriceWhenHasDiscount =>
-      (_$showBasePriceWhenHasDiscountComputed ??= Computed<bool>(
-              () => super.showBasePriceWhenHasDiscount,
-              name: '_CartItemStore.showBasePriceWhenHasDiscount'))
+  bool get hasSomeDiscount =>
+      (_$hasSomeDiscountComputed ??= Computed<bool>(() => super.hasSomeDiscount,
+              name: '_CartItemStore.hasSomeDiscount'))
           .value;
 
-  final _$itemAtom = Atom(name: '_CartItemStore.item');
+  final _$productAtom = Atom(name: '_CartItemStore.product');
 
   @override
-  ProductStore get item {
-    _$itemAtom.reportRead();
-    return super.item;
+  ProductStore get product {
+    _$productAtom.reportRead();
+    return super.product;
   }
 
   @override
-  set item(ProductStore value) {
-    _$itemAtom.reportWrite(value, super.item, () {
-      super.item = value;
+  set product(ProductStore value) {
+    _$productAtom.reportWrite(value, super.product, () {
+      super.product = value;
     });
   }
 
@@ -213,18 +211,18 @@ mixin _$CartItemStore on _CartItemStore, Store {
   @override
   String toString() {
     return '''
-item: ${item},
+product: ${product},
 quantity: ${quantity},
 showDetails: ${showDetails},
 promotion: ${promotion},
 discount: ${discount},
 total: ${total},
 subtotal: ${subtotal},
-discountQuantity: ${discountQuantity},
-discountQuantityFormatted: ${discountQuantityFormatted},
+discountAmount: ${discountAmount},
+discountAmountFormatted: ${discountAmountFormatted},
 subtotalFormatted: ${subtotalFormatted},
 totalFormatted: ${totalFormatted},
-showBasePriceWhenHasDiscount: ${showBasePriceWhenHasDiscount}
+hasSomeDiscount: ${hasSomeDiscount}
     ''';
   }
 }

@@ -124,16 +124,16 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
         Text(cartItem.quantity.toString(),
             style: style, textAlign: TextAlign.center),
         // Product
-        Text(cartItem.item.name, style: style, textAlign: TextAlign.center),
+        Text(cartItem.product.name, style: style, textAlign: TextAlign.center),
         // Unit price
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(cartItem.item.unitPriceFormatted,
+            Text(cartItem.product.unitPriceFormatted,
                 style: style, textAlign: TextAlign.right),
             Visibility(
-                visible: cartItem.showBasePriceWhenHasDiscount,
+                visible: cartItem.hasSomeDiscount,
                 child: Text(cartItem.promotion!.value,
                     style: promotionsStyle, textAlign: TextAlign.right))
           ],
@@ -146,8 +146,8 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
             Text(cartItem.subtotalFormatted,
                 style: style, textAlign: TextAlign.right),
             Visibility(
-                visible: cartItem.showBasePriceWhenHasDiscount,
-                child: Text('-' + cartItem.discountQuantity.toString(),
+                visible: cartItem.hasSomeDiscount,
+                child: Text('-' + cartItem.discountAmount.toString(),
                     style: promotionsStyle, textAlign: TextAlign.right))
           ],
         )

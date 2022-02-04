@@ -24,25 +24,25 @@ mixin _$ShoppingHistoryStore on _ShoppingHistoryStore, Store {
               name: '_ShoppingHistoryStore.hasItems'))
           .value;
 
-  final _$shopItemsAtom = Atom(name: '_ShoppingHistoryStore.shopItems');
+  final _$shoppedItemsAtom = Atom(name: '_ShoppingHistoryStore.shoppedItems');
 
   @override
-  ObservableList<ShoppingCartStore> get shopItems {
-    _$shopItemsAtom.reportRead();
-    return super.shopItems;
+  ObservableList<ShoppingCartStore> get shoppedItems {
+    _$shoppedItemsAtom.reportRead();
+    return super.shoppedItems;
   }
 
   @override
-  set shopItems(ObservableList<ShoppingCartStore> value) {
-    _$shopItemsAtom.reportWrite(value, super.shopItems, () {
-      super.shopItems = value;
+  set shoppedItems(ObservableList<ShoppingCartStore> value) {
+    _$shoppedItemsAtom.reportWrite(value, super.shoppedItems, () {
+      super.shoppedItems = value;
     });
   }
 
   @override
   String toString() {
     return '''
-shopItems: ${shopItems},
+shoppedItems: ${shoppedItems},
 countItems: ${countItems},
 hasItems: ${hasItems}
     ''';
