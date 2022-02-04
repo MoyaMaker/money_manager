@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money_manager/utils/math_double_utils.dart';
+import 'package:money_manager/utils/math_double_util.dart';
 
 void main() {
   test('get double from string', () {
