@@ -3,30 +3,74 @@
 part of 'product_store.dart';
 
 // **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class ProductHiveAdapter extends TypeAdapter<ProductStore> {
+  @override
+  final int typeId = 0;
+
+  @override
+  ProductStore read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ProductStore(
+      id: fields[0] as String,
+      name: fields[1] as String,
+      unitPrice: fields[2] as double,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ProductStore obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.name)
+      ..writeByte(2)
+      ..write(obj.unitPrice);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ProductHiveAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ProductListStore on _ProductListStore, Store {
-  Computed<List<ProductStore>>? _$filteredProductsComputed;
+  Computed<List<ProductStore>?>? _$filteredProductsComputed;
 
   @override
-  List<ProductStore> get filteredProducts => (_$filteredProductsComputed ??=
-          Computed<List<ProductStore>>(() => super.filteredProducts,
+  List<ProductStore>? get filteredProducts => (_$filteredProductsComputed ??=
+          Computed<List<ProductStore>?>(() => super.filteredProducts,
               name: '_ProductListStore.filteredProducts'))
       .value;
 
   final _$productsAtom = Atom(name: '_ProductListStore.products');
 
   @override
-  ObservableList<ProductStore> get products {
+  ObservableList<ProductStore>? get products {
     _$productsAtom.reportRead();
     return super.products;
   }
 
   @override
-  set products(ObservableList<ProductStore> value) {
+  set products(ObservableList<ProductStore>? value) {
     _$productsAtom.reportWrite(value, super.products, () {
       super.products = value;
     });
@@ -45,6 +89,13 @@ mixin _$ProductListStore on _ProductListStore, Store {
     _$searchQueryAtom.reportWrite(value, super.searchQuery, () {
       super.searchQuery = value;
     });
+  }
+
+  final _$_initBoxAsyncAction = AsyncAction('_ProductListStore._initBox');
+
+  @override
+  Future<void> _initBox() {
+    return _$_initBoxAsyncAction.run(() => super._initBox());
   }
 
   final _$_ProductListStoreActionController =
@@ -78,6 +129,17 @@ mixin _$ProductListStore on _ProductListStore, Store {
         name: '_ProductListStore.setSearchQuery');
     try {
       return super.setSearchQuery(value);
+    } finally {
+      _$_ProductListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void dispose() {
+    final _$actionInfo = _$_ProductListStoreActionController.startAction(
+        name: '_ProductListStore.dispose');
+    try {
+      return super.dispose();
     } finally {
       _$_ProductListStoreActionController.endAction(_$actionInfo);
     }

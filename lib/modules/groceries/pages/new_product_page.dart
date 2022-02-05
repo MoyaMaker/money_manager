@@ -83,6 +83,8 @@ class GroceriesNewProductPage extends StatelessWidget {
 
     _productListStore.add(product);
 
+    _productListStore.createProduct(product);
+
     final cartItem = CartItemStore(
         product: product, quantity: stringToDouble(_quantityController.text));
 

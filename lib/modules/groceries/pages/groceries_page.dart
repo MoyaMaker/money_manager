@@ -1,11 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
-import 'package:money_manager/modules/groceries/widgets/form_cart_item_widget.dart';
+
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
+import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
+import 'package:money_manager/modules/groceries/widgets/form_cart_item_widget.dart';
 
 class GroceriesPage extends StatelessWidget {
   const GroceriesPage({Key? key}) : super(key: key);
@@ -28,6 +29,7 @@ class GroceriesPage extends StatelessWidget {
         child: const Icon(Icons.add),
         onPressed: () => Navigator.pushNamed(context, 'groceries/new-product'),
       ),
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       body: Column(
         children: [
           // Search bar
@@ -52,24 +54,32 @@ class GroceriesPage extends StatelessWidget {
   }
 
   Widget gridItems() {
-    final items = _productListStore.filteredProducts;
+    final products = _productListStore.filteredProducts;
 
-    if (items.isEmpty) {
+    if (products == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (products.isEmpty) {
       return const Center(
         child: Text('No hay elementos en lista'),
       );
     }
 
     return GridView.builder(
-        itemCount: items.length,
+        physics: const BouncingScrollPhysics(),
+        addAutomaticKeepAlives: false,
+        itemCount: products.length,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
-            childAspectRatio: 2.08,
-            crossAxisSpacing: 5.0,
-            mainAxisSpacing: 5.0),
+            maxCrossAxisExtent: 300,
+            childAspectRatio: 1.5,
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0),
         padding: const EdgeInsets.all(10.0),
         itemBuilder: (ctx, index) {
-          return itemWidget(ctx, items[index]);
+          return itemWidget(ctx, products[index]);
         });
   }
 
