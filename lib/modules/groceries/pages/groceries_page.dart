@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import 'package:money_manager/modules/groceries/widgets/product_widget.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
-import 'package:money_manager/modules/groceries/widgets/form_cart_item_widget.dart';
 
 class GroceriesPage extends StatelessWidget {
   const GroceriesPage({Key? key}) : super(key: key);
@@ -68,52 +68,35 @@ class GroceriesPage extends StatelessWidget {
       );
     }
 
+    const extraWidget = SizedBox(height: 36.0);
+
+    final module = products.length % 2;
+
+    final quantity = module == 0 ? products.length + 1 : products.length;
+
     return GridView.builder(
         physics: const BouncingScrollPhysics(),
         addAutomaticKeepAlives: false,
-        itemCount: products.length,
+        itemCount: quantity,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            mainAxisExtent: 160,
             maxCrossAxisExtent: 300,
-            childAspectRatio: 1.5,
             crossAxisSpacing: 10.0,
             mainAxisSpacing: 10.0),
         padding: const EdgeInsets.all(10.0),
         itemBuilder: (ctx, index) {
+          if (module == 0 && (quantity - 1) == index) return extraWidget;
           return itemWidget(ctx, products[index]);
         });
   }
 
-  Widget itemWidget(BuildContext context, ProductStore item) {
-    return Card(
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(8.0),
-        title: Text(item.name,
-            style: const TextStyle(
-                fontSize: 16.0, fontWeight: FontWeight.bold, height: 1.0)),
-        subtitle: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(item.unitPriceFormatted,
-                style: const TextStyle(
-                    fontSize: 14.0, color: Colors.blueGrey, height: 1.25)),
-            OutlinedButton(
-                onPressed: () => showDialog<void>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return FormCartItem(
-                            product: item,
-                            onSave: (CartItemStore cartItem) {
-                              _shoppingCartStore.addItem(cartItem);
+  Widget itemWidget(BuildContext context, ProductStore product) {
+    return ProductWidget(
+        product: product,
+        onSave: (CartItemStore cartItem) {
+          _shoppingCartStore.addItem(cartItem);
 
-                              Navigator.pop(context);
-                            });
-                      },
-                    ),
-                child: const Icon(Icons.add_shopping_cart)),
-          ],
-        ),
-      ),
-    );
+          Navigator.pop(context);
+        });
   }
 }
