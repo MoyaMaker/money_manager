@@ -58,6 +58,7 @@ abstract class _ProductListStore with Store {
     }
   }
 
+  @action
   Future<int> createProduct(ProductStore product) {
     // TODO: Validate if product already exist
     return _box.add(product);
