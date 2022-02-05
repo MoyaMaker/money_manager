@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 class GroceriesNewProductPage extends StatelessWidget {
   const GroceriesNewProductPage({Key? key}) : super(key: key);
 
-  static late ProductListStore _groceryListStore;
+  static late ProductListStore _productListStore;
   static late ShoppingCartStore _shoppingCartStore;
 
   static final _formKey = GlobalKey<FormState>();
@@ -21,7 +21,7 @@ class GroceriesNewProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _groceryListStore = Provider.of<ProductListStore>(context, listen: false);
+    _productListStore = Provider.of<ProductListStore>(context, listen: false);
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
 
     return Scaffold(
@@ -81,7 +81,9 @@ class GroceriesNewProductPage extends StatelessWidget {
         name: _productNameController.text,
         unitPrice: stringToDouble(_unitPriceController.text));
 
-    _groceryListStore.add(product);
+    _productListStore.add(product);
+
+    _productListStore.createProduct(product);
 
     final cartItem = CartItemStore(
         product: product, quantity: stringToDouble(_quantityController.text));
