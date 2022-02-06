@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'package:money_manager/utils/font_height.dart';
+
+import 'package:money_manager/modules/groceries/enums/promotions_enum.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
-import 'package:money_manager/utils/font_height.dart';
 
 class GroceriesShoppingDetailPage extends StatelessWidget {
   final ShoppingCartStore shopItem;
@@ -53,7 +56,7 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
                           tableHeader('P. unit.', TextAlign.right),
                           tableHeader('Total.', TextAlign.right)
                         ]),
-                    ...shopItem.items
+                    ...shopItem.cartItems
                         .map((element) => listItem(element))
                         .toList()
                   ],

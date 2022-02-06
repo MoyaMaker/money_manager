@@ -56,15 +56,15 @@ class GroceriesPage extends StatelessWidget {
   Widget gridItems() {
     final products = _productListStore.filteredProducts;
 
-    if (products == null) {
+    if (products.isEmpty && _productListStore.feedbackMessage.isEmpty) {
       return const Center(
         child: CircularProgressIndicator(),
       );
     }
 
-    if (products.isEmpty) {
-      return const Center(
-        child: Text('No hay elementos en lista'),
+    if (products.isEmpty && _productListStore.feedbackMessage.isNotEmpty) {
+      return Center(
+        child: Text(_productListStore.feedbackMessage),
       );
     }
 

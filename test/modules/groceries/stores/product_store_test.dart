@@ -49,13 +49,13 @@ void main() {
 
       productListStore.add(newProduct);
 
-      expect(productListStore.filteredProducts!.length, 1);
+      expect(productListStore.filteredProducts.length, 1);
     });
 
     test('search item in list', () {
       productListStore.setSearchQuery('cate');
 
-      expect(productListStore.filteredProducts!.first.name, 'Aguacate');
+      expect(productListStore.filteredProducts.first.name, 'Aguacate');
     });
 
     test('create product in hive', () {
@@ -79,7 +79,7 @@ void main() {
 
       productListStore.remove(oldItem);
 
-      expect(productListStore.products!.length, 1);
+      expect(productListStore.products.length, 1);
     });
 
     test('verify box is open', () async {

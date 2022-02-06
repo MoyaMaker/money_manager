@@ -10,10 +10,10 @@ void main() {
     });
 
     test('get count items', () {
-      expect(shoppingHistoryStore.countItems, 1);
+      expect(shoppingHistoryStore.countItems, 0);
     });
     test('has items', () {
-      expect(shoppingHistoryStore.hasItems, true);
+      expect(shoppingHistoryStore.hasItems, false);
     });
   });
 }
