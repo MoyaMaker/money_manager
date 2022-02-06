@@ -17,7 +17,7 @@ class GroceriesNewProductPage extends StatelessWidget {
 
   static final _productNameController = TextEditingController();
   static final _unitPriceController = TextEditingController();
-  static final _quantityController = TextEditingController(text: '1.0');
+  static final _quantityController = TextEditingController(text: '1');
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +98,6 @@ class GroceriesNewProductPage extends StatelessWidget {
   void clean() {
     _productNameController.clear();
     _unitPriceController.clear();
-    _quantityController.clear();
+    _quantityController.text = '1';
   }
 }
