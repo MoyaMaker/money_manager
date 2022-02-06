@@ -17,10 +17,9 @@ class FormCartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double quantity = this.quantity ?? 1;
     _priceController =
         TextEditingController(text: product.unitPrice.toString());
-    _quantityController = TextEditingController(text: quantity.toString());
+    _quantityController = TextEditingController(text: '${quantity ?? '1'}');
 
     return SimpleDialog(
       contentPadding: const EdgeInsets.all(15.0),
