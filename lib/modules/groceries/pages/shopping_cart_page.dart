@@ -42,14 +42,15 @@ class GroceriesShoppingCartPage extends StatelessWidget {
               color: Colors.grey,
             ),
         itemBuilder: (context, index) =>
-            cartItem(context, _shoppingCartStore.items[index]));
+            cartItem(context, index, _shoppingCartStore.cartItems[index]));
   }
 
-  Widget cartItem(BuildContext context, CartItemStore cartItem) {
+  Widget cartItem(BuildContext context, int index, CartItemStore cartItem) {
     return CartItem(
         key: Key(cartItem.product.id),
         cartItem: cartItem,
-        onDismissed: (direction) => _shoppingCartStore.removeItem(cartItem),
+        onDismissed: (direction) =>
+            _shoppingCartStore.removeItem(index, cartItem),
         onSave: (CartItemStore cartItem) {
           _shoppingCartStore.addItem(cartItem);
 

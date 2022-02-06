@@ -56,7 +56,7 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
                           tableHeader('P. unit.', TextAlign.right),
                           tableHeader('Total.', TextAlign.right)
                         ]),
-                    ...shopItem.items
+                    ...shopItem.cartItems
                         .map((element) => listItem(element))
                         .toList()
                   ],

@@ -14,7 +14,11 @@ abstract class _ProductListStore with Store {
         await _initBox();
 
         // Init values in list
-        products = ObservableList.of(_box.values.toList());
+        final productList = _box.values.toList();
+
+        if (productList.isEmpty) feedbackMessage = 'No hay elementos en lista';
+
+        products = ObservableList.of(productList);
       })
     ];
   }
@@ -24,26 +28,29 @@ abstract class _ProductListStore with Store {
   late Box<ProductStore> _box;
 
   @observable
-  ObservableList<ProductStore>? products;
+  String feedbackMessage = '';
+
+  @observable
+  ObservableList<ProductStore> products = ObservableList.of([]);
 
   @observable
   String searchQuery = '';
 
   @computed
-  List<ProductStore>? get filteredProducts {
+  List<ProductStore> get filteredProducts {
     if (searchQuery.isEmpty) return products;
 
-    return products!
+    return products
         .where((element) =>
             element.name.toLowerCase().contains(searchQuery.toLowerCase()))
         .toList();
   }
 
   @action
-  void add(ProductStore item) => products!.add(item);
+  void add(ProductStore item) => products.add(item);
 
   @action
-  void remove(ProductStore item) => products!.remove(item);
+  void remove(ProductStore item) => products.remove(item);
 
   @action
   void setSearchQuery(String value) => searchQuery = value;

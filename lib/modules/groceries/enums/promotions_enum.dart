@@ -1,12 +1,26 @@
+import 'package:hive/hive.dart';
+
+part 'promotions_enum.g.dart';
+
+@HiveType(typeId: 2, adapterName: 'PromotionsAdapter')
 enum Promotions {
+  @HiveField(0)
   notSelected,
+  @HiveField(1)
   quantity4UniquePrice,
+  @HiveField(2)
   percentage,
+  @HiveField(3)
   points,
+  @HiveField(4)
   p2x1,
+  @HiveField(5)
   p3x2,
+  @HiveField(6)
   p4x3,
+  @HiveField(7)
   q1x70percentage,
+  @HiveField(8)
   q1AndHalf
 }
 

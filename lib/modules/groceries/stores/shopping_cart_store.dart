@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'cart_item_store.dart';
 
@@ -14,13 +15,28 @@ abstract class _ShoppingCartStore with Store {
       this.storeName = '',
       DateTime? buyDate})
       : buyDate = buyDate ?? DateTime.now(),
-        items = items ?? ObservableList<CartItemStore>.of([]);
+        cartItems = items ?? ObservableList.of([]) {
+    _disposers = [
+      autorun((_) async {
+        await _initBox();
+
+        // Init values in list
+        final cartItemsList = _box.values.toList();
+
+        cartItems = ObservableList.of(cartItemsList);
+      })
+    ];
+  }
+
+  late Box<CartItemStore> _box;
+
+  late List<ReactionDisposer> _disposers;
 
   @observable
   String? id;
 
   @observable
-  ObservableList<CartItemStore> items;
+  late ObservableList<CartItemStore> cartItems;
 
   @observable
   DateTime buyDate;
@@ -29,10 +45,10 @@ abstract class _ShoppingCartStore with Store {
   String storeName;
 
   @computed
-  bool get hasItems => items.isNotEmpty;
+  bool get hasItems => cartItems.isNotEmpty;
 
   @computed
-  int get countItems => items.length;
+  int get countItems => cartItems.length;
 
   @computed
   String get buyDateFormatted =>
@@ -42,7 +58,7 @@ abstract class _ShoppingCartStore with Store {
   String get subtotal {
     double subtotal = 0.0;
 
-    for (var item in items) {
+    for (var item in cartItems) {
       subtotal += item.subtotal;
     }
 
@@ -54,7 +70,7 @@ abstract class _ShoppingCartStore with Store {
   String get discount {
     double discount = 0.0;
 
-    for (var item in items) {
+    for (var item in cartItems) {
       discount += item.discountAmount;
     }
 
@@ -66,7 +82,7 @@ abstract class _ShoppingCartStore with Store {
   String get total {
     double subtotal = 0.0;
 
-    for (var item in items) {
+    for (var item in cartItems) {
       subtotal += item.total;
     }
 
@@ -79,20 +95,29 @@ abstract class _ShoppingCartStore with Store {
 
   @action
   void addItem(CartItemStore cartItem) {
-    final itemAlreadyExist = items
+    final itemAlreadyExist = cartItems
         .where((element) => element.product.id == cartItem.product.id)
         .toList();
 
     if (itemAlreadyExist.isEmpty) {
-      items.add(cartItem);
+      cartItems.add(cartItem);
+      // Save in hive
+      addToCart(cartItem);
     } else {
+      final indexForEdit = cartItems.indexOf(itemAlreadyExist.first);
+
+      editQuantity(indexForEdit, cartItem);
       itemAlreadyExist.first.product.unitPrice = cartItem.product.unitPrice;
       itemAlreadyExist.first.quantity = cartItem.quantity;
     }
   }
 
   @action
-  void removeItem(CartItemStore cartItem) => items.remove(cartItem);
+  void removeItem(int index, CartItemStore cartItem) {
+    cartItems.remove(cartItem);
+
+    removeFromCart(index);
+  }
 
   @action
   void setBuyDate(DateTime value) => buyDate = value;
@@ -102,8 +127,42 @@ abstract class _ShoppingCartStore with Store {
 
   @action
   void cleanCart() {
-    items = items = ObservableList.of([]);
+    cartItems = ObservableList.of([]);
     storeName = '';
     buyDate = DateTime.now();
+  }
+
+  @action
+  Future<void> _initBox() async {
+    const boxName = 'shopping_cart';
+    if (Hive.isBoxOpen(boxName)) {
+      _box = Hive.box<CartItemStore>(boxName);
+    } else {
+      _box = await Hive.openBox<CartItemStore>(boxName);
+    }
+  }
+
+  Future<int> addToCart(CartItemStore cartItem) {
+    return _box.add(cartItem);
+  }
+
+  Future<void> removeFromCart(int index) {
+    return _box.deleteAt(index);
+  }
+
+  Future<void> editQuantity(int index, CartItemStore cartItem) {
+    return _box.putAt(index, cartItem);
+  }
+
+  void _disposeBox() {
+    _box.close();
+  }
+
+  @action
+  void dispose() {
+    for (var d in _disposers) {
+      d();
+    }
+    _disposeBox();
   }
 }

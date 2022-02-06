@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -8,34 +11,72 @@ import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 
 void main() {
-  group('validate init store when is empty', () {
-    test('set default values in store when init', () {
-      final store = ShoppingCartStore();
-
-      expect(store.hasItems, false);
-      expect(store.countItems, 0);
-    });
-  });
-
   group('testing computed from store', () {
     late ShoppingCartStore shoppingCartStore;
+    const boxName = 'shopping_cart';
+    late Box<CartItemStore> box;
 
-    setUp(() {
-      shoppingCartStore = ShoppingCartStore(
-          items: ObservableList.of([
-        CartItemStore(
-            product: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
-            quantity: 2,
-            promotion: Promotions.p2x1),
-        CartItemStore(
-            product: ProductStore(id: '2', name: 'Aguacate', unitPrice: 83.5)),
-        CartItemStore(
-            product: ProductStore(id: '3', name: 'Plátano', unitPrice: 23.0))
-      ]));
+    setUpAll(() async {
+      const testPath = '\\test\\modules\\groceries\\stores';
+      final dir = Directory.current;
+      final path = dir.path + testPath;
+
+      Hive.init(path);
+      Hive
+        ..registerAdapter(ProductHiveAdapter())
+        ..registerAdapter(CartItemAdapter())
+        ..registerAdapter(PromotionsAdapter());
+
+      shoppingCartStore = ShoppingCartStore();
+
+      if (Hive.isBoxOpen(boxName)) {
+        box = Hive.box<CartItemStore>(boxName);
+      } else {
+        box = await Hive.openBox<CartItemStore>(boxName);
+      }
+
+      // Init values in list
+      shoppingCartStore.cartItems = ObservableList.of(box.values.toList());
+    });
+
+    tearDownAll(() async {
+      await Hive.close();
+      await Hive.deleteBoxFromDisk(boxName);
+      await Hive.deleteFromDisk();
+    });
+
+    test('add item in cart', () {
+      // Arrange
+      final cartItem = CartItemStore(
+          quantity: 2,
+          product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0));
+      final cartItemSecond = CartItemStore(
+          quantity: 2,
+          promotion: Promotions.p2x1,
+          product: ProductStore(id: '1', name: 'Item 2', unitPrice: 15.0));
+      // Act
+      shoppingCartStore.addItem(cartItem);
+      shoppingCartStore.addItem(cartItemSecond);
+      // Expect
+      expect(shoppingCartStore.cartItems.first.quantity, 2);
+      expect(shoppingCartStore.countItems, 2);
+    });
+
+    test('add same item in cart', () {
+      // Arrange
+      final cartItem = CartItemStore(
+          quantity: 4,
+          product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0));
+      // Act
+      shoppingCartStore.addItem(cartItem);
+      shoppingCartStore.cartItems.first.removeDiscount();
+      // Expect
+      expect(shoppingCartStore.cartItems.first.quantity, 4);
+      expect(shoppingCartStore.countItems, 2);
     });
 
     test('count items', () {
-      expect(shoppingCartStore.countItems, 3);
+      expect(shoppingCartStore.countItems, 2);
     });
 
     test('check empty list', () {
@@ -72,15 +113,16 @@ void main() {
       final expectedDate = '$day ${months[d.month - 1]} ${d.year}';
 
       // Act
+      shoppingCartStore.setBuyDate(d);
 
       // Assert
       expect(shoppingCartStore.buyDateFormatted, expectedDate);
     });
 
     test('get subtotal, discount and total', () {
-      const expectedResultSubtotal = r'$136.50';
+      const expectedResultSubtotal = r'$90.00';
       const expectedResultDiscount = r'$15.00';
-      const expectedResultTotal = r'$121.50';
+      const expectedResultTotal = r'$75.00';
 
       expect(shoppingCartStore.subtotal, expectedResultSubtotal);
       expect(shoppingCartStore.discount, expectedResultDiscount);
@@ -90,67 +132,21 @@ void main() {
     test('can continue buy', () {
       expect(shoppingCartStore.canContinueBuy, false);
     });
-  });
-
-  group('adding items in cart', () {
-    late ShoppingCartStore shoppingCartStore;
-
-    setUp(() {
-      shoppingCartStore = ShoppingCartStore(
-          items: ObservableList.of([
-        CartItemStore(
-            product: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0)),
-      ]));
-    });
-
-    test('add item in cart', () {
-      // Arrange
-      final cartItem = CartItemStore(
-          product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0));
-      // Act
-      shoppingCartStore.addItem(cartItem);
-      // Expect
-      expect(shoppingCartStore.items.first.quantity, 1);
-      expect(shoppingCartStore.countItems, 2);
-    });
-
-    test('add same item in cart', () {
-      // Arrange
-      final cartItem = CartItemStore(
-          quantity: 4,
-          product: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0));
-      // Act
-      shoppingCartStore.addItem(cartItem);
-      // Expect
-      expect(shoppingCartStore.items.first.quantity, 4);
-      expect(shoppingCartStore.countItems, 1);
-    });
-  });
-
-  group('remove items from cart', () {
-    late ShoppingCartStore shoppingCartStore;
-
-    setUp(() {
-      shoppingCartStore = ShoppingCartStore(
-          items: ObservableList.of([
-        CartItemStore(
-            product: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0),
-            quantity: 2,
-            promotion: Promotions.p2x1),
-        CartItemStore(
-            product: ProductStore(id: '2', name: 'Aguacate', unitPrice: 83.5)),
-        CartItemStore(
-            product: ProductStore(id: '3', name: 'Plátano', unitPrice: 23.0))
-      ]));
-    });
 
     test('remove item', () {
       // Arrange
-      final cartItem = shoppingCartStore.items.first;
+      const index = 0;
+      final cartItem = shoppingCartStore.cartItems.first;
       // Act
-      shoppingCartStore.removeItem(cartItem);
+      shoppingCartStore.removeItem(index, cartItem);
       // Assert
-      expect(shoppingCartStore.countItems, 2);
+      expect(shoppingCartStore.countItems, 1);
+    });
+
+    test('verify box is open', () async {
+      shoppingCartStore = ShoppingCartStore();
+
+      expect(box.isOpen, true);
     });
 
     test('clean cart', () {
@@ -162,6 +158,13 @@ void main() {
       // Assert
       expect(shoppingCartStore.storeName, '');
       expect(shoppingCartStore.countItems, 0);
+      expect(shoppingCartStore.hasItems, false);
+    });
+
+    test('dispose store', () {
+      shoppingCartStore.dispose();
+
+      expect(box.isOpen, false);
     });
   });
 }

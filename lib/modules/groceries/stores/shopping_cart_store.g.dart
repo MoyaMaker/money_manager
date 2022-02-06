@@ -73,18 +73,18 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
-  final _$itemsAtom = Atom(name: '_ShoppingCartStore.items');
+  final _$cartItemsAtom = Atom(name: '_ShoppingCartStore.cartItems');
 
   @override
-  ObservableList<CartItemStore> get items {
-    _$itemsAtom.reportRead();
-    return super.items;
+  ObservableList<CartItemStore> get cartItems {
+    _$cartItemsAtom.reportRead();
+    return super.cartItems;
   }
 
   @override
-  set items(ObservableList<CartItemStore> value) {
-    _$itemsAtom.reportWrite(value, super.items, () {
-      super.items = value;
+  set cartItems(ObservableList<CartItemStore> value) {
+    _$cartItemsAtom.reportWrite(value, super.cartItems, () {
+      super.cartItems = value;
     });
   }
 
@@ -118,6 +118,13 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
+  final _$_initBoxAsyncAction = AsyncAction('_ShoppingCartStore._initBox');
+
+  @override
+  Future<void> _initBox() {
+    return _$_initBoxAsyncAction.run(() => super._initBox());
+  }
+
   final _$_ShoppingCartStoreActionController =
       ActionController(name: '_ShoppingCartStore');
 
@@ -133,11 +140,11 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
-  void removeItem(CartItemStore cartItem) {
+  void removeItem(int index, CartItemStore cartItem) {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.removeItem');
     try {
-      return super.removeItem(cartItem);
+      return super.removeItem(index, cartItem);
     } finally {
       _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
     }
@@ -177,10 +184,21 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
+  void dispose() {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.dispose');
+    try {
+      return super.dispose();
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 id: ${id},
-items: ${items},
+cartItems: ${cartItems},
 buyDate: ${buyDate},
 storeName: ${storeName},
 hasItems: ${hasItems},

@@ -53,24 +53,39 @@ class ProductHiveAdapter extends TypeAdapter<ProductStore> {
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ProductListStore on _ProductListStore, Store {
-  Computed<List<ProductStore>?>? _$filteredProductsComputed;
+  Computed<List<ProductStore>>? _$filteredProductsComputed;
 
   @override
-  List<ProductStore>? get filteredProducts => (_$filteredProductsComputed ??=
-          Computed<List<ProductStore>?>(() => super.filteredProducts,
+  List<ProductStore> get filteredProducts => (_$filteredProductsComputed ??=
+          Computed<List<ProductStore>>(() => super.filteredProducts,
               name: '_ProductListStore.filteredProducts'))
       .value;
+
+  final _$feedbackMessageAtom = Atom(name: '_ProductListStore.feedbackMessage');
+
+  @override
+  String get feedbackMessage {
+    _$feedbackMessageAtom.reportRead();
+    return super.feedbackMessage;
+  }
+
+  @override
+  set feedbackMessage(String value) {
+    _$feedbackMessageAtom.reportWrite(value, super.feedbackMessage, () {
+      super.feedbackMessage = value;
+    });
+  }
 
   final _$productsAtom = Atom(name: '_ProductListStore.products');
 
   @override
-  ObservableList<ProductStore>? get products {
+  ObservableList<ProductStore> get products {
     _$productsAtom.reportRead();
     return super.products;
   }
 
   @override
-  set products(ObservableList<ProductStore>? value) {
+  set products(ObservableList<ProductStore> value) {
     _$productsAtom.reportWrite(value, super.products, () {
       super.products = value;
     });
@@ -135,6 +150,17 @@ mixin _$ProductListStore on _ProductListStore, Store {
   }
 
   @override
+  Future<int> createProduct(ProductStore product) {
+    final _$actionInfo = _$_ProductListStoreActionController.startAction(
+        name: '_ProductListStore.createProduct');
+    try {
+      return super.createProduct(product);
+    } finally {
+      _$_ProductListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void dispose() {
     final _$actionInfo = _$_ProductListStoreActionController.startAction(
         name: '_ProductListStore.dispose');
@@ -148,6 +174,7 @@ mixin _$ProductListStore on _ProductListStore, Store {
   @override
   String toString() {
     return '''
+feedbackMessage: ${feedbackMessage},
 products: ${products},
 searchQuery: ${searchQuery},
 filteredProducts: ${filteredProducts}
