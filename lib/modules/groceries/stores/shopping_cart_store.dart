@@ -102,11 +102,11 @@ abstract class _ShoppingCartStore with Store {
     if (itemAlreadyExist.isEmpty) {
       cartItems.add(cartItem);
       // Save in hive
-      addToCart(cartItem);
+      saveIntoBox(cartItem);
     } else {
       final indexForEdit = cartItems.indexOf(itemAlreadyExist.first);
 
-      editQuantity(indexForEdit, cartItem);
+      editFromBox(indexForEdit, cartItem);
       itemAlreadyExist.first.product.unitPrice = cartItem.product.unitPrice;
       itemAlreadyExist.first.quantity = cartItem.quantity;
     }
@@ -116,7 +116,7 @@ abstract class _ShoppingCartStore with Store {
   void removeItem(int index, CartItemStore cartItem) {
     cartItems.remove(cartItem);
 
-    removeFromCart(index);
+    removeFromBox(index);
   }
 
   @action
@@ -128,6 +128,7 @@ abstract class _ShoppingCartStore with Store {
   @action
   void cleanCart() {
     cartItems = ObservableList.of([]);
+    cleanBox();
     storeName = '';
     buyDate = DateTime.now();
   }
@@ -135,6 +136,7 @@ abstract class _ShoppingCartStore with Store {
   @action
   Future<void> _initBox() async {
     const boxName = 'shopping_cart';
+
     if (Hive.isBoxOpen(boxName)) {
       _box = Hive.box<CartItemStore>(boxName);
     } else {
@@ -142,27 +144,22 @@ abstract class _ShoppingCartStore with Store {
     }
   }
 
-  Future<int> addToCart(CartItemStore cartItem) {
-    return _box.add(cartItem);
-  }
+  Future<int> saveIntoBox(CartItemStore cartItem) => _box.add(cartItem);
 
-  Future<void> removeFromCart(int index) {
-    return _box.deleteAt(index);
-  }
+  Future<void> removeFromBox(int index) => _box.deleteAt(index);
 
-  Future<void> editQuantity(int index, CartItemStore cartItem) {
-    return _box.putAt(index, cartItem);
-  }
+  Future<void> editFromBox(int index, CartItemStore cartItem) =>
+      _box.putAt(index, cartItem);
 
-  void _disposeBox() {
-    _box.close();
-  }
+  Future<void> cleanBox() => _box.deleteFromDisk();
+
+  void _disposeBox() => _box.close();
 
   @action
   void dispose() {
+    _disposeBox();
     for (var d in _disposers) {
       d();
     }
-    _disposeBox();
   }
 }
