@@ -39,7 +39,7 @@ Run command `flutter test --coverage`, this will run the all test in folder `tes
 
 I'm generate a html files with genhtml reading the lcov.info
 
-````
+```
 # Remove output to update all files
 rm -R coverage/output
 
