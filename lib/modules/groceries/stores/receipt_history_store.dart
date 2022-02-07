@@ -61,7 +61,11 @@ abstract class _ReceiptHistoryStore with Store {
   Future<int> saveIntoBox(Receipt receipt) => _box.add(receipt);
 
   @action
+  Future<void> closeBox() => _box.close();
+
+  @action
   void dispose() {
+    closeBox();
     for (var d in _disposers) {
       d();
     }
