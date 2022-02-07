@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 import 'cart_item_store.dart';
 
@@ -21,9 +22,7 @@ abstract class _ShoppingCartStore with Store {
         await _initBox();
 
         // Init values in list
-        final cartItemsList = _box.values.toList();
-
-        cartItems = ObservableList.of(cartItemsList);
+        cartItems = ObservableList.of(_box.values.toList());
       })
     ];
   }
@@ -94,6 +93,9 @@ abstract class _ShoppingCartStore with Store {
   bool get canContinueBuy => hasItems && storeName.isNotEmpty;
 
   @action
+  void setId() => id = const Uuid().v1();
+
+  @action
   void addItem(CartItemStore cartItem) {
     final itemAlreadyExist = cartItems
         .where((element) => element.product.id == cartItem.product.id)
@@ -127,10 +129,11 @@ abstract class _ShoppingCartStore with Store {
 
   @action
   void cleanCart() {
-    cartItems = ObservableList.of([]);
-    cleanBox();
+    id = null;
     storeName = '';
     buyDate = DateTime.now();
+    cartItems = ObservableList.of([]);
+    cleanBox();
   }
 
   @action
@@ -151,7 +154,7 @@ abstract class _ShoppingCartStore with Store {
   Future<void> editFromBox(int index, CartItemStore cartItem) =>
       _box.putAt(index, cartItem);
 
-  Future<void> cleanBox() => _box.deleteFromDisk();
+  Future<void> cleanBox() => _box.clear();
 
   void _disposeBox() => _box.close();
 
@@ -161,5 +164,19 @@ abstract class _ShoppingCartStore with Store {
     for (var d in _disposers) {
       d();
     }
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'storeName': storeName,
+      'buyDate': buyDate,
+      'buyDateFormatted': buyDateFormatted,
+      'countItems': countItems,
+      'cartItems': cartItems,
+      'subtotal': subtotal,
+      'discount': discount,
+      'total': total
+    };
   }
 }

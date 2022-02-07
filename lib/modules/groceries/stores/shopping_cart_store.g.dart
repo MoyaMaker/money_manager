@@ -129,6 +129,17 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
       ActionController(name: '_ShoppingCartStore');
 
   @override
+  void setId() {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.setId');
+    try {
+      return super.setId();
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addItem(CartItemStore cartItem) {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.addItem');

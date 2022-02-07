@@ -1,20 +1,25 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+
+import 'package:money_manager/modules/groceries/stores/receipt_history_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 
 class GroceriesPaymentPage extends StatelessWidget {
   const GroceriesPaymentPage({Key? key}) : super(key: key);
 
   static late ShoppingCartStore _shoppingCartStore;
+  static late ReceiptHistoryStore _receiptHistoryStore;
 
   static late TextEditingController _storeNameController;
 
   @override
   Widget build(BuildContext context) {
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
+    _receiptHistoryStore =
+        Provider.of<ReceiptHistoryStore>(context, listen: false);
 
     _storeNameController =
         TextEditingController(text: _shoppingCartStore.storeName);
@@ -66,7 +71,10 @@ class GroceriesPaymentPage extends StatelessWidget {
                         padding: const EdgeInsets.all(15.0)),
                     onPressed: _shoppingCartStore.canContinueBuy
                         ? () {
-                            // TODO: Save in local storage
+                            _shoppingCartStore.setId();
+
+                            _receiptHistoryStore
+                                .saveReceipt(_shoppingCartStore);
 
                             // Clear cart
                             _shoppingCartStore.cleanCart();
