@@ -1,4 +1,4 @@
-package com.example.money_manager
+package com.moyamaker.money_manager
 
 import io.flutter.embedding.android.FlutterActivity
 
