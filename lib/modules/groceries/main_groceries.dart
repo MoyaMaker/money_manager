@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:money_manager/modules/groceries/pages/groceries_page.dart';
 import 'package:money_manager/modules/groceries/pages/shopping_cart_page.dart';
-import 'package:money_manager/modules/groceries/pages/shopping_history_page.dart';
+import 'package:money_manager/modules/groceries/pages/receipt_history_page.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 import 'package:provider/provider.dart';
 
@@ -72,7 +72,7 @@ class _MainGroceriesState extends State<MainGroceries> {
           children: const [
             GroceriesPage(),
             GroceriesShoppingCartPage(),
-            GroceriesShoppingHistoryPage()
+            ReceiptHistoryPage()
           ],
         ),
       ),

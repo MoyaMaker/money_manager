@@ -5,12 +5,12 @@ import 'package:money_manager/utils/font_height.dart';
 
 import 'package:money_manager/modules/groceries/enums/promotions_enum.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
-import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 
-class GroceriesShoppingDetailPage extends StatelessWidget {
-  final ShoppingCartStore shopItem;
-  const GroceriesShoppingDetailPage({Key? key, required this.shopItem})
-      : super(key: key);
+import '../models/receipt_model.dart';
+
+class ReceiptDetailPage extends StatelessWidget {
+  final Receipt receipt;
+  const ReceiptDetailPage({Key? key, required this.receipt}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
           children: [
             // Store name
             Center(
-              child: Text(shopItem.storeName,
+              child: Text(receipt.storeName,
                   style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
@@ -35,7 +35,7 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
             Center(
                 child: Container(
               margin: const EdgeInsets.only(bottom: 15.0),
-              child: Text(shopItem.buyDateFormatted,
+              child: Text(receipt.buyDateFormatted,
                   style: TextStyle(
                       fontSize: 18.0,
                       height: lineHeight(fontSize: 18.0, height: 20.0))),
@@ -56,7 +56,7 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
                           tableHeader('P. unit.', TextAlign.right),
                           tableHeader('Total.', TextAlign.right)
                         ]),
-                    ...shopItem.cartItems
+                    ...receipt.itemsList
                         .map((element) => listItem(element))
                         .toList()
                   ],
@@ -73,14 +73,14 @@ class GroceriesShoppingDetailPage extends StatelessWidget {
                 children: [
                   const Divider(),
                   // Discount
-                  bottomTotal('Subtotal:', shopItem.subtotal),
+                  bottomTotal('Subtotal:', receipt.subtotal),
                   // Subtotal
-                  bottomTotal('Descuento:', '-' + shopItem.discount,
+                  bottomTotal('Descuento:', '-' + receipt.discount,
                       const Color(0xFF0E6DFD)),
                   const Divider(),
                   // Total
                   bottomTotal(
-                      'Total:', shopItem.total, Colors.black, FontWeight.bold),
+                      'Total:', receipt.total, Colors.black, FontWeight.bold),
                 ],
               ),
             ),
