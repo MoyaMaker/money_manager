@@ -48,6 +48,7 @@ void main() {
     test('add item in cart', () {
       // Arrange
       final cartItem = CartItemStore(
+          promotion: Promotions.p2x1,
           quantity: 2,
           product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0));
       final cartItemSecond = CartItemStore(
@@ -62,16 +63,28 @@ void main() {
       expect(shoppingCartStore.countItems, 2);
     });
 
-    test('add same item in cart', () {
+    test('edit item in cart', () {
       // Arrange
       final cartItem = CartItemStore(
           quantity: 4,
           product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0));
       // Act
-      shoppingCartStore.addItem(cartItem);
+      shoppingCartStore.editItem(0, cartItem);
       shoppingCartStore.cartItems.first.removeDiscount();
       // Expect
       expect(shoppingCartStore.cartItems.first.quantity, 4);
+      expect(shoppingCartStore.countItems, 2);
+    });
+
+    test('add same item in cart', () {
+      // Arrange
+      final cartItem = CartItemStore(
+          quantity: 1,
+          product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0));
+      // Act
+      shoppingCartStore.addItem(cartItem);
+      // Expect
+      expect(shoppingCartStore.cartItems.first.quantity, 5);
       expect(shoppingCartStore.countItems, 2);
     });
 
@@ -120,9 +133,9 @@ void main() {
     });
 
     test('get subtotal, discount and total', () {
-      const expectedResultSubtotal = r'$90.00';
+      const expectedResultSubtotal = r'$105.00';
       const expectedResultDiscount = r'$15.00';
-      const expectedResultTotal = r'$75.00';
+      const expectedResultTotal = r'$90.00';
 
       expect(shoppingCartStore.subtotal, expectedResultSubtotal);
       expect(shoppingCartStore.discount, expectedResultDiscount);
@@ -151,6 +164,7 @@ void main() {
 
     test('clean cart', () {
       // Arrange
+      shoppingCartStore.setId();
       shoppingCartStore.setStoreName('Soriana');
       shoppingCartStore.setBuyDate(DateTime(2021, 7, 12));
       // Act
