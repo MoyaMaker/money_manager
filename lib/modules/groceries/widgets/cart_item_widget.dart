@@ -6,23 +6,25 @@ import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 
 import 'form_cart_item_widget.dart';
 
-class CartItem extends StatefulWidget {
+class CartItemWidget extends StatefulWidget {
   final CartItemStore cartItem;
+  final ValueChanged<CartItemStore> updatePromotion;
   final ValueChanged<DismissDirection> onDismissed;
   final ValueChanged<CartItemStore> onSave;
 
-  const CartItem(
+  const CartItemWidget(
       {Key? key,
       required this.cartItem,
+      required this.updatePromotion,
       required this.onDismissed,
       required this.onSave})
       : super(key: key);
 
   @override
-  _CartItemState createState() => _CartItemState();
+  _CartItemWidgetState createState() => _CartItemWidgetState();
 }
 
-class _CartItemState extends State<CartItem> {
+class _CartItemWidgetState extends State<CartItemWidget> {
   late TextEditingController _discountController;
   late FocusNode _discountTextField;
 
@@ -185,6 +187,7 @@ class _CartItemState extends State<CartItem> {
                           items: Promotions.values,
                           onChanged: (value) {
                             widget.cartItem.setPromotion(value);
+                            widget.updatePromotion(widget.cartItem);
 
                             if (widget.cartItem.promotion!.showTextField) {
                               _discountTextField.requestFocus();
@@ -208,6 +211,7 @@ class _CartItemState extends State<CartItem> {
                                   final discount =
                                       double.tryParse(_discountController.text);
                                   widget.cartItem.setDiscount(discount);
+                                  widget.updatePromotion(widget.cartItem);
                                 },
                                 decoration: const InputDecoration(
                                     contentPadding: EdgeInsets.all(10.0),
@@ -223,6 +227,7 @@ class _CartItemState extends State<CartItem> {
                               final discount =
                                   double.tryParse(_discountController.text);
                               widget.cartItem.setDiscount(discount);
+                              widget.updatePromotion(widget.cartItem);
                             }),
                         // Delete discount
                         IconButton(
@@ -230,6 +235,7 @@ class _CartItemState extends State<CartItem> {
                             onPressed: () {
                               _discountController.clear();
                               widget.cartItem.removeDiscount();
+                              widget.updatePromotion(widget.cartItem);
                             },
                             icon: const Icon(Icons.delete))
                       ],

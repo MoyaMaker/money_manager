@@ -25,7 +25,7 @@ Run this command: `flutter pub run build_runner build --delete-conflicting-outpu
 
 ## Flutter Launcher Icons
 
-Run the package
+Run the package to generate new icons
 ```
 flutter pub get
 flutter pub run flutter_launcher_icons:main

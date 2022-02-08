@@ -46,9 +46,12 @@ class GroceriesShoppingCartPage extends StatelessWidget {
   }
 
   Widget cartItem(BuildContext context, int index, CartItemStore cartItem) {
-    return CartItem(
+    return CartItemWidget(
         key: Key(cartItem.product.id),
         cartItem: cartItem,
+        updatePromotion: (CartItemStore cartItem) {
+          _shoppingCartStore.editFromBox(index, cartItem);
+        },
         onDismissed: (direction) =>
             _shoppingCartStore.removeItem(index, cartItem),
         onSave: (CartItemStore cartItem) {
