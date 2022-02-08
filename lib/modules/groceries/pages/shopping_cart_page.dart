@@ -52,7 +52,7 @@ class GroceriesShoppingCartPage extends StatelessWidget {
         onDismissed: (direction) =>
             _shoppingCartStore.removeItem(index, cartItem),
         onSave: (CartItemStore cartItem) {
-          _shoppingCartStore.addItem(cartItem);
+          _shoppingCartStore.editItem(index, cartItem);
 
           Navigator.pop(context);
         });

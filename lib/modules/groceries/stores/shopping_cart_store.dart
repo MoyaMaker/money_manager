@@ -96,22 +96,36 @@ abstract class _ShoppingCartStore with Store {
   void setId() => id = const Uuid().v1();
 
   @action
-  void addItem(CartItemStore cartItem) {
-    final itemAlreadyExist = cartItems
-        .where((element) => element.product.id == cartItem.product.id)
-        .toList();
+  int findItemIndex(CartItemStore cartItem) {
+    return cartItems
+        .indexWhere((element) => element.product.id == cartItem.product.id);
+  }
 
-    if (itemAlreadyExist.isEmpty) {
+  @action
+  void addItem(CartItemStore cartItem) {
+    final indexItem = findItemIndex(cartItem);
+
+    if (indexItem == -1) {
       cartItems.add(cartItem);
       // Save in hive
       saveIntoBox(cartItem);
     } else {
-      final indexForEdit = cartItems.indexOf(itemAlreadyExist.first);
+      final oldItem = cartItems[indexItem];
 
-      editFromBox(indexForEdit, cartItem);
-      itemAlreadyExist.first.product.unitPrice = cartItem.product.unitPrice;
-      itemAlreadyExist.first.quantity = cartItem.quantity;
+      // Sum new quantity
+      cartItems[indexItem].quantity = oldItem.quantity + cartItem.quantity;
+      // Update unit price
+      cartItems[indexItem].product.unitPrice = cartItem.product.unitPrice;
+
+      editFromBox(indexItem, cartItems[indexItem]);
     }
+  }
+
+  @action
+  void editItem(int index, CartItemStore cartItem) {
+    editFromBox(index, cartItem);
+    cartItems[index].quantity = cartItem.quantity;
+    cartItems[index].product.unitPrice = cartItem.product.unitPrice;
   }
 
   @action
@@ -156,7 +170,7 @@ abstract class _ShoppingCartStore with Store {
 
   Future<void> cleanBox() => _box.clear();
 
-  void _disposeBox() => _box.close();
+  Future<void> _disposeBox() => _box.close();
 
   @action
   void dispose() {
