@@ -165,18 +165,4 @@ abstract class _ShoppingCartStore with Store {
       d();
     }
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'storeName': storeName,
-      'buyDate': buyDate,
-      'buyDateFormatted': buyDateFormatted,
-      'countItems': countItems,
-      'cartItems': cartItems,
-      'subtotal': subtotal,
-      'discount': discount,
-      'total': total
-    };
-  }
 }

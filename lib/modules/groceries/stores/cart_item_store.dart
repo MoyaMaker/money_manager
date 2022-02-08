@@ -17,7 +17,11 @@ abstract class _CartItemStore with Store {
       {required this.product,
       this.quantity = 1.0,
       this.promotion = Promotions.notSelected,
-      this.discount});
+      this.discount}) {
+    _disposers = [];
+  }
+
+  late List<ReactionDisposer> _disposers;
 
   @HiveField(0)
   @observable
@@ -148,5 +152,12 @@ abstract class _CartItemStore with Store {
   void removeDiscount() {
     promotion = Promotions.notSelected;
     discount = null;
+  }
+
+  @action
+  void disposer() {
+    for (var d in _disposers) {
+      d();
+    }
   }
 }

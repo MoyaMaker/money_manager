@@ -256,6 +256,17 @@ mixin _$CartItemStore on _CartItemStore, Store {
   }
 
   @override
+  void disposer() {
+    final _$actionInfo = _$_CartItemStoreActionController.startAction(
+        name: '_CartItemStore.disposer');
+    try {
+      return super.disposer();
+    } finally {
+      _$_CartItemStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 product: ${product},

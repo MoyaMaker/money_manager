@@ -72,6 +72,17 @@ mixin _$ReceiptHistoryStore on _ReceiptHistoryStore, Store {
   }
 
   @override
+  Future<void> closeBox() {
+    final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
+        name: '_ReceiptHistoryStore.closeBox');
+    try {
+      return super.closeBox();
+    } finally {
+      _$_ReceiptHistoryStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void dispose() {
     final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
         name: '_ReceiptHistoryStore.dispose');
