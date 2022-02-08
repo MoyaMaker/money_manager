@@ -140,11 +140,33 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
+  int findItemIndex(CartItemStore cartItem) {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.findItemIndex');
+    try {
+      return super.findItemIndex(cartItem);
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addItem(CartItemStore cartItem) {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.addItem');
     try {
       return super.addItem(cartItem);
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void editItem(int index, CartItemStore cartItem) {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.editItem');
+    try {
+      return super.editItem(index, cartItem);
     } finally {
       _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
     }
