@@ -190,9 +190,5 @@ void main() {
       // Assert
       expect(cartItemStore.hasSomeDiscount, true);
     });
-
-    test('run dispose', () {
-      cartItemStore.disposer();
-    });
   });
 }
