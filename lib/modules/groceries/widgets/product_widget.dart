@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
+import 'package:money_manager/modules/groceries/widgets/edit_product_widget.dart';
 import 'package:money_manager/utils/font_height.dart';
 
 import 'form_cart_item_widget.dart';
@@ -27,7 +28,7 @@ class ProductWidget extends StatelessWidget {
         children: [
           Column(
             children: [
-              optionsProduct(),
+              optionsProduct(context),
               // Name
               name(),
               // Price formatted
@@ -41,25 +42,44 @@ class ProductWidget extends StatelessWidget {
     );
   }
 
-  Widget optionsProduct() {
+  Widget optionsProduct(BuildContext context) {
     return Align(
         alignment: Alignment.centerRight,
-        child: PopupMenuButton(
+        child: PopupMenuButton<OptionSelected>(
             padding: EdgeInsets.zero,
             tooltip: 'Opciones',
+            onSelected: (OptionSelected value) {
+              if (value == OptionSelected.edit) {
+                showDialog<void>(
+                    context: context,
+                    builder: (_) => EditProductWidget(
+                        product: product,
+                        onSave: (ProductStore productModified) {}));
+              }
+            },
             itemBuilder: (_) => [
-                  option(const Icon(Icons.edit), 'Editar'),
+                  option(
+                      value: OptionSelected.edit,
+                      icon: const Icon(Icons.edit),
+                      name: 'Editar'),
                   const PopupMenuDivider(),
-                  option(const Icon(Icons.delete), 'Eliminar'),
+                  option(
+                      value: OptionSelected.delete,
+                      icon: const Icon(Icons.delete),
+                      name: 'Eliminar'),
                 ]));
   }
 
-  PopupMenuEntry option(Icon icon, String name) {
-    return PopupMenuItem(
+  PopupMenuEntry<OptionSelected> option(
+      {required OptionSelected value,
+      required Icon icon,
+      required String name}) {
+    return PopupMenuItem<OptionSelected>(
+        value: value,
         child: Row(children: [
-      Container(margin: const EdgeInsets.only(right: 10.0), child: icon),
-      Text(name)
-    ]));
+          Container(margin: const EdgeInsets.only(right: 10.0), child: icon),
+          Text(name)
+        ]));
   }
 
   Widget name() {
@@ -98,3 +118,5 @@ class ProductWidget extends StatelessWidget {
     );
   }
 }
+
+enum OptionSelected { edit, delete }
