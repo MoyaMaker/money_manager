@@ -52,6 +52,18 @@ void main() {
       expect(productListStore.filteredProducts.first.name, 'Aguacate');
     });
 
+    test('edit product', () {
+      final itemToEdit = productListStore.products.first;
+
+      itemToEdit.name = 'Aguacate Has';
+
+      final index = productListStore.findItemIndex(itemToEdit);
+
+      productListStore.edit(index, itemToEdit);
+
+      expect(productListStore.products[index].name, 'Aguacate Has');
+    });
+
     test('add second item in list', () {
       productListStore.add('Cereal', 56.0);
 
