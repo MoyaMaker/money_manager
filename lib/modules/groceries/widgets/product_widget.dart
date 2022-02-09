@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
@@ -35,9 +36,9 @@ class ProductWidget extends StatelessWidget {
             children: [
               optionsProduct(context),
               // Name
-              name(),
+              Observer(builder: (_) => name()),
               // Price formatted
-              price(),
+              Observer(builder: (_) => price()),
             ],
           ),
           // Button add to shopping cart
@@ -62,28 +63,29 @@ class ProductWidget extends StatelessWidget {
               }
             },
             itemBuilder: (_) => [
-                  option(
+                  // Editar
+                  PopupMenuItem<OptionSelected>(
                       value: OptionSelected.edit,
-                      icon: const Icon(Icons.edit),
-                      name: 'Editar'),
-                  const PopupMenuDivider(),
-                  option(
-                      value: OptionSelected.delete,
-                      icon: const Icon(Icons.delete),
-                      name: 'Eliminar'),
-                ]));
-  }
+                      child: Row(children: [
+                        Container(
+                            margin: const EdgeInsets.only(right: 10.0),
+                            child: const Icon(Icons.edit)),
+                        const Text('Editar')
+                      ])),
 
-  PopupMenuEntry<OptionSelected> option(
-      {required OptionSelected value,
-      required Icon icon,
-      required String name}) {
-    return PopupMenuItem<OptionSelected>(
-        value: value,
-        child: Row(children: [
-          Container(margin: const EdgeInsets.only(right: 10.0), child: icon),
-          Text(name)
-        ]));
+                  const PopupMenuDivider(),
+
+                  // Eliminar
+                  PopupMenuItem<OptionSelected>(
+                      enabled: false,
+                      value: OptionSelected.delete,
+                      child: Row(children: [
+                        Container(
+                            margin: const EdgeInsets.only(right: 10.0),
+                            child: const Icon(Icons.delete)),
+                        const Text('Eliminar')
+                      ]))
+                ]));
   }
 
   Widget name() {

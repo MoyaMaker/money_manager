@@ -30,11 +30,21 @@ class EditProductWidget extends StatelessWidget {
         //
         TextField(
           controller: _nameController,
+          autofocus: true,
+          textInputAction: TextInputAction.next,
           decoration: const InputDecoration(label: Text('Producto')),
         ),
         TextField(
           controller: _priceController,
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.done,
           decoration: const InputDecoration(label: Text('Precio unitario')),
+          onSubmitted: (_) {
+            product.name = _nameController.text;
+            product.unitPrice = stringToDouble(_priceController.text);
+
+            onSave(product);
+          },
         ),
         Container(
           margin: const EdgeInsets.only(top: 30.0),
