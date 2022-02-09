@@ -14,12 +14,14 @@ class GroceriesPage extends StatelessWidget {
   static late ShoppingCartStore _shoppingCartStore;
   static late ProductListStore _productListStore;
 
+  static late TextEditingController _searchTextController;
+
   @override
   Widget build(BuildContext context) {
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
     _productListStore = Provider.of<ProductListStore>(context, listen: false);
 
-    final _searchTextController = TextEditingController();
+    _searchTextController = TextEditingController();
 
     return Scaffold(
       appBar: const CupertinoNavigationBar(
@@ -33,61 +35,53 @@ class GroceriesPage extends StatelessWidget {
       body: Column(
         children: [
           // Search bar
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CupertinoSearchTextField(
-              onChanged: (String value) =>
-                  _productListStore.setSearchQuery(value),
-              controller: _searchTextController,
-              placeholder: 'Buscar',
-            ),
-          ),
+          searchBar(),
           // Items list view
-          Expanded(
-              child: SizedBox(
-                  width: double.infinity,
-                  height: 100.0,
-                  child: Observer(builder: (_) => gridItems()))),
+
+          Expanded(child: SizedBox(height: 100.0, child: gridItems()))
         ],
       ),
     );
   }
 
+  Widget searchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: CupertinoSearchTextField(
+        onChanged: (String value) => _productListStore.setSearchQuery(value),
+        controller: _searchTextController,
+        placeholder: 'Buscar',
+      ),
+    );
+  }
+
   Widget gridItems() {
-    final products = _productListStore.filteredProducts;
-
-    if (products.isEmpty && _productListStore.feedbackMessage.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
-    if (products.isEmpty && _productListStore.feedbackMessage.isNotEmpty) {
-      return Center(
-        child: Text(_productListStore.feedbackMessage),
-      );
-    }
-
-    const extraWidget = SizedBox(height: 36.0);
-
-    final module = products.length % 2;
-
-    final quantity = module == 0 ? products.length + 1 : products.length;
-
-    return GridView.builder(
-        physics: const BouncingScrollPhysics(),
-        addAutomaticKeepAlives: false,
-        itemCount: quantity,
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            mainAxisExtent: 160,
-            maxCrossAxisExtent: 300,
-            crossAxisSpacing: 10.0,
-            mainAxisSpacing: 10.0),
-        padding: const EdgeInsets.all(10.0),
-        itemBuilder: (ctx, index) {
-          if (module == 0 && (quantity - 1) == index) return extraWidget;
-          return itemWidget(ctx, products[index]);
-        });
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        Observer(
+          builder: (_) => SliverPadding(
+            padding: const EdgeInsets.all(10.0),
+            sliver: SliverGrid(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    mainAxisExtent: 160,
+                    maxCrossAxisExtent: 300,
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) => itemWidget(
+                      context, _productListStore.filteredProducts[index]),
+                  childCount: _productListStore.filteredProducts.length,
+                )),
+          ),
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(
+            height: 80.0,
+          ),
+        )
+      ],
+    );
   }
 
   Widget itemWidget(BuildContext context, ProductStore product) {
