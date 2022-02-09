@@ -16,7 +16,6 @@ class ProductWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(boxShadow: const [
         BoxShadow(
             offset: Offset(0.0, 0.0),
@@ -28,6 +27,7 @@ class ProductWidget extends StatelessWidget {
         children: [
           Column(
             children: [
+              optionsProduct(),
               // Name
               name(),
               // Price formatted
@@ -41,30 +41,52 @@ class ProductWidget extends StatelessWidget {
     );
   }
 
+  Widget optionsProduct() {
+    return Align(
+        alignment: Alignment.centerRight,
+        child: PopupMenuButton(
+            padding: EdgeInsets.zero,
+            tooltip: 'Opciones',
+            itemBuilder: (_) => [
+                  option(const Icon(Icons.edit), 'Editar'),
+                  const PopupMenuDivider(),
+                  option(const Icon(Icons.delete), 'Eliminar'),
+                ]));
+  }
+
+  PopupMenuEntry option(Icon icon, String name) {
+    return PopupMenuItem(
+        child: Row(children: [
+      Container(margin: const EdgeInsets.only(right: 10.0), child: icon),
+      Text(name)
+    ]));
+  }
+
   Widget name() {
     return Container(
-      margin: const EdgeInsets.only(top: 5.0, bottom: 2.0),
+      padding: const EdgeInsets.only(right: 10.0, bottom: 2.0, left: 10.0),
       child: Text(product.name,
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 18.0,
+              fontSize: 16.0,
               fontWeight: FontWeight.bold,
-              height: lineHeight(fontSize: 18.0, height: 20.0))),
+              height: lineHeight(fontSize: 16.0, height: 18.0))),
     );
   }
 
   Widget price() {
     return Text(product.unitPriceFormatted,
         style: TextStyle(
-            fontSize: 16.0,
+            fontSize: 14.0,
             color: Colors.blueGrey,
-            height: lineHeight(fontSize: 16.0, height: 18.0)));
+            height: lineHeight(fontSize: 14.0, height: 16.0)));
   }
 
   Widget button(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: double.infinity,
       height: 52.0,
+      padding: const EdgeInsets.only(right: 10.0, bottom: 10.0, left: 10.0),
       child: OutlinedButton(
           onPressed: () => showDialog<void>(
                 context: context,

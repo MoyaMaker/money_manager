@@ -64,7 +64,7 @@ class GroceriesPage extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    mainAxisExtent: 160,
+                    mainAxisExtent: 200,
                     maxCrossAxisExtent: 300,
                     crossAxisSpacing: 10.0,
                     mainAxisSpacing: 10.0),
