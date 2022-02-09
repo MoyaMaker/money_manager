@@ -9,9 +9,14 @@ import 'form_cart_item_widget.dart';
 
 class ProductWidget extends StatelessWidget {
   final ProductStore product;
-  final ValueChanged<CartItemStore> onSave;
+  final ValueChanged<ProductStore> onEdit;
+  final ValueChanged<CartItemStore> onAddToCart;
 
-  const ProductWidget({Key? key, required this.product, required this.onSave})
+  const ProductWidget(
+      {Key? key,
+      required this.product,
+      required this.onEdit,
+      required this.onAddToCart})
       : super(key: key);
 
   @override
@@ -52,9 +57,8 @@ class ProductWidget extends StatelessWidget {
               if (value == OptionSelected.edit) {
                 showDialog<void>(
                     context: context,
-                    builder: (_) => EditProductWidget(
-                        product: product,
-                        onSave: (ProductStore productModified) {}));
+                    builder: (_) =>
+                        EditProductWidget(product: product, onSave: onEdit));
               }
             },
             itemBuilder: (_) => [
@@ -111,7 +115,7 @@ class ProductWidget extends StatelessWidget {
           onPressed: () => showDialog<void>(
                 context: context,
                 builder: (BuildContext context) {
-                  return FormCartItem(product: product, onSave: onSave);
+                  return FormCartItem(product: product, onSave: onAddToCart);
                 },
               ),
           child: const Icon(Icons.add_shopping_cart)),

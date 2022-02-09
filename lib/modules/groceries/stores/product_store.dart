@@ -1,6 +1,7 @@
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
+import 'package:uuid/uuid.dart';
 
 part 'product_store.g.dart';
 
@@ -47,11 +48,21 @@ abstract class _ProductListStore with Store {
   }
 
   @action
-  void add(ProductStore product) {
-    products.add(product);
+  int findItemIndex(ProductStore product) {
+    return products.indexWhere((element) => element.id == product.id);
+  }
+
+  @action
+  ProductStore add(String name, double unitPrice) {
+    final newProduct =
+        ProductStore(id: const Uuid().v1(), name: name, unitPrice: unitPrice);
+
+    products.add(newProduct);
 
     // Save in local data
-    _box.add(product);
+    _box.add(newProduct);
+
+    return newProduct;
   }
 
   @action

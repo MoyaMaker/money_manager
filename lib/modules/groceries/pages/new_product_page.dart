@@ -5,7 +5,6 @@ import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 import 'package:money_manager/utils/math_double_util.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class GroceriesNewProductPage extends StatelessWidget {
   const GroceriesNewProductPage({Key? key}) : super(key: key);
@@ -76,17 +75,12 @@ class GroceriesNewProductPage extends StatelessWidget {
   }
 
   void onSave(BuildContext context) {
-    final product = ProductStore(
-        id: const Uuid().v1(),
-        name: _productNameController.text,
-        unitPrice: stringToDouble(_unitPriceController.text));
-
-    _productListStore.add(product);
-
-    _productListStore.createProduct(product);
+    final newProduct = _productListStore.add(
+        _productNameController.text, stringToDouble(_unitPriceController.text));
 
     final cartItem = CartItemStore(
-        product: product, quantity: stringToDouble(_quantityController.text));
+        product: newProduct,
+        quantity: stringToDouble(_quantityController.text));
 
     _shoppingCartStore.addItem(cartItem);
 

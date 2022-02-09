@@ -69,8 +69,8 @@ class GroceriesPage extends StatelessWidget {
                     crossAxisSpacing: 10.0,
                     mainAxisSpacing: 10.0),
                 delegate: SliverChildBuilderDelegate(
-                  (context, index) => itemWidget(
-                      context, _productListStore.filteredProducts[index]),
+                  (context, index) => itemWidget(context, index,
+                      _productListStore.filteredProducts[index]),
                   childCount: _productListStore.filteredProducts.length,
                 )),
           ),
@@ -84,10 +84,15 @@ class GroceriesPage extends StatelessWidget {
     );
   }
 
-  Widget itemWidget(BuildContext context, ProductStore product) {
+  Widget itemWidget(BuildContext context, int index, ProductStore product) {
     return ProductWidget(
         product: product,
-        onSave: (CartItemStore cartItem) {
+        onEdit: (ProductStore product) {
+          _productListStore.edit(index, product);
+
+          Navigator.pop(context);
+        },
+        onAddToCart: (CartItemStore cartItem) {
           _shoppingCartStore.addItem(cartItem);
 
           Navigator.pop(context);

@@ -117,22 +117,44 @@ mixin _$ProductListStore on _ProductListStore, Store {
       ActionController(name: '_ProductListStore');
 
   @override
-  void add(ProductStore item) {
+  int findItemIndex(ProductStore product) {
     final _$actionInfo = _$_ProductListStoreActionController.startAction(
-        name: '_ProductListStore.add');
+        name: '_ProductListStore.findItemIndex');
     try {
-      return super.add(item);
+      return super.findItemIndex(product);
     } finally {
       _$_ProductListStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void remove(ProductStore item) {
+  ProductStore add(String name, double unitPrice) {
+    final _$actionInfo = _$_ProductListStoreActionController.startAction(
+        name: '_ProductListStore.add');
+    try {
+      return super.add(name, unitPrice);
+    } finally {
+      _$_ProductListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void edit(int index, ProductStore product) {
+    final _$actionInfo = _$_ProductListStoreActionController.startAction(
+        name: '_ProductListStore.edit');
+    try {
+      return super.edit(index, product);
+    } finally {
+      _$_ProductListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void remove(int index) {
     final _$actionInfo = _$_ProductListStoreActionController.startAction(
         name: '_ProductListStore.remove');
     try {
-      return super.remove(item);
+      return super.remove(index);
     } finally {
       _$_ProductListStoreActionController.endAction(_$actionInfo);
     }
@@ -144,17 +166,6 @@ mixin _$ProductListStore on _ProductListStore, Store {
         name: '_ProductListStore.setSearchQuery');
     try {
       return super.setSearchQuery(value);
-    } finally {
-      _$_ProductListStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  Future<int> createProduct(ProductStore product) {
-    final _$actionInfo = _$_ProductListStoreActionController.startAction(
-        name: '_ProductListStore.createProduct');
-    try {
-      return super.createProduct(product);
     } finally {
       _$_ProductListStoreActionController.endAction(_$actionInfo);
     }

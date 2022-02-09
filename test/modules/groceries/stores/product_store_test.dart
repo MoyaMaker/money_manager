@@ -40,14 +40,8 @@ void main() {
       expect(productListStore.filteredProducts, []);
     });
 
-    test('add item in list', () {
-      final newProduct = ProductStore(
-        id: '1',
-        name: 'Aguacate',
-        unitPrice: 83.0,
-      );
-
-      productListStore.add(newProduct);
+    test('add first item in list', () {
+      productListStore.add('Aguacate', 83.0);
 
       expect(productListStore.filteredProducts.length, 1);
     });
@@ -58,26 +52,16 @@ void main() {
       expect(productListStore.filteredProducts.first.name, 'Aguacate');
     });
 
-    test('create product in hive', () {
-      final newProduct = ProductStore(
-        id: '2',
-        name: 'Cereal',
-        unitPrice: 56.0,
-      );
+    test('add second item in list', () {
+      productListStore.add('Cereal', 56.0);
 
-      productListStore.createProduct(newProduct);
-
-      expect(box.values.length, 1);
+      expect(box.values.length, 2);
     });
 
     test('remove item from store', () {
-      final oldItem = ProductStore(
-        id: '1',
-        name: 'Aguacate',
-        unitPrice: 83.0,
-      );
+      const removeIndex = 0;
 
-      productListStore.remove(oldItem);
+      productListStore.remove(removeIndex);
 
       expect(productListStore.products.length, 1);
     });
