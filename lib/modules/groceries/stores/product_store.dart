@@ -1,6 +1,7 @@
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
+import 'package:uuid/uuid.dart';
 
 part 'product_store.g.dart';
 
@@ -47,10 +48,38 @@ abstract class _ProductListStore with Store {
   }
 
   @action
-  void add(ProductStore item) => products.add(item);
+  int findItemIndex(ProductStore product) {
+    return products.indexWhere((element) => element.id == product.id);
+  }
 
   @action
-  void remove(ProductStore item) => products.remove(item);
+  ProductStore add(String name, double unitPrice) {
+    final newProduct =
+        ProductStore(id: const Uuid().v1(), name: name, unitPrice: unitPrice);
+
+    products.add(newProduct);
+
+    // Save in local data
+    _box.add(newProduct);
+
+    return newProduct;
+  }
+
+  @action
+  void edit(int index, ProductStore product) {
+    products[index] = product;
+
+    // Edit in saved data
+    _box.putAt(index, product);
+  }
+
+  @action
+  void remove(int index) {
+    products.removeAt(index);
+
+    // Delete from local data
+    _box.deleteAt(index);
+  }
 
   @action
   void setSearchQuery(String value) => searchQuery = value;
@@ -63,12 +92,6 @@ abstract class _ProductListStore with Store {
     } else {
       _box = await Hive.openBox<ProductStore>(boxName);
     }
-  }
-
-  @action
-  Future<int> createProduct(ProductStore product) {
-    // TODO: Validate if product already exist
-    return _box.add(product);
   }
 
   void _disposeBox() {

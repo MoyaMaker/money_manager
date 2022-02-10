@@ -38,7 +38,9 @@ class GroceriesPage extends StatelessWidget {
           searchBar(),
           // Items list view
 
-          Expanded(child: SizedBox(height: 100.0, child: gridItems()))
+          Expanded(
+              child: SizedBox(
+                  height: 100.0, child: Observer(builder: (_) => gridItems())))
         ],
       ),
     );
@@ -56,24 +58,38 @@ class GroceriesPage extends StatelessWidget {
   }
 
   Widget gridItems() {
+    final products = _productListStore.filteredProducts;
+
+    if (products.isEmpty && _productListStore.feedbackMessage.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (products.isEmpty && _productListStore.feedbackMessage.isNotEmpty) {
+      return Center(
+        child: Text(_productListStore.feedbackMessage),
+      );
+    }
+
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
-        Observer(
-          builder: (_) => SliverPadding(
-            padding: const EdgeInsets.all(10.0),
-            sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    mainAxisExtent: 160,
-                    maxCrossAxisExtent: 300,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => itemWidget(
-                      context, _productListStore.filteredProducts[index]),
-                  childCount: _productListStore.filteredProducts.length,
-                )),
-          ),
+        SliverPadding(
+          padding: const EdgeInsets.all(10.0),
+          sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  mainAxisExtent: 200,
+                  maxCrossAxisExtent: 300,
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => Observer(
+                  builder: (_) => itemWidget(context, index,
+                      _productListStore.filteredProducts[index]),
+                ),
+                childCount: _productListStore.filteredProducts.length,
+              )),
         ),
         const SliverToBoxAdapter(
           child: SizedBox(
@@ -84,13 +100,19 @@ class GroceriesPage extends StatelessWidget {
     );
   }
 
-  Widget itemWidget(BuildContext context, ProductStore product) {
+  Widget itemWidget(BuildContext context, int index, ProductStore product) {
     return ProductWidget(
-        product: product,
-        onSave: (CartItemStore cartItem) {
-          _shoppingCartStore.addItem(cartItem);
+      product: product,
+      onEdit: (ProductStore product) {
+        _productListStore.edit(index, product);
 
-          Navigator.pop(context);
-        });
+        Navigator.pop(context);
+      },
+      onAddToCart: (CartItemStore cartItem) {
+        _shoppingCartStore.addItem(cartItem);
+
+        Navigator.pop(context);
+      },
+    );
   }
 }
