@@ -11,12 +11,14 @@ import 'form_cart_item_widget.dart';
 class ProductWidget extends StatelessWidget {
   final ProductStore product;
   final ValueChanged<ProductStore> onEdit;
+  final VoidCallback onDelete;
   final ValueChanged<CartItemStore> onAddToCart;
 
   const ProductWidget(
       {Key? key,
       required this.product,
       required this.onEdit,
+      required this.onDelete,
       required this.onAddToCart})
       : super(key: key);
 
@@ -60,11 +62,28 @@ class ProductWidget extends StatelessWidget {
                     context: context,
                     builder: (_) =>
                         EditProductWidget(product: product, onSave: onEdit));
+              } else if (value == OptionSelected.delete) {
+                showDialog<void>(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                          contentPadding: const EdgeInsets.all(10.0),
+                          title: const Text(
+                              'Seguro qué quieres eliminar el producto?'),
+                          actions: [
+                            TextButton(
+                                onPressed: () {},
+                                child: const Text('Cancelar')),
+                            ElevatedButton(
+                                onPressed: onDelete,
+                                child: const Text('Eliminar'))
+                          ],
+                        ));
               }
             },
             itemBuilder: (_) => [
                   // Editar
                   PopupMenuItem<OptionSelected>(
+                      enabled: true,
                       value: OptionSelected.edit,
                       child: Row(children: [
                         Container(
@@ -77,7 +96,7 @@ class ProductWidget extends StatelessWidget {
 
                   // Eliminar
                   PopupMenuItem<OptionSelected>(
-                      enabled: false,
+                      enabled: true,
                       value: OptionSelected.delete,
                       child: Row(children: [
                         Container(

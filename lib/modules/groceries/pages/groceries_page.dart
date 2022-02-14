@@ -108,6 +108,7 @@ class GroceriesPage extends StatelessWidget {
 
         Navigator.pop(context);
       },
+      onDelete: () {},
       onAddToCart: (CartItemStore cartItem) {
         _shoppingCartStore.addItem(cartItem);
 
