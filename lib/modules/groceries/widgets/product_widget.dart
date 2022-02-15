@@ -71,7 +71,7 @@ class ProductWidget extends StatelessWidget {
                               'Seguro qué quieres eliminar el producto?'),
                           actions: [
                             TextButton(
-                                onPressed: () {},
+                                onPressed: () => Navigator.pop(context),
                                 child: const Text('Cancelar')),
                             ElevatedButton(
                                 onPressed: onDelete,
