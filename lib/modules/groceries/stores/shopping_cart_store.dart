@@ -13,9 +13,11 @@ abstract class _ShoppingCartStore with Store {
   _ShoppingCartStore(
       {this.id,
       ObservableList<CartItemStore>? items,
+      ObservableMap<int, CartItemStore>? itemsMap,
       this.storeName = '',
       DateTime? buyDate})
       : buyDate = buyDate ?? DateTime.now(),
+        mapCartItems = itemsMap ?? ObservableMap.of({}),
         cartItems = items ?? ObservableList.of([]) {
     _disposers = [
       autorun((_) async {
@@ -23,6 +25,20 @@ abstract class _ShoppingCartStore with Store {
 
         // Init values in list
         cartItems = ObservableList.of(_box.values.toList());
+
+        mapCartItems =
+            ObservableMap.of(_box.toMap().cast<int, CartItemStore>());
+      }),
+      reaction((_) => selectAll, (bool selected) {
+        for (var item in cartItems) {
+          item.setHasChecked(selected);
+        }
+      }),
+      reaction((_) => checkedItems.length, (length) {
+        final copyList = cartItems;
+        copyList.sort(((a, b) => a.hasChecked ? 1 : -1));
+
+        cartItems = ObservableList.of(copyList);
       })
     ];
   }
@@ -38,10 +54,16 @@ abstract class _ShoppingCartStore with Store {
   late ObservableList<CartItemStore> cartItems;
 
   @observable
+  late ObservableMap<int, CartItemStore> mapCartItems;
+
+  @observable
   DateTime buyDate;
 
   @observable
   String storeName;
+
+  @observable
+  bool selectAll = false;
 
   @computed
   bool get hasItems => cartItems.isNotEmpty;
@@ -54,10 +76,14 @@ abstract class _ShoppingCartStore with Store {
       DateFormat('dd MMMM yyyy', 'es_MX').format(buyDate);
 
   @computed
+  List<CartItemStore> get checkedItems =>
+      cartItems.where((element) => element.hasChecked).toList();
+
+  @computed
   String get subtotal {
     double subtotal = 0.0;
 
-    for (var item in cartItems) {
+    for (var item in checkedItems) {
       subtotal += item.subtotal;
     }
 
@@ -69,7 +95,7 @@ abstract class _ShoppingCartStore with Store {
   String get discount {
     double discount = 0.0;
 
-    for (var item in cartItems) {
+    for (var item in checkedItems) {
       discount += item.discountAmount;
     }
 
@@ -81,7 +107,7 @@ abstract class _ShoppingCartStore with Store {
   String get total {
     double subtotal = 0.0;
 
-    for (var item in cartItems) {
+    for (var item in checkedItems) {
       subtotal += item.total;
     }
 
@@ -100,6 +126,9 @@ abstract class _ShoppingCartStore with Store {
     return cartItems
         .indexWhere((element) => element.product.id == cartItem.product.id);
   }
+
+  @action
+  void setSelectAll(bool? value) => selectAll = value!;
 
   @action
   void addItem(CartItemStore cartItem) {

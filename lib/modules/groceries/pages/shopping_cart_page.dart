@@ -21,6 +21,17 @@ class GroceriesShoppingCartPage extends StatelessWidget {
       ),
       body: Column(
         children: [
+          Observer(
+            builder: (_) => Visibility(
+                visible: _shoppingCartStore.hasItems,
+                child: CheckboxListTile(
+                    title: const Text('Seleccionar todos'),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    value: _shoppingCartStore.selectAll,
+                    onChanged: (value) =>
+                        _shoppingCartStore.setSelectAll(value))),
+          ),
           Expanded(child: Observer(builder: (_) => listItems())),
           bottomSheetTotal(context)
         ],
@@ -41,8 +52,9 @@ class GroceriesShoppingCartPage extends StatelessWidget {
               height: 1.0,
               color: Colors.grey,
             ),
-        itemBuilder: (context, index) =>
-            cartItem(context, index, _shoppingCartStore.cartItems[index]));
+        itemBuilder: (context, index) => Observer(
+            builder: (_) => cartItem(
+                context, index, _shoppingCartStore.mapCartItems[index]!)));
   }
 
   Widget cartItem(BuildContext context, int index, CartItemStore cartItem) {

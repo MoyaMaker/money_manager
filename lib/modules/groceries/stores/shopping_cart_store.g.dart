@@ -30,6 +30,13 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
           Computed<String>(() => super.buyDateFormatted,
               name: '_ShoppingCartStore.buyDateFormatted'))
       .value;
+  Computed<List<CartItemStore>>? _$checkedItemsComputed;
+
+  @override
+  List<CartItemStore> get checkedItems => (_$checkedItemsComputed ??=
+          Computed<List<CartItemStore>>(() => super.checkedItems,
+              name: '_ShoppingCartStore.checkedItems'))
+      .value;
   Computed<String>? _$subtotalComputed;
 
   @override
@@ -88,6 +95,21 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
+  final _$mapCartItemsAtom = Atom(name: '_ShoppingCartStore.mapCartItems');
+
+  @override
+  ObservableMap<int, CartItemStore> get mapCartItems {
+    _$mapCartItemsAtom.reportRead();
+    return super.mapCartItems;
+  }
+
+  @override
+  set mapCartItems(ObservableMap<int, CartItemStore> value) {
+    _$mapCartItemsAtom.reportWrite(value, super.mapCartItems, () {
+      super.mapCartItems = value;
+    });
+  }
+
   final _$buyDateAtom = Atom(name: '_ShoppingCartStore.buyDate');
 
   @override
@@ -118,6 +140,21 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
+  final _$selectAllAtom = Atom(name: '_ShoppingCartStore.selectAll');
+
+  @override
+  bool get selectAll {
+    _$selectAllAtom.reportRead();
+    return super.selectAll;
+  }
+
+  @override
+  set selectAll(bool value) {
+    _$selectAllAtom.reportWrite(value, super.selectAll, () {
+      super.selectAll = value;
+    });
+  }
+
   final _$_initBoxAsyncAction = AsyncAction('_ShoppingCartStore._initBox');
 
   @override
@@ -145,6 +182,17 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
         name: '_ShoppingCartStore.findItemIndex');
     try {
       return super.findItemIndex(cartItem);
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSelectAll(bool? value) {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.setSelectAll');
+    try {
+      return super.setSelectAll(value);
     } finally {
       _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
     }
@@ -232,11 +280,14 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     return '''
 id: ${id},
 cartItems: ${cartItems},
+mapCartItems: ${mapCartItems},
 buyDate: ${buyDate},
 storeName: ${storeName},
+selectAll: ${selectAll},
 hasItems: ${hasItems},
 countItems: ${countItems},
 buyDateFormatted: ${buyDateFormatted},
+checkedItems: ${checkedItems},
 subtotal: ${subtotal},
 discount: ${discount},
 total: ${total},
