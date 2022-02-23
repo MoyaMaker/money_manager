@@ -50,11 +50,12 @@ mixin _$ReceiptHistoryStore on _ReceiptHistoryStore, Store {
       ActionController(name: '_ReceiptHistoryStore');
 
   @override
-  void saveReceipt(ShoppingCartStore shoppingCart) {
+  void saveReceipt(String id, String storeName, DateTime buyDate,
+      List<CartItemStore> cartItems) {
     final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
         name: '_ReceiptHistoryStore.saveReceipt');
     try {
-      return super.saveReceipt(shoppingCart);
+      return super.saveReceipt(id, storeName, buyDate, cartItems);
     } finally {
       _$_ReceiptHistoryStoreActionController.endAction(_$actionInfo);
     }

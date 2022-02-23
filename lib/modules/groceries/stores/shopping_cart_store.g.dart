@@ -64,6 +64,13 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
       (_$canContinueBuyComputed ??= Computed<bool>(() => super.canContinueBuy,
               name: '_ShoppingCartStore.canContinueBuy'))
           .value;
+  Computed<bool>? _$canCheckoutComputed;
+
+  @override
+  bool get canCheckout =>
+      (_$canCheckoutComputed ??= Computed<bool>(() => super.canCheckout,
+              name: '_ShoppingCartStore.canCheckout'))
+          .value;
 
   final _$idAtom = Atom(name: '_ShoppingCartStore.id');
 
@@ -92,21 +99,6 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   set cartItems(ObservableList<CartItemStore> value) {
     _$cartItemsAtom.reportWrite(value, super.cartItems, () {
       super.cartItems = value;
-    });
-  }
-
-  final _$mapCartItemsAtom = Atom(name: '_ShoppingCartStore.mapCartItems');
-
-  @override
-  ObservableMap<int, CartItemStore> get mapCartItems {
-    _$mapCartItemsAtom.reportRead();
-    return super.mapCartItems;
-  }
-
-  @override
-  set mapCartItems(ObservableMap<int, CartItemStore> value) {
-    _$mapCartItemsAtom.reportWrite(value, super.mapCartItems, () {
-      super.mapCartItems = value;
     });
   }
 
@@ -188,6 +180,17 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
+  int findKeyInMap(CartItemStore cartItem) {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.findKeyInMap');
+    try {
+      return super.findKeyInMap(cartItem);
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setSelectAll(bool? value) {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.setSelectAll');
@@ -221,11 +224,11 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
-  void removeItem(int index, CartItemStore cartItem) {
+  void removeItem(CartItemStore cartItem) {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.removeItem');
     try {
-      return super.removeItem(index, cartItem);
+      return super.removeItem(cartItem);
     } finally {
       _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
     }
@@ -280,7 +283,6 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     return '''
 id: ${id},
 cartItems: ${cartItems},
-mapCartItems: ${mapCartItems},
 buyDate: ${buyDate},
 storeName: ${storeName},
 selectAll: ${selectAll},
@@ -291,7 +293,8 @@ checkedItems: ${checkedItems},
 subtotal: ${subtotal},
 discount: ${discount},
 total: ${total},
-canContinueBuy: ${canContinueBuy}
+canContinueBuy: ${canContinueBuy},
+canCheckout: ${canCheckout}
     ''';
   }
 }

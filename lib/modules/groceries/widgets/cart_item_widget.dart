@@ -69,7 +69,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                         widget.cartItem.setHasChecked(newValue)),
 
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(

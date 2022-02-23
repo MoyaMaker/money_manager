@@ -73,8 +73,11 @@ class GroceriesPaymentPage extends StatelessWidget {
                         ? () {
                             _shoppingCartStore.setId();
 
-                            _receiptHistoryStore
-                                .saveReceipt(_shoppingCartStore);
+                            _receiptHistoryStore.saveReceipt(
+                                _shoppingCartStore.id!,
+                                _shoppingCartStore.storeName,
+                                _shoppingCartStore.buyDate,
+                                _shoppingCartStore.checkedItems);
 
                             // Clear cart
                             _shoppingCartStore.cleanCart();
