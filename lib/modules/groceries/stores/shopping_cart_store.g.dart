@@ -30,6 +30,13 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
           Computed<String>(() => super.buyDateFormatted,
               name: '_ShoppingCartStore.buyDateFormatted'))
       .value;
+  Computed<List<CartItemStore>>? _$checkedItemsComputed;
+
+  @override
+  List<CartItemStore> get checkedItems => (_$checkedItemsComputed ??=
+          Computed<List<CartItemStore>>(() => super.checkedItems,
+              name: '_ShoppingCartStore.checkedItems'))
+      .value;
   Computed<String>? _$subtotalComputed;
 
   @override
@@ -56,6 +63,13 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   bool get canContinueBuy =>
       (_$canContinueBuyComputed ??= Computed<bool>(() => super.canContinueBuy,
               name: '_ShoppingCartStore.canContinueBuy'))
+          .value;
+  Computed<bool>? _$canCheckoutComputed;
+
+  @override
+  bool get canCheckout =>
+      (_$canCheckoutComputed ??= Computed<bool>(() => super.canCheckout,
+              name: '_ShoppingCartStore.canCheckout'))
           .value;
 
   final _$idAtom = Atom(name: '_ShoppingCartStore.id');
@@ -118,6 +132,21 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
+  final _$selectAllAtom = Atom(name: '_ShoppingCartStore.selectAll');
+
+  @override
+  bool get selectAll {
+    _$selectAllAtom.reportRead();
+    return super.selectAll;
+  }
+
+  @override
+  set selectAll(bool value) {
+    _$selectAllAtom.reportWrite(value, super.selectAll, () {
+      super.selectAll = value;
+    });
+  }
+
   final _$_initBoxAsyncAction = AsyncAction('_ShoppingCartStore._initBox');
 
   @override
@@ -151,6 +180,28 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
+  int findKeyInMap(CartItemStore cartItem) {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.findKeyInMap');
+    try {
+      return super.findKeyInMap(cartItem);
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSelectAll(bool? value) {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.setSelectAll');
+    try {
+      return super.setSelectAll(value);
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addItem(CartItemStore cartItem) {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.addItem');
@@ -173,11 +224,11 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
-  void removeItem(int index, CartItemStore cartItem) {
+  void removeItem(CartItemStore cartItem) {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.removeItem');
     try {
-      return super.removeItem(index, cartItem);
+      return super.removeItem(cartItem);
     } finally {
       _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
     }
@@ -234,13 +285,16 @@ id: ${id},
 cartItems: ${cartItems},
 buyDate: ${buyDate},
 storeName: ${storeName},
+selectAll: ${selectAll},
 hasItems: ${hasItems},
 countItems: ${countItems},
 buyDateFormatted: ${buyDateFormatted},
+checkedItems: ${checkedItems},
 subtotal: ${subtotal},
 discount: ${discount},
 total: ${total},
-canContinueBuy: ${canContinueBuy}
+canContinueBuy: ${canContinueBuy},
+canCheckout: ${canCheckout}
     ''';
   }
 }

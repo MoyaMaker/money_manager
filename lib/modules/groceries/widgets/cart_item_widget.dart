@@ -63,8 +63,13 @@ class _CartItemWidgetState extends State<CartItemWidget> {
             builder: (_) => Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Checkbox(
+                    value: widget.cartItem.hasChecked,
+                    onChanged: (bool? newValue) =>
+                        widget.cartItem.setHasChecked(newValue)),
+
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(

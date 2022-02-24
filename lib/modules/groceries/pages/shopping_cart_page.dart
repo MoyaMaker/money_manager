@@ -21,6 +21,17 @@ class GroceriesShoppingCartPage extends StatelessWidget {
       ),
       body: Column(
         children: [
+          Observer(
+            builder: (_) => Visibility(
+                visible: _shoppingCartStore.hasItems,
+                child: CheckboxListTile(
+                    title: const Text('Seleccionar todos'),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    value: _shoppingCartStore.selectAll,
+                    onChanged: (value) =>
+                        _shoppingCartStore.setSelectAll(value))),
+          ),
           Expanded(child: Observer(builder: (_) => listItems())),
           bottomSheetTotal(context)
         ],
@@ -41,8 +52,9 @@ class GroceriesShoppingCartPage extends StatelessWidget {
               height: 1.0,
               color: Colors.grey,
             ),
-        itemBuilder: (context, index) =>
-            cartItem(context, index, _shoppingCartStore.cartItems[index]));
+        itemBuilder: (context, index) => Observer(
+            builder: (_) =>
+                cartItem(context, index, _shoppingCartStore.cartItems[index])));
   }
 
   Widget cartItem(BuildContext context, int index, CartItemStore cartItem) {
@@ -50,10 +62,9 @@ class GroceriesShoppingCartPage extends StatelessWidget {
         key: Key(cartItem.product.id),
         cartItem: cartItem,
         updatePromotion: (CartItemStore cartItem) {
-          _shoppingCartStore.editFromBox(index, cartItem);
+          _shoppingCartStore.editItem(index, cartItem);
         },
-        onDismissed: (direction) =>
-            _shoppingCartStore.removeItem(index, cartItem),
+        onDismissed: (direction) => _shoppingCartStore.removeItem(cartItem),
         onSave: (CartItemStore cartItem) {
           _shoppingCartStore.editItem(index, cartItem);
 
@@ -131,7 +142,7 @@ class GroceriesShoppingCartPage extends StatelessWidget {
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.all(15.0)),
-                      onPressed: _shoppingCartStore.hasItems
+                      onPressed: _shoppingCartStore.canCheckout
                           ? () =>
                               Navigator.pushNamed(context, 'groceries/payment')
                           : null,

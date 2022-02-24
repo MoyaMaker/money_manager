@@ -180,6 +180,21 @@ mixin _$CartItemStore on _CartItemStore, Store {
     });
   }
 
+  final _$hasCheckedAtom = Atom(name: '_CartItemStore.hasChecked');
+
+  @override
+  bool get hasChecked {
+    _$hasCheckedAtom.reportRead();
+    return super.hasChecked;
+  }
+
+  @override
+  set hasChecked(bool value) {
+    _$hasCheckedAtom.reportWrite(value, super.hasChecked, () {
+      super.hasChecked = value;
+    });
+  }
+
   final _$_CartItemStoreActionController =
       ActionController(name: '_CartItemStore');
 
@@ -195,6 +210,17 @@ mixin _$CartItemStore on _CartItemStore, Store {
           moduleQuantity: moduleQuantity,
           promo: promo,
           applyModule: applyModule);
+    } finally {
+      _$_CartItemStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setHasChecked(bool? value) {
+    final _$actionInfo = _$_CartItemStoreActionController.startAction(
+        name: '_CartItemStore.setHasChecked');
+    try {
+      return super.setHasChecked(value);
     } finally {
       _$_CartItemStoreActionController.endAction(_$actionInfo);
     }
@@ -263,6 +289,7 @@ quantity: ${quantity},
 showDetails: ${showDetails},
 promotion: ${promotion},
 discount: ${discount},
+hasChecked: ${hasChecked},
 total: ${total},
 subtotal: ${subtotal},
 discountAmount: ${discountAmount},

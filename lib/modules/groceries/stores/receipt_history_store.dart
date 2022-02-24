@@ -1,7 +1,8 @@
 import 'package:mobx/mobx.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_manager/modules/groceries/models/receipt_model.dart';
-import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
+
+import 'cart_item_store.dart';
 
 part 'receipt_history_store.g.dart';
 
@@ -46,12 +47,10 @@ abstract class _ReceiptHistoryStore with Store {
   }
 
   @action
-  void saveReceipt(ShoppingCartStore shoppingCart) {
+  void saveReceipt(String id, String storeName, DateTime buyDate,
+      List<CartItemStore> cartItems) {
     final newReceipt = Receipt(
-        id: shoppingCart.id!,
-        storeName: shoppingCart.storeName,
-        buyDate: shoppingCart.buyDate,
-        itemsList: shoppingCart.cartItems);
+        id: id, storeName: storeName, buyDate: buyDate, itemsList: cartItems);
 
     shoppedItems.add(newReceipt);
     saveIntoBox(newReceipt);

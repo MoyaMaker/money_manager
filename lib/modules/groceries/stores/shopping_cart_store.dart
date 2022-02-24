@@ -23,6 +23,17 @@ abstract class _ShoppingCartStore with Store {
 
         // Init values in list
         cartItems = ObservableList.of(_box.values.toList());
+      }),
+      reaction((_) => selectAll, (bool selected) {
+        for (var item in cartItems) {
+          item.setHasChecked(selected);
+        }
+      }),
+      reaction((_) => checkedItems.length, (length) {
+        final copyList = cartItems;
+        copyList.sort(((a, b) => a.hasChecked ? 1 : -1));
+
+        cartItems = ObservableList.of(copyList);
       })
     ];
   }
@@ -43,6 +54,9 @@ abstract class _ShoppingCartStore with Store {
   @observable
   String storeName;
 
+  @observable
+  bool selectAll = false;
+
   @computed
   bool get hasItems => cartItems.isNotEmpty;
 
@@ -54,10 +68,14 @@ abstract class _ShoppingCartStore with Store {
       DateFormat('dd MMMM yyyy', 'es_MX').format(buyDate);
 
   @computed
+  List<CartItemStore> get checkedItems =>
+      cartItems.where((element) => element.hasChecked).toList();
+
+  @computed
   String get subtotal {
     double subtotal = 0.0;
 
-    for (var item in cartItems) {
+    for (var item in checkedItems) {
       subtotal += item.subtotal;
     }
 
@@ -69,7 +87,7 @@ abstract class _ShoppingCartStore with Store {
   String get discount {
     double discount = 0.0;
 
-    for (var item in cartItems) {
+    for (var item in checkedItems) {
       discount += item.discountAmount;
     }
 
@@ -81,7 +99,7 @@ abstract class _ShoppingCartStore with Store {
   String get total {
     double subtotal = 0.0;
 
-    for (var item in cartItems) {
+    for (var item in checkedItems) {
       subtotal += item.total;
     }
 
@@ -90,7 +108,10 @@ abstract class _ShoppingCartStore with Store {
   }
 
   @computed
-  bool get canContinueBuy => hasItems && storeName.isNotEmpty;
+  bool get canContinueBuy => checkedItems.isNotEmpty && storeName.isNotEmpty;
+
+  @computed
+  bool get canCheckout => checkedItems.isNotEmpty;
 
   @action
   void setId() => id = const Uuid().v1();
@@ -102,13 +123,31 @@ abstract class _ShoppingCartStore with Store {
   }
 
   @action
+  int findKeyInMap(CartItemStore cartItem) {
+    final mapCartItems = _box.toMap().cast<int, CartItemStore>();
+
+    int resultKey = -1;
+
+    mapCartItems.forEach((key, value) {
+      if (value.product.id == cartItem.product.id) {
+        resultKey = key;
+      }
+    });
+
+    return resultKey;
+  }
+
+  @action
+  void setSelectAll(bool? value) => selectAll = value!;
+
+  @action
   void addItem(CartItemStore cartItem) {
     final indexItem = findItemIndex(cartItem);
 
     if (indexItem == -1) {
       cartItems.add(cartItem);
       // Save in hive
-      saveIntoBox(cartItem);
+      _box.add(cartItem);
     } else {
       final oldItem = cartItems[indexItem];
 
@@ -117,22 +156,29 @@ abstract class _ShoppingCartStore with Store {
       // Update unit price
       cartItems[indexItem].product.unitPrice = cartItem.product.unitPrice;
 
-      editFromBox(indexItem, cartItems[indexItem]);
+      final key = findKeyInMap(cartItem);
+
+      _box.put(key, cartItem);
     }
   }
 
   @action
   void editItem(int index, CartItemStore cartItem) {
-    editFromBox(index, cartItem);
+    final key = findKeyInMap(cartItem);
+
     cartItems[index].quantity = cartItem.quantity;
     cartItems[index].product.unitPrice = cartItem.product.unitPrice;
+
+    _box.put(key, cartItem);
   }
 
   @action
-  void removeItem(int index, CartItemStore cartItem) {
+  void removeItem(CartItemStore cartItem) {
+    final key = findKeyInMap(cartItem);
+
     cartItems.remove(cartItem);
 
-    removeFromBox(index);
+    _box.delete(key);
   }
 
   @action
@@ -146,8 +192,11 @@ abstract class _ShoppingCartStore with Store {
     id = null;
     storeName = '';
     buyDate = DateTime.now();
-    cartItems = ObservableList.of([]);
-    cleanBox();
+    selectAll = false;
+
+    for (var item in checkedItems) {
+      removeItem(item);
+    }
   }
 
   @action
@@ -160,15 +209,6 @@ abstract class _ShoppingCartStore with Store {
       _box = await Hive.openBox<CartItemStore>(boxName);
     }
   }
-
-  Future<int> saveIntoBox(CartItemStore cartItem) => _box.add(cartItem);
-
-  Future<void> removeFromBox(int index) => _box.deleteAt(index);
-
-  Future<void> editFromBox(int index, CartItemStore cartItem) =>
-      _box.putAt(index, cartItem);
-
-  Future<void> cleanBox() => _box.clear();
 
   Future<void> _disposeBox() => _box.close();
 

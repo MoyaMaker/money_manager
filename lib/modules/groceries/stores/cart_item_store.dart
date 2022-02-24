@@ -42,6 +42,9 @@ abstract class _CartItemStore with Store {
   @observable
   double? discount;
 
+  @observable
+  bool hasChecked = false;
+
   @computed
   double get total {
     if (promotion!.showTextField && discount == null) {
@@ -80,24 +83,6 @@ abstract class _CartItemStore with Store {
     }
   }
 
-  @action
-  double _calculatePromotion(double q, double uPrice,
-      {required int moduleQuantity,
-      required double promo,
-      bool applyModule = true}) {
-    final itemsWithoutPromo = applyModule ? q % moduleQuantity : moduleQuantity;
-    final itemPromoApply = q - itemsWithoutPromo;
-
-    final discount =
-        double.parse(((itemPromoApply * uPrice) * promo).toStringAsFixed(2));
-
-    final subtotal = q * uPrice;
-
-    final total = subtotal - discount;
-
-    return total;
-  }
-
   @computed
   double get subtotal => product.unitPrice * quantity;
 
@@ -131,6 +116,27 @@ abstract class _CartItemStore with Store {
       return false;
     }
   }
+
+  @action
+  double _calculatePromotion(double q, double uPrice,
+      {required int moduleQuantity,
+      required double promo,
+      bool applyModule = true}) {
+    final itemsWithoutPromo = applyModule ? q % moduleQuantity : moduleQuantity;
+    final itemPromoApply = q - itemsWithoutPromo;
+
+    final discount =
+        double.parse(((itemPromoApply * uPrice) * promo).toStringAsFixed(2));
+
+    final subtotal = q * uPrice;
+
+    final total = subtotal - discount;
+
+    return total;
+  }
+
+  @action
+  void setHasChecked(bool? value) => hasChecked = value!;
 
   @action
   void setQuantity(double newValue) => quantity = roundDouble(newValue);
