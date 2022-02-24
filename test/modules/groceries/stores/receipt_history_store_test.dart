@@ -65,7 +65,8 @@ void main() {
                 product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0))
           ]));
 
-      receiptHistoryStore.saveReceipt(shoppingCart);
+      receiptHistoryStore.saveReceipt(shoppingCart.id!, shoppingCart.storeName,
+          shoppingCart.buyDate, shoppingCart.checkedItems);
 
       expect(receiptHistoryStore.countItems, 1);
     });

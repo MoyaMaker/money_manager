@@ -49,6 +49,8 @@ void main() {
     test('search item in list', () {
       productListStore.setSearchQuery('cate');
 
+      expect(productListStore.showFeedbackMessage, false);
+      expect(productListStore.showProgress, false);
       expect(productListStore.filteredProducts.first.name, 'Aguacate');
     });
 
@@ -59,7 +61,7 @@ void main() {
 
       final index = productListStore.findItemIndex(itemToEdit);
 
-      productListStore.edit(index, itemToEdit);
+      productListStore.edit(itemToEdit);
 
       expect(productListStore.products[index].name, 'Aguacate Has');
     });
@@ -71,9 +73,9 @@ void main() {
     });
 
     test('remove item from store', () {
-      const removeIndex = 0;
+      final removeItem = productListStore.products[0];
 
-      productListStore.remove(removeIndex);
+      productListStore.remove(removeItem);
 
       expect(productListStore.products.length, 1);
     });
