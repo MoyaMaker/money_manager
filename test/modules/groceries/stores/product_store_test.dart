@@ -54,6 +54,16 @@ void main() {
       expect(productListStore.filteredProducts.first.name, 'Aguacate');
     });
 
+    test('search is empty', () {
+      productListStore.setSearchQuery('qwerty');
+
+      expect(productListStore.showFeedbackMessage, true,
+          reason: 'Show feedback message');
+      expect(productListStore.showProgress, false, reason: 'Hide progress');
+      expect(productListStore.filteredProducts.isEmpty, true,
+          reason: 'List is empty');
+    });
+
     test('edit product', () {
       final itemToEdit = productListStore.products.first;
 
