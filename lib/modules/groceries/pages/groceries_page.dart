@@ -58,15 +58,13 @@ class GroceriesPage extends StatelessWidget {
   }
 
   Widget gridItems() {
-    final products = _productListStore.filteredProducts;
-
-    if (products.isEmpty && _productListStore.feedbackMessage.isEmpty) {
+    if (_productListStore.showProgress) {
       return const Center(
         child: CircularProgressIndicator(),
       );
     }
 
-    if (products.isEmpty && _productListStore.feedbackMessage.isNotEmpty) {
+    if (_productListStore.showFeedbackMessage) {
       return Center(
         child: Text(_productListStore.feedbackMessage),
       );
@@ -103,13 +101,13 @@ class GroceriesPage extends StatelessWidget {
   Widget itemWidget(BuildContext context, int index, ProductStore product) {
     return ProductWidget(
       product: product,
-      onEdit: (ProductStore product) {
-        _productListStore.edit(index, product);
+      onEdit: (ProductStore p) {
+        _productListStore.edit(p);
 
         Navigator.pop(context);
       },
       onDelete: () {
-        _productListStore.remove(index);
+        _productListStore.remove(product);
 
         Navigator.pop(context);
       },

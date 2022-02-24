@@ -17,9 +17,18 @@ abstract class _ProductListStore with Store {
         // Init values in list
         final productList = _box.values.toList();
 
-        if (productList.isEmpty) feedbackMessage = 'No hay elementos en lista';
+        if (productList.isEmpty) {
+          feedbackMessage = 'No hay productos registrados';
+        }
 
         products = ObservableList.of(productList);
+      }),
+      reaction((_) => searchQuery, (String q) {
+        if (q.isNotEmpty && filteredProducts.isEmpty) {
+          feedbackMessage = 'No hay coincidencias';
+        } else {
+          feedbackMessage = 'No hay productos registrados';
+        }
       })
     ];
   }
@@ -38,6 +47,14 @@ abstract class _ProductListStore with Store {
   String searchQuery = '';
 
   @computed
+  bool get showProgress =>
+      searchQuery.isEmpty && products.isEmpty && feedbackMessage.isEmpty;
+
+  @computed
+  bool get showFeedbackMessage =>
+      products.isEmpty && feedbackMessage.isNotEmpty;
+
+  @computed
   List<ProductStore> get filteredProducts {
     if (searchQuery.isEmpty) return products;
 
@@ -50,6 +67,21 @@ abstract class _ProductListStore with Store {
   @action
   int findItemIndex(ProductStore product) {
     return products.indexWhere((element) => element.id == product.id);
+  }
+
+  @action
+  int findKeyInMap(ProductStore product) {
+    final mapProducts = _box.toMap().cast<int, ProductStore>();
+
+    int resultKey = -1;
+
+    mapProducts.forEach((key, value) {
+      if (value.id == product.id) {
+        resultKey = key;
+      }
+    });
+
+    return resultKey;
   }
 
   @action
@@ -66,19 +98,24 @@ abstract class _ProductListStore with Store {
   }
 
   @action
-  void edit(int index, ProductStore product) {
-    products[index] = product;
+  void edit(ProductStore product) {
+    final key = findKeyInMap(product);
+
+    final itemIndex = findItemIndex(product);
+
+    products[itemIndex] = product;
 
     // Edit in saved data
-    _box.putAt(index, product);
+    _box.put(key, product);
   }
 
   @action
-  void remove(int index) {
-    products.removeAt(index);
+  void remove(ProductStore product) {
+    final key = findKeyInMap(product);
 
-    // Delete from local data
-    _box.deleteAt(index);
+    products.remove(product);
+
+    _box.delete(key);
   }
 
   @action
