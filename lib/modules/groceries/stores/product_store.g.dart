@@ -53,6 +53,20 @@ class ProductHiveAdapter extends TypeAdapter<ProductStore> {
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ProductListStore on _ProductListStore, Store {
+  Computed<bool>? _$showProgressComputed;
+
+  @override
+  bool get showProgress =>
+      (_$showProgressComputed ??= Computed<bool>(() => super.showProgress,
+              name: '_ProductListStore.showProgress'))
+          .value;
+  Computed<bool>? _$showFeedbackMessageComputed;
+
+  @override
+  bool get showFeedbackMessage => (_$showFeedbackMessageComputed ??=
+          Computed<bool>(() => super.showFeedbackMessage,
+              name: '_ProductListStore.showFeedbackMessage'))
+      .value;
   Computed<List<ProductStore>>? _$filteredProductsComputed;
 
   @override
@@ -128,6 +142,17 @@ mixin _$ProductListStore on _ProductListStore, Store {
   }
 
   @override
+  int findKeyInMap(ProductStore product) {
+    final _$actionInfo = _$_ProductListStoreActionController.startAction(
+        name: '_ProductListStore.findKeyInMap');
+    try {
+      return super.findKeyInMap(product);
+    } finally {
+      _$_ProductListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   ProductStore add(String name, double unitPrice) {
     final _$actionInfo = _$_ProductListStoreActionController.startAction(
         name: '_ProductListStore.add');
@@ -139,22 +164,22 @@ mixin _$ProductListStore on _ProductListStore, Store {
   }
 
   @override
-  void edit(int index, ProductStore product) {
+  void edit(ProductStore product) {
     final _$actionInfo = _$_ProductListStoreActionController.startAction(
         name: '_ProductListStore.edit');
     try {
-      return super.edit(index, product);
+      return super.edit(product);
     } finally {
       _$_ProductListStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void remove(int index) {
+  void remove(ProductStore product) {
     final _$actionInfo = _$_ProductListStoreActionController.startAction(
         name: '_ProductListStore.remove');
     try {
-      return super.remove(index);
+      return super.remove(product);
     } finally {
       _$_ProductListStoreActionController.endAction(_$actionInfo);
     }
@@ -188,6 +213,8 @@ mixin _$ProductListStore on _ProductListStore, Store {
 feedbackMessage: ${feedbackMessage},
 products: ${products},
 searchQuery: ${searchQuery},
+showProgress: ${showProgress},
+showFeedbackMessage: ${showFeedbackMessage},
 filteredProducts: ${filteredProducts}
     ''';
   }
