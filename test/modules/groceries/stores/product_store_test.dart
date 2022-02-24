@@ -49,7 +49,19 @@ void main() {
     test('search item in list', () {
       productListStore.setSearchQuery('cate');
 
+      expect(productListStore.showFeedbackMessage, false);
+      expect(productListStore.showProgress, false);
       expect(productListStore.filteredProducts.first.name, 'Aguacate');
+    });
+
+    test('search is empty', () {
+      productListStore.setSearchQuery('qwerty');
+
+      expect(productListStore.showFeedbackMessage, true,
+          reason: 'Show feedback message');
+      expect(productListStore.showProgress, false, reason: 'Hide progress');
+      expect(productListStore.filteredProducts.isEmpty, true,
+          reason: 'List is empty');
     });
 
     test('edit product', () {
@@ -59,7 +71,7 @@ void main() {
 
       final index = productListStore.findItemIndex(itemToEdit);
 
-      productListStore.edit(index, itemToEdit);
+      productListStore.edit(itemToEdit);
 
       expect(productListStore.products[index].name, 'Aguacate Has');
     });
@@ -71,9 +83,9 @@ void main() {
     });
 
     test('remove item from store', () {
-      const removeIndex = 0;
+      final removeItem = productListStore.products[0];
 
-      productListStore.remove(removeIndex);
+      productListStore.remove(removeItem);
 
       expect(productListStore.products.length, 1);
     });

@@ -52,7 +52,7 @@ abstract class _ProductListStore with Store {
 
   @computed
   bool get showFeedbackMessage =>
-      products.isEmpty && feedbackMessage.isNotEmpty;
+      filteredProducts.isEmpty && feedbackMessage.isNotEmpty;
 
   @computed
   List<ProductStore> get filteredProducts {

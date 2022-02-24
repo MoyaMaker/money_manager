@@ -133,6 +133,14 @@ void main() {
     });
 
     test('get subtotal, discount and total', () {
+      final d = reaction((_) => shoppingCartStore.selectAll, (bool selected) {
+        for (var item in shoppingCartStore.cartItems) {
+          item.setHasChecked(selected);
+        }
+      });
+
+      shoppingCartStore.setSelectAll(true);
+
       const expectedResultSubtotal = r'$105.00';
       const expectedResultDiscount = r'$15.00';
       const expectedResultTotal = r'$90.00';
@@ -140,18 +148,19 @@ void main() {
       expect(shoppingCartStore.subtotal, expectedResultSubtotal);
       expect(shoppingCartStore.discount, expectedResultDiscount);
       expect(shoppingCartStore.total, expectedResultTotal);
+      d();
     });
 
     test('can continue buy', () {
       expect(shoppingCartStore.canContinueBuy, false);
+      expect(shoppingCartStore.canCheckout, true);
     });
 
     test('remove item', () {
       // Arrange
-      const index = 0;
       final cartItem = shoppingCartStore.cartItems.first;
       // Act
-      shoppingCartStore.removeItem(index, cartItem);
+      shoppingCartStore.removeItem(cartItem);
       // Assert
       expect(shoppingCartStore.countItems, 1);
     });
@@ -164,6 +173,14 @@ void main() {
 
     test('clean cart', () {
       // Arrange
+      final d = reaction((_) => shoppingCartStore.selectAll, (bool selected) {
+        for (var item in shoppingCartStore.cartItems) {
+          item.setHasChecked(selected);
+        }
+      });
+
+      shoppingCartStore.setSelectAll(true);
+
       shoppingCartStore.setId();
       shoppingCartStore.setStoreName('Soriana');
       shoppingCartStore.setBuyDate(DateTime(2021, 7, 12));
@@ -173,6 +190,7 @@ void main() {
       expect(shoppingCartStore.storeName, '');
       expect(shoppingCartStore.countItems, 0);
       expect(shoppingCartStore.hasItems, false);
+      d();
     });
 
     test('dispose store', () {
