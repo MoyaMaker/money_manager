@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:money_manager/modules/groceries/stores/payment_store.dart';
+import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -12,6 +14,8 @@ class GroceriesPaymentPage extends StatelessWidget {
 
   static late ShoppingCartStore _shoppingCartStore;
   static late ReceiptHistoryStore _receiptHistoryStore;
+  static late ProductListStore _productListStore;
+  static late PaymentStore _paymentStore;
 
   static late TextEditingController _storeNameController;
 
@@ -20,6 +24,11 @@ class GroceriesPaymentPage extends StatelessWidget {
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
     _receiptHistoryStore =
         Provider.of<ReceiptHistoryStore>(context, listen: false);
+    _productListStore = Provider.of<ProductListStore>(context, listen: false);
+    _paymentStore = PaymentStore(
+        productListStore: _productListStore,
+        receiptHistoryStore: _receiptHistoryStore,
+        shoppingCartStore: _shoppingCartStore);
 
     _storeNameController =
         TextEditingController(text: _shoppingCartStore.storeName);
@@ -71,16 +80,7 @@ class GroceriesPaymentPage extends StatelessWidget {
                         padding: const EdgeInsets.all(15.0)),
                     onPressed: _shoppingCartStore.canContinueBuy
                         ? () {
-                            _shoppingCartStore.setId();
-
-                            _receiptHistoryStore.saveReceipt(
-                                _shoppingCartStore.id!,
-                                _shoppingCartStore.storeName,
-                                _shoppingCartStore.buyDate,
-                                _shoppingCartStore.checkedItems);
-
-                            // Clear cart
-                            _shoppingCartStore.cleanCart();
+                            _paymentStore.createReceipt();
                             // Clear inputs
                             _storeNameController.clear();
 
