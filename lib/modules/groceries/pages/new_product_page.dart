@@ -24,8 +24,8 @@ class GroceriesNewProductPage extends StatelessWidget {
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
 
     return Scaffold(
-      appBar: const CupertinoNavigationBar(
-        middle: Text('Nuevo producto'),
+      appBar: AppBar(
+        title: const Text('Nuevo producto'),
       ),
       body: Form(
           key: _formKey,

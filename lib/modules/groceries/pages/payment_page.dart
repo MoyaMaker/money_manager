@@ -34,8 +34,8 @@ class GroceriesPaymentPage extends StatelessWidget {
         TextEditingController(text: _shoppingCartStore.storeName);
 
     return Scaffold(
-      appBar: const CupertinoNavigationBar(
-        middle: Text('Pago'),
+      appBar: AppBar(
+        title: const Text('Pago'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),

@@ -15,8 +15,8 @@ class ReceiptDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CupertinoNavigationBar(
-        middle: Text('Detalle de compra'),
+      appBar: AppBar(
+        title: const Text('Detalle de compra'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),

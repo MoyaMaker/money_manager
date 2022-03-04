@@ -24,8 +24,20 @@ class GroceriesPage extends StatelessWidget {
     _searchTextController = TextEditingController();
 
     return Scaffold(
-      appBar: const CupertinoNavigationBar(
-        middle: Text('Despensa'),
+      appBar: AppBar(title: const Text('Despensa')),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(
+              title: const Text('Despensa'),
+              onTap: () {},
+            ),
+            ListTile(
+              title: const Text('Tarjetas de crédito'),
+              onTap: () {},
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
