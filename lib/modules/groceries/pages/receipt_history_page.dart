@@ -17,8 +17,8 @@ class ReceiptHistoryPage extends StatelessWidget {
     _receiptHistoryStore =
         Provider.of<ReceiptHistoryStore>(context, listen: false);
     return Scaffold(
-        appBar: const CupertinoNavigationBar(
-          middle: Text('Historial de compras'),
+        appBar: AppBar(
+          title: const Text('Historial de compras'),
         ),
         body: Observer(builder: (_) => listItems(context)));
   }
