@@ -10,6 +10,11 @@ class HomePage extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
+            leading: const Icon(Icons.credit_card),
+            title: const Text('Tarjeta de crédito'),
+            onTap: () => Navigator.pushNamed(context, 'credit-card'),
+          ),
+          ListTile(
             leading: const Icon(Icons.create),
             title: const Text('Registro de gastos'),
             onTap: () => Navigator.pushNamed(context, 'expenses'),

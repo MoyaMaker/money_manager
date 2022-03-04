@@ -33,7 +33,7 @@ class MoneyManagerApp extends StatelessWidget {
           Locale('en', ''),
           Locale('es', ''),
         ],
-        initialRoute: '/',
+        initialRoute: 'groceries',
         routes: mainRoutes,
       ),
     );
