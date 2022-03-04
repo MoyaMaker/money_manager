@@ -22,8 +22,12 @@ class MoneyManagerApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Money Manager',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+            primarySwatch: Colors.blue,
+            appBarTheme: const AppBarTheme(
+                centerTitle: true,
+                foregroundColor: Colors.black,
+                backgroundColor: Color(0xFFFAFAFA),
+                elevation: 0.0)),
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
