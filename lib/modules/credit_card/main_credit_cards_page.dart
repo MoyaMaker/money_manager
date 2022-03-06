@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_manager/modules/groceries/widgets/menu_drawer_widget.dart';
 
 class MainCreditCardPage extends StatelessWidget {
   const MainCreditCardPage({Key? key}) : super(key: key);
@@ -7,9 +7,10 @@ class MainCreditCardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CupertinoNavigationBar(
-        middle: Text('Tarjetas'),
+      appBar: AppBar(
+        title: const Text('Tarjetas'),
       ),
+      drawer: const MenuDrawer(),
       body: Column(
         children: const [],
       ),
