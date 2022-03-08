@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:money_manager/modules/groceries/main_groceries.dart';
 import 'package:money_manager/modules/groceries/pages/new_product_page.dart';
 import 'package:money_manager/modules/groceries/pages/payment_page.dart';
-import 'package:money_manager/modules/groceries/pages/receipt_history_page.dart';
-
-import '../pages/groceries_page.dart';
-import '../pages/shopping_cart_page.dart';
 
 final groceriesRoutes = <String, Widget Function(BuildContext)>{
-  '/': (_) => const MainGroceries(),
-  'groceries': (_) => const GroceriesPage(),
-  'groceries/shopping-cart': (_) => const GroceriesShoppingCartPage(),
+  'groceries': (_) => const MainGroceries(),
   'groceries/new-product': (_) => const GroceriesNewProductPage(),
-  'groceries/payment': (_) => const GroceriesPaymentPage(),
-  'groceries/receipt-history': (_) => const ReceiptHistoryPage()
+  'groceries/payment': (_) => const GroceriesPaymentPage()
 };

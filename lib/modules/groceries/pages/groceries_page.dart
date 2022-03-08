@@ -25,20 +25,6 @@ class GroceriesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Despensa')),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              title: const Text('Despensa'),
-              onTap: () {},
-            ),
-            ListTile(
-              title: const Text('Tarjetas de crédito'),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => Navigator.pushNamed(context, 'groceries/new-product'),
