@@ -65,10 +65,6 @@ abstract class _FormNewProduct with Store {
       error.unitPrice = 'Ingresa un precio valido';
       return;
     }
-    if (value.isNaN) {
-      error.unitPrice = 'Ingresa un precio valido';
-      return;
-    }
 
     const minValue = 0.05;
     if (value < minValue) {
@@ -89,10 +85,6 @@ abstract class _FormNewProduct with Store {
     final value = double.tryParse(stringValue);
 
     if (value == null) {
-      error.quantity = 'Ingresa una cantidad valida';
-      return;
-    }
-    if (value.isNaN) {
       error.quantity = 'Ingresa una cantidad valida';
       return;
     }
