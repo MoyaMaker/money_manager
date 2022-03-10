@@ -1,4 +1,6 @@
+import 'package:hive/hive.dart';
 import 'package:mobx/mobx.dart';
+import 'package:money_manager/modules/groceries/stores/product_store.dart';
 
 part 'new_product_store.g.dart';
 
@@ -26,6 +28,12 @@ abstract class _FormNewProduct with Store {
   @observable
   String quantity = '1';
 
+  @observable
+  ObservableFuture<bool> nameChecked = ObservableFuture.value(true);
+
+  @computed
+  bool get isNameCheckedPending => nameChecked.status == FutureStatus.pending;
+
   @computed
   bool get canSave => !error.hasErrors;
 
@@ -39,7 +47,34 @@ abstract class _FormNewProduct with Store {
   void setQuantity(String value) => quantity = value;
 
   @action
-  void validateName(String value) {
+  Future<bool> checkNameExist(String value) async {
+    const boxName = 'products';
+
+    late Box<ProductStore> box;
+
+    if (Hive.isBoxOpen(boxName)) {
+      box = Hive.box<ProductStore>(boxName);
+    } else {
+      box = await Hive.openBox<ProductStore>(boxName);
+    }
+
+    final productList = box.values.toList();
+
+    bool exist = false;
+
+    for (var product in productList) {
+      final itemName = product.name.toLowerCase().trim();
+      final valueName = value.toLowerCase().trim();
+      if (itemName == valueName) {
+        exist = true;
+      }
+    }
+
+    return exist;
+  }
+
+  @action
+  Future<void> validateName(String value) async {
     if (value.isEmpty) {
       error.name = 'Debes ingresar un nombre al producto';
       return;
@@ -47,6 +82,17 @@ abstract class _FormNewProduct with Store {
     if (value.length < 3) {
       error.name = 'El nombre no puede ser tan corto';
       return;
+    }
+
+    if (value.length >= 3) {
+      nameChecked = ObservableFuture(checkNameExist(value));
+
+      final alreadyExist = await nameChecked;
+
+      if (alreadyExist) {
+        error.name = 'Este producto ya existe';
+        return;
+      }
     }
 
     error.name = null;

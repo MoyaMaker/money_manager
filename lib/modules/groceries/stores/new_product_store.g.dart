@@ -9,6 +9,13 @@ part of 'new_product_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$FormNewProduct on _FormNewProduct, Store {
+  Computed<bool>? _$isNameCheckedPendingComputed;
+
+  @override
+  bool get isNameCheckedPending => (_$isNameCheckedPendingComputed ??=
+          Computed<bool>(() => super.isNameCheckedPending,
+              name: '_FormNewProduct.isNameCheckedPending'))
+      .value;
   Computed<bool>? _$canSaveComputed;
 
   @override
@@ -61,6 +68,36 @@ mixin _$FormNewProduct on _FormNewProduct, Store {
     });
   }
 
+  final _$nameCheckedAtom = Atom(name: '_FormNewProduct.nameChecked');
+
+  @override
+  ObservableFuture<bool> get nameChecked {
+    _$nameCheckedAtom.reportRead();
+    return super.nameChecked;
+  }
+
+  @override
+  set nameChecked(ObservableFuture<bool> value) {
+    _$nameCheckedAtom.reportWrite(value, super.nameChecked, () {
+      super.nameChecked = value;
+    });
+  }
+
+  final _$checkNameExistAsyncAction =
+      AsyncAction('_FormNewProduct.checkNameExist');
+
+  @override
+  Future<bool> checkNameExist(String value) {
+    return _$checkNameExistAsyncAction.run(() => super.checkNameExist(value));
+  }
+
+  final _$validateNameAsyncAction = AsyncAction('_FormNewProduct.validateName');
+
+  @override
+  Future<void> validateName(String value) {
+    return _$validateNameAsyncAction.run(() => super.validateName(value));
+  }
+
   final _$_FormNewProductActionController =
       ActionController(name: '_FormNewProduct');
 
@@ -92,17 +129,6 @@ mixin _$FormNewProduct on _FormNewProduct, Store {
         name: '_FormNewProduct.setQuantity');
     try {
       return super.setQuantity(value);
-    } finally {
-      _$_FormNewProductActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void validateName(String value) {
-    final _$actionInfo = _$_FormNewProductActionController.startAction(
-        name: '_FormNewProduct.validateName');
-    try {
-      return super.validateName(value);
     } finally {
       _$_FormNewProductActionController.endAction(_$actionInfo);
     }
@@ -158,6 +184,8 @@ mixin _$FormNewProduct on _FormNewProduct, Store {
 name: ${name},
 unitPrice: ${unitPrice},
 quantity: ${quantity},
+nameChecked: ${nameChecked},
+isNameCheckedPending: ${isNameCheckedPending},
 canSave: ${canSave}
     ''';
   }
