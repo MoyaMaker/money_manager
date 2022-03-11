@@ -111,7 +111,17 @@ abstract class _ShoppingCartStore with Store {
   bool get canContinueBuy => checkedItems.isNotEmpty && storeName.isNotEmpty;
 
   @computed
-  bool get canCheckout => checkedItems.isNotEmpty;
+  bool get canCheckout {
+    bool valid = checkedItems.isNotEmpty;
+
+    for (var item in checkedItems) {
+      if (item.error.hasErrors) {
+        valid = false;
+      }
+    }
+
+    return valid;
+  }
 
   @action
   void setId() => id = const Uuid().v1();
