@@ -187,19 +187,21 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                     Row(
                       children: [
                         // Dropdown
-                        PromotionDropdown(
-                          initialValue: widget.cartItem.promotion,
-                          items: Promotions.values,
-                          onChanged: (value) {
-                            widget.cartItem.setPromotion(value);
-                            widget.updatePromotion(widget.cartItem);
+                        Observer(
+                          builder: (_) => PromotionDropdown(
+                            initialValue: widget.cartItem.promotion,
+                            items: Promotions.values,
+                            onChanged: (value) {
+                              widget.cartItem.setPromotion(value);
+                              widget.updatePromotion(widget.cartItem);
 
-                            if (widget.cartItem.promotion!.showTextField) {
-                              _discountTextField.requestFocus();
-                            } else {
-                              _discountController.text = '';
-                            }
-                          },
+                              if (widget.cartItem.promotion!.showTextField) {
+                                _discountTextField.requestFocus();
+                              } else {
+                                _discountController.text = '';
+                              }
+                            },
+                          ),
                         ),
 
                         // Input discount
@@ -212,6 +214,11 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                                 controller: _discountController,
                                 focusNode: _discountTextField,
                                 keyboardType: TextInputType.number,
+                                onChanged: (String value) {
+                                  final discount = double.tryParse(value);
+                                  widget.cartItem.setDiscount(discount);
+                                  widget.updatePromotion(widget.cartItem);
+                                },
                                 onSubmitted: (value) {
                                   final discount =
                                       double.tryParse(_discountController.text);
@@ -245,6 +252,12 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                             icon: const Icon(Icons.delete))
                       ],
                     ),
+
+                    // Input error
+                    Observer(
+                      builder: (_) => Text(widget.cartItem.error.discount ?? '',
+                          style: const TextStyle(color: Colors.red)),
+                    )
                   ],
                 ),
               ),

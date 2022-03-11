@@ -282,6 +282,17 @@ mixin _$CartItemStore on _CartItemStore, Store {
   }
 
   @override
+  void validateDiscount(double? value) {
+    final _$actionInfo = _$_CartItemStoreActionController.startAction(
+        name: '_CartItemStore.validateDiscount');
+    try {
+      return super.validateDiscount(value);
+    } finally {
+      _$_CartItemStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 product: ${product},
@@ -297,6 +308,39 @@ discountAmountFormatted: ${discountAmountFormatted},
 subtotalFormatted: ${subtotalFormatted},
 totalFormatted: ${totalFormatted},
 hasSomeDiscount: ${hasSomeDiscount}
+    ''';
+  }
+}
+
+mixin _$ErrorPromotionInput on _ErrorPromotionInput, Store {
+  Computed<bool>? _$hasErrorsComputed;
+
+  @override
+  bool get hasErrors =>
+      (_$hasErrorsComputed ??= Computed<bool>(() => super.hasErrors,
+              name: '_ErrorPromotionInput.hasErrors'))
+          .value;
+
+  final _$discountAtom = Atom(name: '_ErrorPromotionInput.discount');
+
+  @override
+  String? get discount {
+    _$discountAtom.reportRead();
+    return super.discount;
+  }
+
+  @override
+  set discount(String? value) {
+    _$discountAtom.reportWrite(value, super.discount, () {
+      super.discount = value;
+    });
+  }
+
+  @override
+  String toString() {
+    return '''
+discount: ${discount},
+hasErrors: ${hasErrors}
     ''';
   }
 }

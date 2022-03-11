@@ -17,7 +17,13 @@ abstract class _CartItemStore with Store {
       {required this.product,
       this.quantity = 1.0,
       this.promotion = Promotions.notSelected,
-      this.discount});
+      this.discount}) {
+    _disposers = [reaction((_) => discount, validateDiscount)];
+  }
+
+  late List<ReactionDisposer> _disposers;
+
+  final ErrorPromotionInput error = ErrorPromotionInput();
 
   @HiveField(0)
   @observable
@@ -154,5 +160,56 @@ abstract class _CartItemStore with Store {
   void removeDiscount() {
     promotion = Promotions.notSelected;
     discount = null;
+    error.discount = null;
+    showDetails = false;
   }
+
+  @action
+  void validateDiscount(double? value) {
+    if (promotion != null && promotion!.showTextField) {
+      if (value == null) {
+        error.discount = 'Debes ingresar una cantidad';
+        return;
+      }
+
+      if (value.isNaN) {
+        error.discount = 'No es un valor aceptable';
+        return;
+      }
+
+      if (value <= 0) {
+        error.discount = 'El descuento no puede ser menor o igual a 0';
+        return;
+      }
+
+      if (promotion! == Promotions.percentage && value > 100) {
+        error.discount = 'El descuento no puede ser superior al 100%';
+        return;
+      }
+
+      if (promotion! == Promotions.points && value > subtotal) {
+        error.discount =
+            'La cantidad de punto no puede ser mayor al costo total';
+        return;
+      }
+    }
+
+    error.discount = null;
+  }
+
+  void dispose() {
+    for (var d in _disposers) {
+      d();
+    }
+  }
+}
+
+class ErrorPromotionInput = _ErrorPromotionInput with _$ErrorPromotionInput;
+
+abstract class _ErrorPromotionInput with Store {
+  @observable
+  String? discount;
+
+  @computed
+  bool get hasErrors => discount != null;
 }
