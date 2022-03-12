@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/utils/math_double_util.dart';
+
+import '../stores/form_validation/form_cart_item_store.dart';
 
 class FormCartItem extends StatelessWidget {
   final ProductStore product;
   final double? quantity;
   final ValueChanged<CartItemStore> onSave;
+
+  static late FormCartItemStore formCartItemStore;
 
   const FormCartItem(
       {Key? key, required this.product, this.quantity, required this.onSave})
@@ -21,6 +26,9 @@ class FormCartItem extends StatelessWidget {
         TextEditingController(text: product.unitPrice.toString());
     _quantityController = TextEditingController(text: '${quantity ?? '1'}');
 
+    formCartItemStore =
+        FormCartItemStore(product.unitPrice.toString(), '${quantity ?? '1'}');
+
     return SimpleDialog(
       contentPadding: const EdgeInsets.all(15.0),
       children: [
@@ -29,27 +37,39 @@ class FormCartItem extends StatelessWidget {
             style:
                 const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
         // Price
-        TextField(
-          controller: _priceController,
-          keyboardType: TextInputType.number,
-          textInputAction: TextInputAction.next,
-          decoration: const InputDecoration(icon: Icon(Icons.attach_money)),
+        Observer(
+          builder: (_) => TextFormField(
+            controller: _priceController,
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
+            onChanged: (String value) => formCartItemStore.setPrice(value),
+            decoration: InputDecoration(
+                icon: const Icon(Icons.attach_money),
+                errorText: formCartItemStore.error.price),
+          ),
         ),
         // Quantity
-        TextField(
-          controller: _quantityController,
-          keyboardType: TextInputType.number,
-          textInputAction: TextInputAction.done,
-          autofocus: true,
-          decoration: const InputDecoration(icon: Icon(Icons.shopping_basket)),
-          onSubmitted: (String newValue) => onSave(_cartItem),
+        Observer(
+          builder: (_) => TextFormField(
+            controller: _quantityController,
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.done,
+            onChanged: (String value) => formCartItemStore.setQuantity(value),
+            autofocus: true,
+            decoration: InputDecoration(
+                icon: const Icon(Icons.shopping_basket),
+                errorText: formCartItemStore.error.quantity),
+            onFieldSubmitted: (String newValue) =>
+                formCartItemStore.error.hasErrors ? null : onSave(_cartItem),
+          ),
         ),
 
         // Add button
         Container(
           margin: const EdgeInsets.only(top: 15.0),
           child: OutlinedButton.icon(
-              onPressed: () => onSave(_cartItem),
+              onPressed: () =>
+                  formCartItemStore.error.hasErrors ? null : onSave(_cartItem),
               icon: const Icon(Icons.add),
               label: const Text('Agregar')),
         )
