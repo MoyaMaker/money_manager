@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.credit_card),
             title: const Text('Tarjeta de crédito'),
-            onTap: () => Navigator.pushNamed(context, 'credit-card'),
+            onTap: () => Navigator.pushNamed(context, 'credit_card'),
           ),
           ListTile(
             leading: const Icon(Icons.shopping_cart),

@@ -33,9 +33,12 @@ class _MainCreditCardPageState extends State<MainCreditCardPage> {
     thirdPosition = _size.width * 0.9625;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tarjetas'),
-      ),
+      appBar: AppBar(title: const Text('Tarjetas'), actions: <Widget>[
+        IconButton(
+            tooltip: 'Añadir tarjeta',
+            onPressed: () => Navigator.pushNamed(context, 'credit_card/create'),
+            icon: const Icon(Icons.add))
+      ]),
       body: Column(
         children: [
           SizedBox(
