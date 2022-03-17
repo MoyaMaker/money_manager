@@ -70,6 +70,13 @@ mixin _$CreateCreditCardStore on _CreateCreditCardStore, Store {
     });
   }
 
+  final _$_initBoxAsyncAction = AsyncAction('_CreateCreditCardStore._initBox');
+
+  @override
+  Future<void> _initBox() {
+    return _$_initBoxAsyncAction.run(() => super._initBox());
+  }
+
   final _$_CreateCreditCardStoreActionController =
       ActionController(name: '_CreateCreditCardStore');
 
@@ -156,6 +163,17 @@ mixin _$CreateCreditCardStore on _CreateCreditCardStore, Store {
         name: '_CreateCreditCardStore.validatePaymentLimitDate');
     try {
       return super.validatePaymentLimitDate(value);
+    } finally {
+      _$_CreateCreditCardStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void validateAll() {
+    final _$actionInfo = _$_CreateCreditCardStoreActionController.startAction(
+        name: '_CreateCreditCardStore.validateAll');
+    try {
+      return super.validateAll();
     } finally {
       _$_CreateCreditCardStoreActionController.endAction(_$actionInfo);
     }

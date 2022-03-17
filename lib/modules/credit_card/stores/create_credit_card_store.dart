@@ -1,3 +1,4 @@
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobx/mobx.dart';
 
 part 'create_credit_card_store.g.dart';
@@ -8,12 +9,17 @@ class CreateCreditCardStore = _CreateCreditCardStore
 abstract class _CreateCreditCardStore with Store {
   _CreateCreditCardStore() {
     _disposers = [
+      autorun((_) async {
+        await _initBox();
+      }),
       reaction((_) => cardName, validateCardName),
       reaction((_) => creditLimit, validateCreditLimit),
       reaction((_) => dueDate, validateDueDate),
       reaction((_) => paymentLimitDate, validatePaymentLimitDate)
     ];
   }
+
+  late Box _box;
 
   final error = ErrorFormCreditCard();
 
@@ -72,7 +78,7 @@ abstract class _CreateCreditCardStore with Store {
       return;
     }
 
-    final valueDouble = double.tryParse(value);
+    final valueDouble = int.tryParse(value);
 
     if (valueDouble == null) {
       error.creditLimit = 'Ingresa una cantidad valida';
@@ -94,6 +100,18 @@ abstract class _CreateCreditCardStore with Store {
       return;
     }
 
+    final date = int.tryParse(value);
+
+    if (date == null) {
+      error.dueDate = 'Ingresa un día valido';
+      return;
+    }
+
+    if (date <= 0 || date > 31) {
+      error.dueDate = 'Ingresa un día valido';
+      return;
+    }
+
     error.dueDate = null;
   }
 
@@ -104,7 +122,37 @@ abstract class _CreateCreditCardStore with Store {
       return;
     }
 
+    final date = int.tryParse(value);
+
+    if (date == null) {
+      error.paymentLimitDate = 'Ingresa un día valido';
+      return;
+    }
+
+    if (date <= 0 || date > 31) {
+      error.paymentLimitDate = 'Ingresa un día valido';
+      return;
+    }
+
     error.paymentLimitDate = null;
+  }
+
+  @action
+  void validateAll() {
+    validateCardName(cardName);
+    validateCreditLimit(creditLimit);
+    validateDueDate(dueDate);
+    validatePaymentLimitDate(paymentLimitDate);
+  }
+
+  @action
+  Future<void> _initBox() async {
+    const boxName = 'credit_card';
+    if (Hive.isBoxOpen(boxName)) {
+      _box = Hive.box(boxName);
+    } else {
+      _box = await Hive.openBox(boxName);
+    }
   }
 
   @action
