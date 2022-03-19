@@ -9,6 +9,20 @@ part of 'create_credit_card_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$CreateCreditCardStore on _CreateCreditCardStore, Store {
+  Computed<bool>? _$canSaveComputed;
+
+  @override
+  bool get canSave => (_$canSaveComputed ??= Computed<bool>(() => super.canSave,
+          name: '_CreateCreditCardStore.canSave'))
+      .value;
+  Computed<CreditCardStore>? _$creditCardComputed;
+
+  @override
+  CreditCardStore get creditCard => (_$creditCardComputed ??=
+          Computed<CreditCardStore>(() => super.creditCard,
+              name: '_CreateCreditCardStore.creditCard'))
+      .value;
+
   final _$cardNameAtom = Atom(name: '_CreateCreditCardStore.cardName');
 
   @override
@@ -68,13 +82,6 @@ mixin _$CreateCreditCardStore on _CreateCreditCardStore, Store {
     _$paymentLimitDateAtom.reportWrite(value, super.paymentLimitDate, () {
       super.paymentLimitDate = value;
     });
-  }
-
-  final _$_initBoxAsyncAction = AsyncAction('_CreateCreditCardStore._initBox');
-
-  @override
-  Future<void> _initBox() {
-    return _$_initBoxAsyncAction.run(() => super._initBox());
   }
 
   final _$_CreateCreditCardStoreActionController =
@@ -196,7 +203,9 @@ mixin _$CreateCreditCardStore on _CreateCreditCardStore, Store {
 cardName: ${cardName},
 creditLimit: ${creditLimit},
 dueDate: ${dueDate},
-paymentLimitDate: ${paymentLimitDate}
+paymentLimitDate: ${paymentLimitDate},
+canSave: ${canSave},
+creditCard: ${creditCard}
     ''';
   }
 }
