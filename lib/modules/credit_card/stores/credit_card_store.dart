@@ -22,10 +22,19 @@ abstract class _CreditCardListStore with Store {
   late Box<CreditCardStore> _box;
 
   @observable
+  int activeIndex = 0;
+
+  @observable
   String feedbackMessage = '';
 
   @observable
   ObservableList<CreditCardStore> creditCardList = ObservableList.of([]);
+
+  @computed
+  CreditCardStore get activeCard => creditCardList[activeIndex];
+
+  @computed
+  bool get showProgress => creditCardList.isEmpty && feedbackMessage.isEmpty;
 
   @action
   Future<void> _initBox() async {
@@ -34,6 +43,24 @@ abstract class _CreditCardListStore with Store {
       _box = Hive.box<CreditCardStore>(boxName);
     } else {
       _box = await Hive.openBox<CreditCardStore>(boxName);
+    }
+  }
+
+  @action
+  void nextCard() {
+    if (activeIndex < (creditCardList.length - 1)) {
+      activeIndex++;
+    } else {
+      activeIndex = 0;
+    }
+  }
+
+  @action
+  void prevCard() {
+    if (activeIndex > 0) {
+      activeIndex--;
+    } else {
+      activeIndex = creditCardList.length - 1;
     }
   }
 

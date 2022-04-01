@@ -59,6 +59,36 @@ class CreditCardAdapter extends TypeAdapter<CreditCardStore> {
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$CreditCardListStore on _CreditCardListStore, Store {
+  Computed<CreditCardStore>? _$activeCardComputed;
+
+  @override
+  CreditCardStore get activeCard => (_$activeCardComputed ??=
+          Computed<CreditCardStore>(() => super.activeCard,
+              name: '_CreditCardListStore.activeCard'))
+      .value;
+  Computed<bool>? _$showProgressComputed;
+
+  @override
+  bool get showProgress =>
+      (_$showProgressComputed ??= Computed<bool>(() => super.showProgress,
+              name: '_CreditCardListStore.showProgress'))
+          .value;
+
+  final _$activeIndexAtom = Atom(name: '_CreditCardListStore.activeIndex');
+
+  @override
+  int get activeIndex {
+    _$activeIndexAtom.reportRead();
+    return super.activeIndex;
+  }
+
+  @override
+  set activeIndex(int value) {
+    _$activeIndexAtom.reportWrite(value, super.activeIndex, () {
+      super.activeIndex = value;
+    });
+  }
+
   final _$feedbackMessageAtom =
       Atom(name: '_CreditCardListStore.feedbackMessage');
 
@@ -109,6 +139,28 @@ mixin _$CreditCardListStore on _CreditCardListStore, Store {
       ActionController(name: '_CreditCardListStore');
 
   @override
+  void nextCard() {
+    final _$actionInfo = _$_CreditCardListStoreActionController.startAction(
+        name: '_CreditCardListStore.nextCard');
+    try {
+      return super.nextCard();
+    } finally {
+      _$_CreditCardListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void prevCard() {
+    final _$actionInfo = _$_CreditCardListStoreActionController.startAction(
+        name: '_CreditCardListStore.prevCard');
+    try {
+      return super.prevCard();
+    } finally {
+      _$_CreditCardListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _getCards() {
     final _$actionInfo = _$_CreditCardListStoreActionController.startAction(
         name: '_CreditCardListStore._getCards');
@@ -133,8 +185,11 @@ mixin _$CreditCardListStore on _CreditCardListStore, Store {
   @override
   String toString() {
     return '''
+activeIndex: ${activeIndex},
 feedbackMessage: ${feedbackMessage},
-creditCardList: ${creditCardList}
+creditCardList: ${creditCardList},
+activeCard: ${activeCard},
+showProgress: ${showProgress}
     ''';
   }
 }

@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 
-class MainCreditCardPage extends StatefulWidget {
+import 'stores/credit_card_store.dart';
+
+class MainCreditCardPage extends StatelessWidget {
   const MainCreditCardPage({Key? key}) : super(key: key);
 
-  @override
-  State<MainCreditCardPage> createState() => _MainCreditCardPageState();
-}
+  static late Size _size;
+  static double cardSizeWidth = 0.0;
+  static double cardSizeHeigh = 0.0;
 
-class _MainCreditCardPageState extends State<MainCreditCardPage> {
-  late Size _size;
-  double cardSizeWidth = 0.0;
-  double cardSizeHeigh = 0.0;
-  int activeIndex = 0;
-
-  late double firstPosition;
-  late double secondPosition;
-  late double thirdPosition;
+  static late double firstPosition;
+  static late double secondPosition;
+  static late double thirdPosition;
 
   final animatedDuration = const Duration(microseconds: 400);
 
-  final cardList = ['BBVA', 'Hey Banco', 'Mercado Pago'];
+  static late CreditCardListStore _creditCardStore;
 
   @override
   Widget build(BuildContext context) {
+    _creditCardStore = Provider.of<CreditCardListStore>(context, listen: false);
     _size = MediaQuery.of(context).size;
 
     cardSizeWidth = _size.width * 0.85;
@@ -41,59 +40,76 @@ class _MainCreditCardPageState extends State<MainCreditCardPage> {
       ]),
       body: Column(
         children: [
-          SizedBox(
-            width: _size.width,
-            height: _size.width * 0.55,
-            child: Stack(children: [
-              AnimatedPositioned(
-                  duration: animatedDuration,
-                  left: firstPosition,
-                  child: firstWidget()),
-              AnimatedPositioned(
-                  duration: animatedDuration,
-                  left: secondPosition,
-                  child: cardWidget(cardList[activeIndex])),
-              AnimatedPositioned(
-                  duration: animatedDuration,
-                  left: thirdPosition,
-                  child: secondWidget())
-            ]),
-          ),
+          // Adding builder
+          Observer(builder: (_) => cardBuilder()),
 
           // Navigation buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                  color: Colors.blue,
-                  onPressed: () => prev(),
-                  icon: const Icon(Icons.arrow_left)),
-              dots(),
-              IconButton(
-                  color: Colors.blue,
-                  onPressed: () => next(),
-                  icon: const Icon(Icons.arrow_right))
-            ],
+          Observer(
+            builder: (_) => Visibility(
+              visible: _creditCardStore.creditCardList.length > 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      color: Colors.blue,
+                      onPressed: () => _creditCardStore.prevCard(),
+                      icon: const Icon(Icons.arrow_left)),
+                  dots(),
+                  IconButton(
+                      color: Colors.blue,
+                      onPressed: () => _creditCardStore.nextCard(),
+                      icon: const Icon(Icons.arrow_right))
+                ],
+              ),
+            ),
           )
         ],
       ),
     );
   }
 
-  Widget dots() {
-    return Row(
-      children: [
-        dot(0),
-        dot(1),
-        dot(2),
-      ],
+  Widget cardBuilder() {
+    if (_creditCardStore.showProgress) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    return SizedBox(
+      width: _size.width,
+      height: _size.width * 0.55,
+      child: Stack(children: [
+        AnimatedPositioned(
+            duration: animatedDuration,
+            left: firstPosition,
+            child: firstWidget()),
+        AnimatedPositioned(
+            duration: animatedDuration,
+            left: secondPosition,
+            child: cardWidget(_creditCardStore.activeCard.creditName)),
+        AnimatedPositioned(
+            duration: animatedDuration,
+            left: thirdPosition,
+            child: secondWidget())
+      ]),
     );
   }
 
+  Widget dots() {
+    return Row(children: [
+      ..._creditCardStore.creditCardList
+          .map((item) => dot(_creditCardStore.creditCardList.indexOf(item)))
+    ]);
+  }
+
   Widget dot(int index) {
+    final activeIndex = _creditCardStore.activeIndex;
+
     final size = index == activeIndex ? 10.0 : 8.0;
-    final margin =
-        cardList.length > 1 && index < (cardList.length - 1) ? 5.0 : 0.0;
+    final margin = _creditCardStore.creditCardList.length > 1 &&
+            index < (_creditCardStore.creditCardList.length - 1)
+        ? 5.0
+        : 0.0;
 
     return Container(
       decoration: BoxDecoration(
@@ -107,26 +123,9 @@ class _MainCreditCardPageState extends State<MainCreditCardPage> {
     );
   }
 
-  void next() {
-    if (activeIndex < (cardList.length - 1)) {
-      activeIndex++;
-    } else {
-      activeIndex = 0;
-    }
-    setState(() {});
-  }
-
-  void prev() {
-    if (activeIndex > 0) {
-      activeIndex--;
-    } else {
-      activeIndex = cardList.length - 1;
-    }
-    setState(() {});
-  }
-
   Widget firstWidget() {
-    if (activeIndex == 0 && cardList.length > 1) {
+    if (_creditCardStore.activeIndex == 0 &&
+        _creditCardStore.creditCardList.isNotEmpty) {
       return Container();
     } else {
       return cardWidget('');
@@ -134,7 +133,8 @@ class _MainCreditCardPageState extends State<MainCreditCardPage> {
   }
 
   Widget secondWidget() {
-    if (activeIndex == (cardList.length - 1)) {
+    if (_creditCardStore.activeIndex ==
+        (_creditCardStore.creditCardList.length - 1)) {
       return Container();
     } else {
       return cardWidget('');
@@ -145,9 +145,9 @@ class _MainCreditCardPageState extends State<MainCreditCardPage> {
     return GestureDetector(
       onHorizontalDragEnd: (details) {
         if (details.primaryVelocity! > 0) {
-          prev();
+          _creditCardStore.prevCard();
         } else {
-          next();
+          _creditCardStore.nextCard();
         }
       },
       child: SizedBox(
