@@ -30,7 +30,13 @@ abstract class _ShoppingCartStore with Store {
         }
       }),
       reaction((_) => checkedItems.length, (length) {
+        /// Block order in case select all elements.
+        /// Always `length` return the length of `countItems` when "select all" change to true
+        /// in that case just block order when select all
+        if (length == countItems) return;
+
         final copyList = cartItems;
+
         copyList.sort(((a, b) => a.hasChecked ? 1 : -1));
 
         cartItems = ObservableList.of(copyList);
