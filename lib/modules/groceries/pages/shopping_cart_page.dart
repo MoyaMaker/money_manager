@@ -24,7 +24,18 @@ class GroceriesShoppingCartPage extends StatelessWidget {
             builder: (_) => Visibility(
                 visible: _shoppingCartStore.hasItems,
                 child: CheckboxListTile(
-                    title: const Text('Seleccionar todos'),
+                    title: RichText(
+                      text: TextSpan(
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 16.0),
+                          text: 'Seleccionar todos ',
+                          children: [
+                            TextSpan(
+                                text: '(${_shoppingCartStore.countItems})',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold))
+                          ]),
+                    ),
                     controlAffinity: ListTileControlAffinity.leading,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
                     value: _shoppingCartStore.selectAll,
