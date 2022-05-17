@@ -13,7 +13,7 @@ class GroceriesNewProductPage extends StatelessWidget {
   // Stores
   static late ProductListStore _productListStore;
   static late ShoppingCartStore _shoppingCartStore;
-  static final FormNewProduct formNewProduct = FormNewProduct();
+  static late FormNewProduct formNewProduct;
 
   // Focus nodes
   static late FocusNode _nameFocus;
@@ -24,6 +24,7 @@ class GroceriesNewProductPage extends StatelessWidget {
   Widget build(BuildContext context) {
     _productListStore = Provider.of<ProductListStore>(context, listen: false);
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
+    formNewProduct = FormNewProduct();
 
     _nameFocus = FocusNode();
     _unitPriceFocus = FocusNode();
