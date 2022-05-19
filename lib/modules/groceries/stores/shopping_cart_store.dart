@@ -23,24 +23,22 @@ abstract class _ShoppingCartStore with Store {
 
         // Init values in list
         cartItems = ObservableList.of(_box.values.toList());
-      }),
+      }, name: 'Initialize hive box and load cart items saved'),
       reaction((_) => selectAll, (bool selected) {
         for (var item in cartItems) {
           item.setHasChecked(selected);
         }
-      }),
+      }, name: 'Reaction for check all items in shopping cart'),
+      reaction((_) => cartItems.length, (_) => orderListForCheckedMethods(),
+          name: 'Order new item when is added'),
       reaction((_) => checkedItems.length, (length) {
         /// Block order in case select all elements.
         /// Always `length` return the length of `countItems` when "select all" change to true
         /// in that case just block order when select all
         if (length == countItems) return;
 
-        final copyList = cartItems;
-
-        copyList.sort(((a, b) => a.hasChecked ? 1 : -1));
-
-        cartItems = ObservableList.of(copyList);
-      })
+        orderListForCheckedMethods();
+      }, name: 'Reaction for order list when product has checked')
     ];
   }
 
@@ -202,6 +200,15 @@ abstract class _ShoppingCartStore with Store {
 
   @action
   void setStoreName(String value) => storeName = value;
+
+  @action
+  void orderListForCheckedMethods() {
+    final copyList = cartItems;
+
+    copyList.sort(((a, b) => a.hasChecked ? 1 : -1));
+
+    cartItems = ObservableList.of(copyList);
+  }
 
   @action
   void cleanCart() {
