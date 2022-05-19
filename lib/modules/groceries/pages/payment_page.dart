@@ -84,7 +84,7 @@ class GroceriesPaymentPage extends StatelessWidget {
                             _storeNameController.clear();
 
                             Navigator.pushNamedAndRemoveUntil(
-                                context, '/', (route) => false);
+                                context, 'groceries', (route) => false);
                           }
                         : null,
                     child: const Text('Guardar',
