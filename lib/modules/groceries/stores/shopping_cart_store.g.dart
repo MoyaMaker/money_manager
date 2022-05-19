@@ -257,6 +257,17 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
+  void orderListForCheckedMethods() {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.orderListForCheckedMethods');
+    try {
+      return super.orderListForCheckedMethods();
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void cleanCart() {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.cleanCart');
