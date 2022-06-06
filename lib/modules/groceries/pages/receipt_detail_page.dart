@@ -6,16 +6,22 @@ import 'package:money_manager/modules/groceries/enums/promotions_enum.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 
 import '../models/receipt_model.dart';
+import '../stores/receipt_history_store.dart';
 
 class ReceiptDetailPage extends StatelessWidget {
   final Receipt receipt;
-  const ReceiptDetailPage({Key? key, required this.receipt}) : super(key: key);
+  final ReceiptHistoryStore receiptHistoryStore;
+
+  const ReceiptDetailPage(
+      {Key? key, required this.receipt, required this.receiptHistoryStore})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalle de compra'),
+        actions: [optionsProduct(context)],
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -74,7 +80,7 @@ class ReceiptDetailPage extends StatelessWidget {
                   // Discount
                   bottomTotal('Subtotal:', receipt.subtotal),
                   // Subtotal
-                  bottomTotal('Descuento:', '-' + receipt.discount,
+                  bottomTotal('Descuento:', '-${receipt.discount}',
                       const Color(0xFF0E6DFD)),
                   const Divider(),
                   // Total
@@ -149,7 +155,7 @@ class ReceiptDetailPage extends StatelessWidget {
                 style: style, textAlign: TextAlign.right),
             Visibility(
                 visible: cartItem.hasSomeDiscount,
-                child: Text('-' + cartItem.discountAmount.toString(),
+                child: Text('-${cartItem.discountAmount}',
                     style: promotionsStyle, textAlign: TextAlign.right))
           ],
         )
@@ -191,4 +197,51 @@ class ReceiptDetailPage extends StatelessWidget {
       ],
     );
   }
+
+  Widget optionsProduct(BuildContext context) {
+    return Align(
+        alignment: Alignment.centerRight,
+        child: PopupMenuButton<OptionSelected>(
+            padding: EdgeInsets.zero,
+            tooltip: 'Opciones',
+            onSelected: (OptionSelected value) {
+              if (value == OptionSelected.delete) {
+                showDialog<void>(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                          contentPadding: const EdgeInsets.all(10.0),
+                          title: const Text(
+                              '¿Seguro qué quieres eliminar el recibo de compra?'),
+                          actions: [
+                            TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('Cancelar')),
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+
+                                  receiptHistoryStore.delete(receipt);
+
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Eliminar'))
+                          ],
+                        ));
+              }
+            },
+            itemBuilder: (_) => [
+                  // Eliminar
+                  PopupMenuItem<OptionSelected>(
+                      enabled: true,
+                      value: OptionSelected.delete,
+                      child: Row(children: [
+                        Container(
+                            margin: const EdgeInsets.only(right: 10.0),
+                            child: const Icon(Icons.delete)),
+                        const Text('Eliminar')
+                      ])),
+                ]));
+  }
 }
+
+enum OptionSelected { edit, delete }
