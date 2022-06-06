@@ -6,7 +6,7 @@ part of 'shopping_cart_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   Computed<bool>? _$hasItemsComputed;
@@ -72,7 +72,7 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
               name: '_ShoppingCartStore.canCheckout'))
           .value;
 
-  final _$idAtom = Atom(name: '_ShoppingCartStore.id');
+  late final _$idAtom = Atom(name: '_ShoppingCartStore.id', context: context);
 
   @override
   String? get id {
@@ -87,7 +87,8 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
-  final _$cartItemsAtom = Atom(name: '_ShoppingCartStore.cartItems');
+  late final _$cartItemsAtom =
+      Atom(name: '_ShoppingCartStore.cartItems', context: context);
 
   @override
   ObservableList<CartItemStore> get cartItems {
@@ -102,7 +103,8 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
-  final _$buyDateAtom = Atom(name: '_ShoppingCartStore.buyDate');
+  late final _$buyDateAtom =
+      Atom(name: '_ShoppingCartStore.buyDate', context: context);
 
   @override
   DateTime get buyDate {
@@ -117,7 +119,8 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
-  final _$storeNameAtom = Atom(name: '_ShoppingCartStore.storeName');
+  late final _$storeNameAtom =
+      Atom(name: '_ShoppingCartStore.storeName', context: context);
 
   @override
   String get storeName {
@@ -132,7 +135,8 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
-  final _$selectAllAtom = Atom(name: '_ShoppingCartStore.selectAll');
+  late final _$selectAllAtom =
+      Atom(name: '_ShoppingCartStore.selectAll', context: context);
 
   @override
   bool get selectAll {
@@ -147,15 +151,16 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
-  final _$_initBoxAsyncAction = AsyncAction('_ShoppingCartStore._initBox');
+  late final _$_initBoxAsyncAction =
+      AsyncAction('_ShoppingCartStore._initBox', context: context);
 
   @override
   Future<void> _initBox() {
     return _$_initBoxAsyncAction.run(() => super._initBox());
   }
 
-  final _$_ShoppingCartStoreActionController =
-      ActionController(name: '_ShoppingCartStore');
+  late final _$_ShoppingCartStoreActionController =
+      ActionController(name: '_ShoppingCartStore', context: context);
 
   @override
   void setId() {

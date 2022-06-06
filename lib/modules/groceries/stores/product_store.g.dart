@@ -50,7 +50,7 @@ class ProductHiveAdapter extends TypeAdapter<ProductStore> {
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$ProductListStore on _ProductListStore, Store {
   Computed<bool>? _$showProgressComputed;
@@ -75,7 +75,8 @@ mixin _$ProductListStore on _ProductListStore, Store {
               name: '_ProductListStore.filteredProducts'))
       .value;
 
-  final _$feedbackMessageAtom = Atom(name: '_ProductListStore.feedbackMessage');
+  late final _$feedbackMessageAtom =
+      Atom(name: '_ProductListStore.feedbackMessage', context: context);
 
   @override
   String get feedbackMessage {
@@ -90,7 +91,8 @@ mixin _$ProductListStore on _ProductListStore, Store {
     });
   }
 
-  final _$productsAtom = Atom(name: '_ProductListStore.products');
+  late final _$productsAtom =
+      Atom(name: '_ProductListStore.products', context: context);
 
   @override
   ObservableList<ProductStore> get products {
@@ -105,7 +107,8 @@ mixin _$ProductListStore on _ProductListStore, Store {
     });
   }
 
-  final _$searchQueryAtom = Atom(name: '_ProductListStore.searchQuery');
+  late final _$searchQueryAtom =
+      Atom(name: '_ProductListStore.searchQuery', context: context);
 
   @override
   String get searchQuery {
@@ -120,15 +123,16 @@ mixin _$ProductListStore on _ProductListStore, Store {
     });
   }
 
-  final _$_initBoxAsyncAction = AsyncAction('_ProductListStore._initBox');
+  late final _$_initBoxAsyncAction =
+      AsyncAction('_ProductListStore._initBox', context: context);
 
   @override
   Future<void> _initBox() {
     return _$_initBoxAsyncAction.run(() => super._initBox());
   }
 
-  final _$_ProductListStoreActionController =
-      ActionController(name: '_ProductListStore');
+  late final _$_ProductListStoreActionController =
+      ActionController(name: '_ProductListStore', context: context);
 
   @override
   int findItemIndex(ProductStore product) {
@@ -229,7 +233,7 @@ mixin _$ProductStore on _ProductStore, Store {
               name: '_ProductStore.unitPriceFormatted'))
       .value;
 
-  final _$idAtom = Atom(name: '_ProductStore.id');
+  late final _$idAtom = Atom(name: '_ProductStore.id', context: context);
 
   @override
   String get id {
@@ -244,7 +248,7 @@ mixin _$ProductStore on _ProductStore, Store {
     });
   }
 
-  final _$nameAtom = Atom(name: '_ProductStore.name');
+  late final _$nameAtom = Atom(name: '_ProductStore.name', context: context);
 
   @override
   String get name {
@@ -259,7 +263,8 @@ mixin _$ProductStore on _ProductStore, Store {
     });
   }
 
-  final _$unitPriceAtom = Atom(name: '_ProductStore.unitPrice');
+  late final _$unitPriceAtom =
+      Atom(name: '_ProductStore.unitPrice', context: context);
 
   @override
   double get unitPrice {
