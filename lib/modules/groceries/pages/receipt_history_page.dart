@@ -39,7 +39,9 @@ class ReceiptHistoryPage extends StatelessWidget {
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => ReceiptDetailPage(receipt: receipt))),
+              builder: (_) => ReceiptDetailPage(
+                  receipt: receipt,
+                  receiptHistoryStore: _receiptHistoryStore))),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 10.0),
         decoration: const BoxDecoration(
