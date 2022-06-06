@@ -60,6 +60,35 @@ abstract class _ReceiptHistoryStore with Store {
   Future<int> saveIntoBox(Receipt receipt) => _box.add(receipt);
 
   @action
+  void delete(Receipt receipt) {
+    final key = findKeyInMap(receipt);
+
+    shoppedItems.remove(receipt);
+
+    _box.delete(key);
+  }
+
+  @action
+  int findItemIndex(Receipt receipt) {
+    return shoppedItems.indexWhere((element) => element.id == receipt.id);
+  }
+
+  @action
+  int findKeyInMap(Receipt receipt) {
+    final mapProducts = _box.toMap().cast<int, Receipt>();
+
+    int resultKey = -1;
+
+    mapProducts.forEach((key, value) {
+      if (value.id == receipt.id) {
+        resultKey = key;
+      }
+    });
+
+    return resultKey;
+  }
+
+  @action
   Future<void> closeBox() => _box.close();
 
   @action

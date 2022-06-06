@@ -6,7 +6,7 @@ part of 'create_credit_card_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$CreateCreditCardStore on _CreateCreditCardStore, Store {
   Computed<bool>? _$canSaveComputed;
@@ -23,7 +23,8 @@ mixin _$CreateCreditCardStore on _CreateCreditCardStore, Store {
               name: '_CreateCreditCardStore.creditCard'))
       .value;
 
-  final _$cardNameAtom = Atom(name: '_CreateCreditCardStore.cardName');
+  late final _$cardNameAtom =
+      Atom(name: '_CreateCreditCardStore.cardName', context: context);
 
   @override
   String get cardName {
@@ -38,7 +39,8 @@ mixin _$CreateCreditCardStore on _CreateCreditCardStore, Store {
     });
   }
 
-  final _$creditLimitAtom = Atom(name: '_CreateCreditCardStore.creditLimit');
+  late final _$creditLimitAtom =
+      Atom(name: '_CreateCreditCardStore.creditLimit', context: context);
 
   @override
   String get creditLimit {
@@ -53,7 +55,8 @@ mixin _$CreateCreditCardStore on _CreateCreditCardStore, Store {
     });
   }
 
-  final _$dueDateAtom = Atom(name: '_CreateCreditCardStore.dueDate');
+  late final _$dueDateAtom =
+      Atom(name: '_CreateCreditCardStore.dueDate', context: context);
 
   @override
   String get dueDate {
@@ -68,8 +71,8 @@ mixin _$CreateCreditCardStore on _CreateCreditCardStore, Store {
     });
   }
 
-  final _$paymentLimitDateAtom =
-      Atom(name: '_CreateCreditCardStore.paymentLimitDate');
+  late final _$paymentLimitDateAtom =
+      Atom(name: '_CreateCreditCardStore.paymentLimitDate', context: context);
 
   @override
   String get paymentLimitDate {
@@ -84,8 +87,8 @@ mixin _$CreateCreditCardStore on _CreateCreditCardStore, Store {
     });
   }
 
-  final _$_CreateCreditCardStoreActionController =
-      ActionController(name: '_CreateCreditCardStore');
+  late final _$_CreateCreditCardStoreActionController =
+      ActionController(name: '_CreateCreditCardStore', context: context);
 
   @override
   void setCardName(String value) {
@@ -219,7 +222,8 @@ mixin _$ErrorFormCreditCard on _ErrorFormCreditCard, Store {
               name: '_ErrorFormCreditCard.hasErrors'))
           .value;
 
-  final _$cardNameAtom = Atom(name: '_ErrorFormCreditCard.cardName');
+  late final _$cardNameAtom =
+      Atom(name: '_ErrorFormCreditCard.cardName', context: context);
 
   @override
   String? get cardName {
@@ -234,7 +238,8 @@ mixin _$ErrorFormCreditCard on _ErrorFormCreditCard, Store {
     });
   }
 
-  final _$creditLimitAtom = Atom(name: '_ErrorFormCreditCard.creditLimit');
+  late final _$creditLimitAtom =
+      Atom(name: '_ErrorFormCreditCard.creditLimit', context: context);
 
   @override
   String? get creditLimit {
@@ -249,7 +254,8 @@ mixin _$ErrorFormCreditCard on _ErrorFormCreditCard, Store {
     });
   }
 
-  final _$dueDateAtom = Atom(name: '_ErrorFormCreditCard.dueDate');
+  late final _$dueDateAtom =
+      Atom(name: '_ErrorFormCreditCard.dueDate', context: context);
 
   @override
   String? get dueDate {
@@ -264,8 +270,8 @@ mixin _$ErrorFormCreditCard on _ErrorFormCreditCard, Store {
     });
   }
 
-  final _$paymentLimitDateAtom =
-      Atom(name: '_ErrorFormCreditCard.paymentLimitDate');
+  late final _$paymentLimitDateAtom =
+      Atom(name: '_ErrorFormCreditCard.paymentLimitDate', context: context);
 
   @override
   String? get paymentLimitDate {

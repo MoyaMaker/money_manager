@@ -6,7 +6,7 @@ part of 'new_product_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$FormNewProduct on _FormNewProduct, Store {
   Computed<bool>? _$isNameCheckedPendingComputed;
@@ -23,7 +23,7 @@ mixin _$FormNewProduct on _FormNewProduct, Store {
           Computed<bool>(() => super.canSave, name: '_FormNewProduct.canSave'))
       .value;
 
-  final _$nameAtom = Atom(name: '_FormNewProduct.name');
+  late final _$nameAtom = Atom(name: '_FormNewProduct.name', context: context);
 
   @override
   String get name {
@@ -38,7 +38,8 @@ mixin _$FormNewProduct on _FormNewProduct, Store {
     });
   }
 
-  final _$unitPriceAtom = Atom(name: '_FormNewProduct.unitPrice');
+  late final _$unitPriceAtom =
+      Atom(name: '_FormNewProduct.unitPrice', context: context);
 
   @override
   String get unitPrice {
@@ -53,7 +54,8 @@ mixin _$FormNewProduct on _FormNewProduct, Store {
     });
   }
 
-  final _$quantityAtom = Atom(name: '_FormNewProduct.quantity');
+  late final _$quantityAtom =
+      Atom(name: '_FormNewProduct.quantity', context: context);
 
   @override
   String get quantity {
@@ -68,7 +70,8 @@ mixin _$FormNewProduct on _FormNewProduct, Store {
     });
   }
 
-  final _$nameCheckedAtom = Atom(name: '_FormNewProduct.nameChecked');
+  late final _$nameCheckedAtom =
+      Atom(name: '_FormNewProduct.nameChecked', context: context);
 
   @override
   ObservableFuture<bool> get nameChecked {
@@ -83,23 +86,24 @@ mixin _$FormNewProduct on _FormNewProduct, Store {
     });
   }
 
-  final _$checkNameExistAsyncAction =
-      AsyncAction('_FormNewProduct.checkNameExist');
+  late final _$checkNameExistAsyncAction =
+      AsyncAction('_FormNewProduct.checkNameExist', context: context);
 
   @override
   Future<bool> checkNameExist(String value) {
     return _$checkNameExistAsyncAction.run(() => super.checkNameExist(value));
   }
 
-  final _$validateNameAsyncAction = AsyncAction('_FormNewProduct.validateName');
+  late final _$validateNameAsyncAction =
+      AsyncAction('_FormNewProduct.validateName', context: context);
 
   @override
   Future<void> validateName(String value) {
     return _$validateNameAsyncAction.run(() => super.validateName(value));
   }
 
-  final _$_FormNewProductActionController =
-      ActionController(name: '_FormNewProduct');
+  late final _$_FormNewProductActionController =
+      ActionController(name: '_FormNewProduct', context: context);
 
   @override
   void setName(String value) {
@@ -200,7 +204,8 @@ mixin _$ErrorProductFormState on _ErrorProductFormState, Store {
               name: '_ErrorProductFormState.hasErrors'))
           .value;
 
-  final _$nameAtom = Atom(name: '_ErrorProductFormState.name');
+  late final _$nameAtom =
+      Atom(name: '_ErrorProductFormState.name', context: context);
 
   @override
   String? get name {
@@ -215,7 +220,8 @@ mixin _$ErrorProductFormState on _ErrorProductFormState, Store {
     });
   }
 
-  final _$unitPriceAtom = Atom(name: '_ErrorProductFormState.unitPrice');
+  late final _$unitPriceAtom =
+      Atom(name: '_ErrorProductFormState.unitPrice', context: context);
 
   @override
   String? get unitPrice {
@@ -230,7 +236,8 @@ mixin _$ErrorProductFormState on _ErrorProductFormState, Store {
     });
   }
 
-  final _$quantityAtom = Atom(name: '_ErrorProductFormState.quantity');
+  late final _$quantityAtom =
+      Atom(name: '_ErrorProductFormState.quantity', context: context);
 
   @override
   String? get quantity {

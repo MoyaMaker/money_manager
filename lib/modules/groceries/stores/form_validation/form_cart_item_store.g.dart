@@ -6,10 +6,11 @@ part of 'form_cart_item_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$FormCartItemStore on _FormCartItemStore, Store {
-  final _$priceAtom = Atom(name: '_FormCartItemStore.price');
+  late final _$priceAtom =
+      Atom(name: '_FormCartItemStore.price', context: context);
 
   @override
   String get price {
@@ -24,7 +25,8 @@ mixin _$FormCartItemStore on _FormCartItemStore, Store {
     });
   }
 
-  final _$quantityAtom = Atom(name: '_FormCartItemStore.quantity');
+  late final _$quantityAtom =
+      Atom(name: '_FormCartItemStore.quantity', context: context);
 
   @override
   String get quantity {
@@ -39,8 +41,8 @@ mixin _$FormCartItemStore on _FormCartItemStore, Store {
     });
   }
 
-  final _$_FormCartItemStoreActionController =
-      ActionController(name: '_FormCartItemStore');
+  late final _$_FormCartItemStoreActionController =
+      ActionController(name: '_FormCartItemStore', context: context);
 
   @override
   void setPrice(String value) {
@@ -115,7 +117,8 @@ mixin _$ErrorFormCartItemStore on _ErrorFormCartItemStore, Store {
               name: '_ErrorFormCartItemStore.hasErrors'))
           .value;
 
-  final _$priceAtom = Atom(name: '_ErrorFormCartItemStore.price');
+  late final _$priceAtom =
+      Atom(name: '_ErrorFormCartItemStore.price', context: context);
 
   @override
   String? get price {
@@ -130,7 +133,8 @@ mixin _$ErrorFormCartItemStore on _ErrorFormCartItemStore, Store {
     });
   }
 
-  final _$quantityAtom = Atom(name: '_ErrorFormCartItemStore.quantity');
+  late final _$quantityAtom =
+      Atom(name: '_ErrorFormCartItemStore.quantity', context: context);
 
   @override
   String? get quantity {

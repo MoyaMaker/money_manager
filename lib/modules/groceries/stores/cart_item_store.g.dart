@@ -53,7 +53,7 @@ class CartItemAdapter extends TypeAdapter<CartItemStore> {
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$CartItemStore on _CartItemStore, Store {
   Computed<double>? _$totalComputed;
@@ -105,7 +105,8 @@ mixin _$CartItemStore on _CartItemStore, Store {
               name: '_CartItemStore.hasSomeDiscount'))
           .value;
 
-  final _$productAtom = Atom(name: '_CartItemStore.product');
+  late final _$productAtom =
+      Atom(name: '_CartItemStore.product', context: context);
 
   @override
   ProductStore get product {
@@ -120,7 +121,8 @@ mixin _$CartItemStore on _CartItemStore, Store {
     });
   }
 
-  final _$quantityAtom = Atom(name: '_CartItemStore.quantity');
+  late final _$quantityAtom =
+      Atom(name: '_CartItemStore.quantity', context: context);
 
   @override
   double get quantity {
@@ -135,7 +137,8 @@ mixin _$CartItemStore on _CartItemStore, Store {
     });
   }
 
-  final _$showDetailsAtom = Atom(name: '_CartItemStore.showDetails');
+  late final _$showDetailsAtom =
+      Atom(name: '_CartItemStore.showDetails', context: context);
 
   @override
   bool get showDetails {
@@ -150,7 +153,8 @@ mixin _$CartItemStore on _CartItemStore, Store {
     });
   }
 
-  final _$promotionAtom = Atom(name: '_CartItemStore.promotion');
+  late final _$promotionAtom =
+      Atom(name: '_CartItemStore.promotion', context: context);
 
   @override
   Promotions? get promotion {
@@ -165,7 +169,8 @@ mixin _$CartItemStore on _CartItemStore, Store {
     });
   }
 
-  final _$discountAtom = Atom(name: '_CartItemStore.discount');
+  late final _$discountAtom =
+      Atom(name: '_CartItemStore.discount', context: context);
 
   @override
   double? get discount {
@@ -180,7 +185,8 @@ mixin _$CartItemStore on _CartItemStore, Store {
     });
   }
 
-  final _$hasCheckedAtom = Atom(name: '_CartItemStore.hasChecked');
+  late final _$hasCheckedAtom =
+      Atom(name: '_CartItemStore.hasChecked', context: context);
 
   @override
   bool get hasChecked {
@@ -195,8 +201,8 @@ mixin _$CartItemStore on _CartItemStore, Store {
     });
   }
 
-  final _$_CartItemStoreActionController =
-      ActionController(name: '_CartItemStore');
+  late final _$_CartItemStoreActionController =
+      ActionController(name: '_CartItemStore', context: context);
 
   @override
   double _calculatePromotion(double q, double uPrice,
@@ -321,7 +327,8 @@ mixin _$ErrorPromotionInput on _ErrorPromotionInput, Store {
               name: '_ErrorPromotionInput.hasErrors'))
           .value;
 
-  final _$discountAtom = Atom(name: '_ErrorPromotionInput.discount');
+  late final _$discountAtom =
+      Atom(name: '_ErrorPromotionInput.discount', context: context);
 
   @override
   String? get discount {

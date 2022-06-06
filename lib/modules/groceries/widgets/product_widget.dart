@@ -68,7 +68,7 @@ class ProductWidget extends StatelessWidget {
                     builder: (_) => AlertDialog(
                           contentPadding: const EdgeInsets.all(10.0),
                           title: const Text(
-                              'Seguro qué quieres eliminar el producto?'),
+                              '¿Seguro qué quieres eliminar el producto?'),
                           actions: [
                             TextButton(
                                 onPressed: () => Navigator.pop(context),
