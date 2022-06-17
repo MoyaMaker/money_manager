@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:money_manager/modules/groceries/pages/new_product_page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -26,8 +27,10 @@ class GroceriesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Despensa')),
       floatingActionButton: FloatingActionButton(
+        tooltip: 'Nuevo producto',
         child: const Icon(Icons.add),
-        onPressed: () => Navigator.pushNamed(context, 'groceries/new-product'),
+        onPressed: () => Navigator.pushNamed(context, 'groceries/new-product',
+            arguments: NewProductArguments(addIntoCart: false)),
       ),
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       body: Column(
