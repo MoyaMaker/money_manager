@@ -137,7 +137,8 @@ class GroceriesNewProductPage extends StatelessWidget {
   }
 }
 
-/// Parameter add new product into shopping cart
+/// Arguments for new product
+/// [addIntoCart] when value is true show the quantity product and product is saved into shopping cart
 class NewProductArguments {
   final bool addIntoCart;
 
