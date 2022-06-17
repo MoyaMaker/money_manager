@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 class GroceriesNewProductPage extends StatelessWidget {
   const GroceriesNewProductPage({Key? key}) : super(key: key);
 
+  static late NewProductArguments args;
+
   // Stores
   static late ProductListStore _productListStore;
   static late ShoppingCartStore _shoppingCartStore;
@@ -22,6 +24,8 @@ class GroceriesNewProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    args = _extractArguments(context);
+
     _productListStore = Provider.of<ProductListStore>(context, listen: false);
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
     formNewProduct = FormNewProduct();
@@ -66,17 +70,20 @@ class GroceriesNewProductPage extends StatelessWidget {
           ),
           // Quantity
           Observer(
-            builder: (_) => TextFormField(
-              initialValue: '1',
-              focusNode: _quantityFocus,
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.number,
-              onChanged: (String value) => formNewProduct.setQuantity(value),
-              decoration: InputDecoration(
-                  label: const Text('Cantidad'),
-                  icon: const Icon(Icons.shopping_basket),
-                  errorText: formNewProduct.error.quantity),
-              onFieldSubmitted: (String value) => onSave(context),
+            builder: (_) => Visibility(
+              visible: args.addIntoCart,
+              child: TextFormField(
+                initialValue: '1',
+                focusNode: _quantityFocus,
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.number,
+                onChanged: (String value) => formNewProduct.setQuantity(value),
+                decoration: InputDecoration(
+                    label: const Text('Cantidad'),
+                    icon: const Icon(Icons.shopping_basket),
+                    errorText: formNewProduct.error.quantity),
+                onFieldSubmitted: (String value) => onSave(context),
+              ),
             ),
           ),
           // Save button
@@ -94,6 +101,16 @@ class GroceriesNewProductPage extends StatelessWidget {
     );
   }
 
+  NewProductArguments _extractArguments(BuildContext context) {
+    final modalRoute = ModalRoute.of(context);
+
+    if (modalRoute?.settings.arguments != null) {
+      return modalRoute!.settings.arguments as NewProductArguments;
+    }
+
+    return NewProductArguments();
+  }
+
   void onSave(BuildContext context) {
     formNewProduct.validateAll();
 
@@ -101,11 +118,13 @@ class GroceriesNewProductPage extends StatelessWidget {
       final newProduct = _productListStore.add(
           formNewProduct.name, stringToDouble(formNewProduct.unitPrice));
 
-      final cartItem = CartItemStore(
-          product: newProduct,
-          quantity: stringToDouble(formNewProduct.quantity));
+      if (args.addIntoCart) {
+        final cartItem = CartItemStore(
+            product: newProduct,
+            quantity: stringToDouble(formNewProduct.quantity));
 
-      _shoppingCartStore.addItem(cartItem);
+        _shoppingCartStore.addItem(cartItem);
+      }
 
       Navigator.pop(context);
     } else if (formNewProduct.error.name != null) {
@@ -116,4 +135,11 @@ class GroceriesNewProductPage extends StatelessWidget {
       _quantityFocus.requestFocus();
     }
   }
+}
+
+/// Parameter add new product into shopping cart
+class NewProductArguments {
+  final bool addIntoCart;
+
+  NewProductArguments({this.addIntoCart = true});
 }

@@ -20,27 +20,45 @@ class GroceriesShoppingCartPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Observer(
-            builder: (_) => Visibility(
-                visible: _shoppingCartStore.hasItems,
-                child: CheckboxListTile(
-                    title: RichText(
-                      text: TextSpan(
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 16.0),
-                          text: 'Seleccionar todos ',
-                          children: [
-                            TextSpan(
-                                text: '(${_shoppingCartStore.countItems})',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold))
-                          ]),
-                    ),
-                    controlAffinity: ListTileControlAffinity.leading,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
-                    value: _shoppingCartStore.selectAll,
-                    onChanged: (value) =>
-                        _shoppingCartStore.setSelectAll(value))),
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 55.0,
+                  child: Observer(
+                    builder: (_) => Visibility(
+                        visible: _shoppingCartStore.hasItems,
+                        child: CheckboxListTile(
+                            title: RichText(
+                              text: TextSpan(
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16.0),
+                                  text: 'Seleccionar todos ',
+                                  children: [
+                                    TextSpan(
+                                        text:
+                                            '(${_shoppingCartStore.countItems})',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold))
+                                  ]),
+                            ),
+                            controlAffinity: ListTileControlAffinity.leading,
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 5.0),
+                            value: _shoppingCartStore.selectAll,
+                            onChanged: (value) =>
+                                _shoppingCartStore.setSelectAll(value))),
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(right: 10.0),
+                child: ElevatedButton(
+                    child: const Icon(Icons.add),
+                    onPressed: () =>
+                        Navigator.pushNamed(context, 'groceries/new-product')),
+              )
+            ],
           ),
           Expanded(child: Observer(builder: (_) => listItems())),
           bottomSheetTotal(context)
