@@ -21,13 +21,13 @@ class CartItemAdapter extends TypeAdapter<CartItemStore> {
       quantity: fields[1] as double,
       promotion: fields[2] as Promotions?,
       discount: fields[3] as double?,
-    );
+    )..hasChecked = fields[4] == null ? false : fields[4] as bool;
   }
 
   @override
   void write(BinaryWriter writer, CartItemStore obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.product)
       ..writeByte(1)
@@ -35,7 +35,9 @@ class CartItemAdapter extends TypeAdapter<CartItemStore> {
       ..writeByte(2)
       ..write(obj.promotion)
       ..writeByte(3)
-      ..write(obj.discount);
+      ..write(obj.discount)
+      ..writeByte(4)
+      ..write(obj.hasChecked);
   }
 
   @override

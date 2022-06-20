@@ -28,6 +28,8 @@ abstract class _ShoppingCartStore with Store {
         for (var item in cartItems) {
           item.setHasChecked(selected);
         }
+
+        updateAllItemsInHive();
       }, name: 'Reaction for check all items in shopping cart'),
       reaction((_) => cartItems.length, (_) => orderListForCheckedMethods(),
           name: 'Order new item when is added'),
@@ -38,6 +40,7 @@ abstract class _ShoppingCartStore with Store {
         if (length == countItems) return;
 
         orderListForCheckedMethods();
+        updateAllItemsInHive();
       }, name: 'Reaction for order list when product has checked')
     ];
   }
@@ -220,6 +223,16 @@ abstract class _ShoppingCartStore with Store {
     for (var item in checkedItems) {
       removeItem(item);
     }
+  }
+
+  /// Update items in box
+  /// To save when item has checked
+  @action
+  void updateAllItemsInHive() {
+    cartItems.forEach((element) {
+      final key = findKeyInMap(element);
+      _box.put(key, element);
+    });
   }
 
   @action
