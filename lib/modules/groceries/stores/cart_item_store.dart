@@ -48,6 +48,8 @@ abstract class _CartItemStore with Store {
   @observable
   double? discount;
 
+  // Checkbox when it's selected into shopping cart
+  @HiveField(4, defaultValue: false)
   @observable
   bool hasChecked = false;
 
