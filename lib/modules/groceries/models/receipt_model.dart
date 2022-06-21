@@ -57,4 +57,11 @@ class Receipt {
     return NumberFormat.currency(locale: 'es_MX', symbol: r'$')
         .format(subtotal);
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'storeName': storeName,
+        'buyDate': buyDate,
+        'itemsList': itemsList
+      };
 }
