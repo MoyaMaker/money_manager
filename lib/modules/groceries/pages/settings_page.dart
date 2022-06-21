@@ -3,6 +3,7 @@ import 'package:money_manager/modules/groceries/stores/receipt_history_store.dar
 import 'package:money_manager/modules/groceries/stores/security_copy_store.dart';
 import 'package:provider/provider.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
+import 'package:share_plus/share_plus.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -31,7 +32,17 @@ class SettingsPage extends StatelessWidget {
                 label: const Text('Copia de seguridad'),
                 icon: const Icon(Icons.backup),
                 onPressed: () async {
-                  _securityCopyStore.downloadCopyFile();
+                  final file = await _securityCopyStore.downloadCopyFile();
+
+                  if (file != null) {
+                    Share.shareFiles([file.path], text: 'Copy security');
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (_) => const AlertDialog(
+                              title: Text('No se ha generado el archivo'),
+                            ));
+                  }
                 })
           ],
         ),

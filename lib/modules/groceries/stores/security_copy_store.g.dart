@@ -38,7 +38,7 @@ mixin _$SecurityCopyStore on _SecurityCopyStore, Store {
       AsyncAction('_SecurityCopyStore.downloadCopyFile', context: context);
 
   @override
-  Future downloadCopyFile() {
+  Future<File?> downloadCopyFile() {
     return _$downloadCopyFileAsyncAction.run(() => super.downloadCopyFile());
   }
 

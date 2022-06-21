@@ -199,6 +199,16 @@ abstract class _CartItemStore with Store {
     error.discount = null;
   }
 
+  @action
+  Map<String, dynamic> toJson() => {
+        "product": product.toJson(),
+        "quantity": quantity,
+        "showDetails": showDetails,
+        "promotions": promotion!.name,
+        "discount": discount,
+        "hasChecked": hasChecked
+      };
+
   void dispose() {
     for (var d in _disposers) {
       d();

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/receipt_history_store.dart';
@@ -32,16 +31,19 @@ abstract class _SecurityCopyStore with Store {
       {"products": _getJsonProducts, "receipt_history": _getJsonReceiptHistory};
 
   @action
-  downloadCopyFile() async {
+  Future<File?> downloadCopyFile() async {
     final dir = await Directory.systemTemp.createTemp();
-    File logFile = File('${dir.path}_app_security_copy.json');
+    File jsonFile = File(
+        '${dir.path}/${DateTime.now().millisecondsSinceEpoch}_app_security_copy.json');
 
     try {
-      logFile = await logFile.writeAsString(jsonEncode(securityCopyJson));
+      final jsonString = jsonEncode(securityCopyJson);
+      final file = await jsonFile.writeAsString(jsonString);
 
-      return logFile;
+      return file;
     } catch (e) {
-      throw ErrorDescription('Unable to create log file!\n$e');
+      print(e);
+      return null;
     }
   }
 }

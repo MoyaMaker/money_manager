@@ -61,7 +61,7 @@ class Receipt {
   Map<String, dynamic> toJson() => {
         'id': id,
         'storeName': storeName,
-        'buyDate': buyDate,
-        'itemsList': itemsList
+        'buyDate': buyDate.toString(),
+        'itemsList': itemsList.map((e) => e.toJson()).toList()
       };
 }
