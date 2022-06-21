@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:money_manager/modules/groceries/pages/groceries_page.dart';
+import 'package:money_manager/modules/groceries/pages/settings_page.dart';
 import 'package:money_manager/modules/groceries/pages/shopping_cart_page.dart';
 import 'package:money_manager/modules/groceries/pages/receipt_history_page.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
@@ -52,6 +53,7 @@ class _MainGroceriesState extends State<MainGroceries> {
             currentIndex: _activePage,
             onTap: (value) => setState(() => _pageController.jumpToPage(value)),
             iconSize: 32.0,
+            type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(
                   icon: _activePage == 0
@@ -64,6 +66,11 @@ class _MainGroceriesState extends State<MainGroceries> {
                       ? const Icon(Icons.history)
                       : const Icon(Icons.history_outlined),
                   label: 'Historial'),
+              BottomNavigationBarItem(
+                  icon: _activePage == 3
+                      ? const Icon(Icons.settings)
+                      : const Icon(Icons.settings_outlined),
+                  label: 'Configuración')
             ]),
         body: PageView(
           controller: _pageController,
@@ -72,7 +79,8 @@ class _MainGroceriesState extends State<MainGroceries> {
           children: const [
             GroceriesPage(),
             GroceriesShoppingCartPage(),
-            ReceiptHistoryPage()
+            ReceiptHistoryPage(),
+            SettingsPage()
           ],
         ),
       ),

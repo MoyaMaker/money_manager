@@ -166,4 +166,8 @@ abstract class _ProductStore with Store {
   @computed
   String get unitPriceFormatted =>
       NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(unitPrice);
+
+  @action
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': name, 'unitPrice': unitPrice};
 }

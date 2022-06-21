@@ -279,6 +279,20 @@ mixin _$ProductStore on _ProductStore, Store {
     });
   }
 
+  late final _$_ProductStoreActionController =
+      ActionController(name: '_ProductStore', context: context);
+
+  @override
+  Map<String, dynamic> toJson() {
+    final _$actionInfo = _$_ProductStoreActionController.startAction(
+        name: '_ProductStore.toJson');
+    try {
+      return super.toJson();
+    } finally {
+      _$_ProductStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

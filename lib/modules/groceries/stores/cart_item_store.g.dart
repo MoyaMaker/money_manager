@@ -301,6 +301,17 @@ mixin _$CartItemStore on _CartItemStore, Store {
   }
 
   @override
+  Map<String, dynamic> toJson() {
+    final _$actionInfo = _$_CartItemStoreActionController.startAction(
+        name: '_CartItemStore.toJson');
+    try {
+      return super.toJson();
+    } finally {
+      _$_CartItemStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 product: ${product},
