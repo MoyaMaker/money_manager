@@ -52,6 +52,43 @@ class CartItemAdapter extends TypeAdapter<CartItemStore> {
 }
 
 // **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+CartItemStore _$CartItemStoreFromJson(Map<String, dynamic> json) =>
+    CartItemStore(
+      product: ProductStore.fromJson(json['product'] as Map<String, dynamic>),
+      quantity: (json['quantity'] as num?)?.toDouble() ?? 1.0,
+      promotion: $enumDecodeNullable(_$PromotionsEnumMap, json['promotion']) ??
+          Promotions.notSelected,
+      discount: (json['discount'] as num?)?.toDouble(),
+    )
+      ..showDetails = json['showDetails'] as bool? ?? false
+      ..hasChecked = json['hasChecked'] as bool;
+
+Map<String, dynamic> _$CartItemStoreToJson(CartItemStore instance) =>
+    <String, dynamic>{
+      'product': instance.product,
+      'quantity': instance.quantity,
+      'showDetails': instance.showDetails,
+      'promotion': _$PromotionsEnumMap[instance.promotion],
+      'discount': instance.discount,
+      'hasChecked': instance.hasChecked,
+    };
+
+const _$PromotionsEnumMap = {
+  Promotions.notSelected: 'notSelected',
+  Promotions.quantity4UniquePrice: 'quantity4UniquePrice',
+  Promotions.percentage: 'percentage',
+  Promotions.points: 'points',
+  Promotions.p2x1: 'p2x1',
+  Promotions.p3x2: 'p3x2',
+  Promotions.p4x3: 'p4x3',
+  Promotions.q1x70percentage: 'q1x70percentage',
+  Promotions.q1AndHalf: 'q1AndHalf',
+};
+
+// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 
@@ -295,17 +332,6 @@ mixin _$CartItemStore on _CartItemStore, Store {
         name: '_CartItemStore.validateDiscount');
     try {
       return super.validateDiscount(value);
-    } finally {
-      _$_CartItemStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    final _$actionInfo = _$_CartItemStoreActionController.startAction(
-        name: '_CartItemStore.toJson');
-    try {
-      return super.toJson();
     } finally {
       _$_CartItemStoreActionController.endAction(_$actionInfo);
     }

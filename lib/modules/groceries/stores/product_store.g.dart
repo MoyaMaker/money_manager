@@ -47,6 +47,23 @@ class ProductHiveAdapter extends TypeAdapter<ProductStore> {
 }
 
 // **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+ProductStore _$ProductStoreFromJson(Map<String, dynamic> json) => ProductStore(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      unitPrice: (json['unitPrice'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$ProductStoreToJson(ProductStore instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'unitPrice': instance.unitPrice,
+    };
+
+// **************************************************************************
 // StoreGenerator
 // **************************************************************************
 
@@ -201,6 +218,17 @@ mixin _$ProductListStore on _ProductListStore, Store {
   }
 
   @override
+  Future<Iterable<int>> restoreProducts(List<ProductStore> values) {
+    final _$actionInfo = _$_ProductListStoreActionController.startAction(
+        name: '_ProductListStore.restoreProducts');
+    try {
+      return super.restoreProducts(values);
+    } finally {
+      _$_ProductListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void dispose() {
     final _$actionInfo = _$_ProductListStoreActionController.startAction(
         name: '_ProductListStore.dispose');
@@ -277,20 +305,6 @@ mixin _$ProductStore on _ProductStore, Store {
     _$unitPriceAtom.reportWrite(value, super.unitPrice, () {
       super.unitPrice = value;
     });
-  }
-
-  late final _$_ProductStoreActionController =
-      ActionController(name: '_ProductStore', context: context);
-
-  @override
-  Map<String, dynamic> toJson() {
-    final _$actionInfo = _$_ProductStoreActionController.startAction(
-        name: '_ProductStore.toJson');
-    try {
-      return super.toJson();
-    } finally {
-      _$_ProductStoreActionController.endAction(_$actionInfo);
-    }
   }
 
   @override

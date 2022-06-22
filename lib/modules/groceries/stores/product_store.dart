@@ -1,5 +1,6 @@
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
@@ -122,6 +123,12 @@ abstract class _ProductListStore with Store {
   void setSearchQuery(String value) => searchQuery = value;
 
   @action
+  Future<Iterable<int>> restoreProducts(List<ProductStore> values) {
+    products = ObservableList.of(values);
+    return _box.addAll(values);
+  }
+
+  @action
   Future<void> _initBox() async {
     const boxName = 'products';
     if (Hive.isBoxOpen(boxName)) {
@@ -144,8 +151,18 @@ abstract class _ProductListStore with Store {
   }
 }
 
+@JsonSerializable()
 @HiveType(typeId: 0, adapterName: 'ProductHiveAdapter')
-class ProductStore = _ProductStore with _$ProductStore;
+class ProductStore extends _ProductStore with _$ProductStore {
+  ProductStore(
+      {required String id, required String name, required double unitPrice})
+      : super(id: id, name: name, unitPrice: unitPrice);
+
+  factory ProductStore.fromJson(Map<String, dynamic> json) =>
+      _$ProductStoreFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProductStoreToJson(this);
+}
 
 abstract class _ProductStore with Store {
   _ProductStore(
@@ -166,8 +183,4 @@ abstract class _ProductStore with Store {
   @computed
   String get unitPriceFormatted =>
       NumberFormat.currency(locale: 'es_MX', symbol: r'$').format(unitPrice);
-
-  @action
-  Map<String, dynamic> toJson() =>
-      {'id': id, 'name': name, 'unitPrice': unitPrice};
 }

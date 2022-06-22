@@ -108,6 +108,17 @@ mixin _$ReceiptHistoryStore on _ReceiptHistoryStore, Store {
   }
 
   @override
+  Future<Iterable<int>> restoreReceipts(List<Receipt> values) {
+    final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
+        name: '_ReceiptHistoryStore.restoreReceipts');
+    try {
+      return super.restoreReceipts(values);
+    } finally {
+      _$_ReceiptHistoryStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   Future<void> closeBox() {
     final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
         name: '_ReceiptHistoryStore.closeBox');

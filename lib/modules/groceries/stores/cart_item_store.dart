@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:mobx/mobx.dart';
 
 import 'package:money_manager/utils/math_double_util.dart';
@@ -9,8 +10,21 @@ import 'product_store.dart';
 
 part 'cart_item_store.g.dart';
 
+@JsonSerializable()
 @HiveType(typeId: 1, adapterName: 'CartItemAdapter')
-class CartItemStore = _CartItemStore with _$CartItemStore;
+class CartItemStore extends _CartItemStore with _$CartItemStore {
+  CartItemStore(
+      {required ProductStore product,
+      double quantity = 1.0,
+      Promotions? promotion = Promotions.notSelected,
+      double? discount})
+      : super(product: product);
+
+  factory CartItemStore.fromJson(Map<String, dynamic> json) =>
+      _$CartItemStoreFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CartItemStoreToJson(this);
+}
 
 abstract class _CartItemStore with Store {
   _CartItemStore(
@@ -35,6 +49,7 @@ abstract class _CartItemStore with Store {
 
   /// Displays discount container
   /// or any other detail in the cart item box
+  @JsonKey(defaultValue: false)
   @observable
   bool showDetails = false;
 
@@ -198,16 +213,6 @@ abstract class _CartItemStore with Store {
 
     error.discount = null;
   }
-
-  @action
-  Map<String, dynamic> toJson() => {
-        "product": product.toJson(),
-        "quantity": quantity,
-        "showDetails": showDetails,
-        "promotions": promotion!.name,
-        "discount": discount,
-        "hasChecked": hasChecked
-      };
 
   void dispose() {
     for (var d in _disposers) {

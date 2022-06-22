@@ -89,6 +89,12 @@ abstract class _ReceiptHistoryStore with Store {
   }
 
   @action
+  Future<Iterable<int>> restoreReceipts(List<Receipt> values) {
+    shoppedItems = ObservableList.of(values);
+    return _box.addAll(values);
+  }
+
+  @action
   Future<void> closeBox() => _box.close();
 
   @action
