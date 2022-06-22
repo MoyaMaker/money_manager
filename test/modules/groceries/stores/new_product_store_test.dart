@@ -1,15 +1,34 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobx/mobx.dart';
 import 'package:money_manager/modules/groceries/stores/new_product_store.dart';
+import 'package:money_manager/modules/groceries/stores/product_store.dart';
 
 void main() {
   group('New product store: ', () {
     late FormNewProduct store;
+    const boxName = 'products';
+    late Box<ProductStore> box;
 
     late List<ReactionDisposer> disposers;
 
-    setUpAll(() {
+    setUpAll(() async {
+      const testPath = '\\test\\modules\\groceries\\stores';
+      final dir = Directory.current;
+      final path = dir.path + testPath;
+
+      Hive.init(path);
+      Hive.registerAdapter(ProductHiveAdapter());
+
       store = FormNewProduct();
+
+      if (Hive.isBoxOpen(boxName)) {
+        box = Hive.box<ProductStore>(boxName);
+      } else {
+        box = await Hive.openBox<ProductStore>(boxName);
+      }
 
       disposers = [
         reaction(
@@ -19,14 +38,20 @@ void main() {
         reaction((_) => store.quantity,
             (String value) => store.validateQuantity(value))
       ];
+
+      box.add(ProductStore(id: 'id', name: 'Aguacate', unitPrice: 83.0));
     });
 
-    tearDownAll(() {
+    tearDownAll(() async {
       for (var d in disposers) {
         d();
       }
 
       store.dispose();
+
+      await Hive.close();
+      await Hive.deleteBoxFromDisk(boxName);
+      await Hive.deleteFromDisk();
     });
 
     test('Validate name empty', () {
@@ -47,13 +72,24 @@ void main() {
       expect(store.error.name != null, true);
     });
 
-    test('Validate name without error', () {
+    test('Validate name without error', () async {
       // Arrange
       const nameProduct = 'Aaa';
       // Act
       store.setName(nameProduct);
+      await store.checkNameExist(store.name);
       // Assert
       expect(store.error.name == null, true);
+    });
+
+    test('Validate if product exist', () async {
+      // Arrange
+      const nameProduct = 'Aguacate';
+      // Act
+      store.setName(nameProduct);
+      await store.checkNameExist(store.name);
+      // Assert
+      expect(store.error.name != null, true);
     });
 
     test('Validate unit price empty', () {
@@ -129,12 +165,18 @@ void main() {
       expect(store.error.quantity == null, true);
     });
 
-    test('Can save product', () {
+    test('Can save product', () async {
       // Arrange
       // Act
+      store.setName('Nuevo producto');
       store.validateAll();
+      await store.checkNameExist(store.name);
       // Assert
       expect(store.canSave, true);
+    });
+
+    test('box is open', () {
+      expect(box.isOpen, true);
     });
   });
 }
