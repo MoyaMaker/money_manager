@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -162,6 +164,11 @@ class ProductStore extends _ProductStore with _$ProductStore {
       _$ProductStoreFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductStoreToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
 }
 
 abstract class _ProductStore with Store {

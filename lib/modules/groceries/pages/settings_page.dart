@@ -39,7 +39,9 @@ class SettingsPage extends StatelessWidget {
                   final file = await _securityCopyStore.downloadCopyFile();
 
                   if (file != null) {
-                    Share.shareFiles([file.path], text: 'Copy security');
+                    final date = DateTime.now();
+                    Share.shareFiles([file.path],
+                        text: 'Backup ${date.day} ${date.month} ${date.year}');
                   } else {
                     showDialog(
                         context: context,

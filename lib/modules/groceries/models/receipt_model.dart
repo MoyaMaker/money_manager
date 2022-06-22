@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -64,4 +66,9 @@ class Receipt {
       _$ReceiptFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReceiptToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
 }
