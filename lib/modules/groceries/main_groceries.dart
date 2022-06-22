@@ -54,6 +54,8 @@ class _MainGroceriesState extends State<MainGroceries> {
             onTap: (value) => setState(() => _pageController.jumpToPage(value)),
             iconSize: 32.0,
             type: BottomNavigationBarType.fixed,
+            selectedLabelStyle: const TextStyle(fontSize: 12.0),
+            unselectedLabelStyle: const TextStyle(fontSize: 12.0),
             items: [
               BottomNavigationBarItem(
                   icon: _activePage == 0
