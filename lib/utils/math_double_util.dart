@@ -1,6 +1,6 @@
 double stringToDouble(String value) {
-  final _stringToDouble = double.parse(value);
-  return (_stringToDouble).toDouble();
+  final stringToDouble = double.parse(value);
+  return (stringToDouble).toDouble();
 }
 
 double roundDouble(double value) => double.parse(value.toStringAsFixed(2));
