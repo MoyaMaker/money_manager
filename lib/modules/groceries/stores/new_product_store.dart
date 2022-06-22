@@ -4,7 +4,7 @@ import 'package:money_manager/modules/groceries/stores/product_store.dart';
 
 part 'new_product_store.g.dart';
 
-class FormNewProduct = _FormNewProduct with _$FormNewProduct;
+class FormNewProduct extends _FormNewProduct with _$FormNewProduct {}
 
 abstract class _FormNewProduct with Store {
   _FormNewProduct() {
@@ -159,8 +159,8 @@ abstract class _FormNewProduct with Store {
   }
 }
 
-class ErrorProductFormState = _ErrorProductFormState
-    with _$ErrorProductFormState;
+class ErrorProductFormState extends _ErrorProductFormState
+    with _$ErrorProductFormState {}
 
 abstract class _ErrorProductFormState with Store {
   @observable

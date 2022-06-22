@@ -2,7 +2,9 @@ import 'package:mobx/mobx.dart';
 
 part 'form_cart_item_store.g.dart';
 
-class FormCartItemStore = _FormCartItemStore with _$FormCartItemStore;
+class FormCartItemStore extends _FormCartItemStore with _$FormCartItemStore {
+  FormCartItemStore(String price, String quantity) : super(price, quantity);
+}
 
 abstract class _FormCartItemStore with Store {
   _FormCartItemStore(this.price, this.quantity) {
@@ -80,8 +82,8 @@ abstract class _FormCartItemStore with Store {
   }
 }
 
-class ErrorFormCartItemStore = _ErrorFormCartItemStore
-    with _$ErrorFormCartItemStore;
+class ErrorFormCartItemStore extends _ErrorFormCartItemStore
+    with _$ErrorFormCartItemStore {}
 
 abstract class _ErrorFormCartItemStore with Store {
   @observable

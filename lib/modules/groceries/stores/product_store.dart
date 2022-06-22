@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 
 part 'product_store.g.dart';
 
-class ProductListStore = _ProductListStore with _$ProductListStore;
+class ProductListStore extends _ProductListStore with _$ProductListStore {}
 
 abstract class _ProductListStore with Store {
   _ProductListStore() {

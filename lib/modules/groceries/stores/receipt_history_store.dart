@@ -6,7 +6,8 @@ import 'cart_item_store.dart';
 
 part 'receipt_history_store.g.dart';
 
-class ReceiptHistoryStore = _ReceiptHistoryStore with _$ReceiptHistoryStore;
+class ReceiptHistoryStore extends _ReceiptHistoryStore
+    with _$ReceiptHistoryStore {}
 
 abstract class _ReceiptHistoryStore with Store {
   _ReceiptHistoryStore() {

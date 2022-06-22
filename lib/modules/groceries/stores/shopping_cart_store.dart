@@ -7,7 +7,14 @@ import 'cart_item_store.dart';
 
 part 'shopping_cart_store.g.dart';
 
-class ShoppingCartStore = _ShoppingCartStore with _$ShoppingCartStore;
+class ShoppingCartStore extends _ShoppingCartStore with _$ShoppingCartStore {
+  ShoppingCartStore(
+      {String? id,
+      ObservableList<CartItemStore>? items,
+      String storeName = '',
+      DateTime? buyDate})
+      : super(id: id, items: items, storeName: storeName, buyDate: buyDate);
+}
 
 abstract class _ShoppingCartStore with Store {
   _ShoppingCartStore(

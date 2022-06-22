@@ -18,7 +18,11 @@ class CartItemStore extends _CartItemStore with _$CartItemStore {
       double quantity = 1.0,
       Promotions? promotion = Promotions.notSelected,
       double? discount})
-      : super(product: product);
+      : super(
+            product: product,
+            quantity: quantity,
+            promotion: promotion,
+            discount: discount);
 
   factory CartItemStore.fromJson(Map<String, dynamic> json) =>
       _$CartItemStoreFromJson(json);
@@ -221,7 +225,8 @@ abstract class _CartItemStore with Store {
   }
 }
 
-class ErrorPromotionInput = _ErrorPromotionInput with _$ErrorPromotionInput;
+class ErrorPromotionInput extends _ErrorPromotionInput
+    with _$ErrorPromotionInput {}
 
 abstract class _ErrorPromotionInput with Store {
   @observable
