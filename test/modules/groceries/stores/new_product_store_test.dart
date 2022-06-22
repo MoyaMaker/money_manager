@@ -6,12 +6,12 @@ void main() {
   group('New product store: ', () {
     late FormNewProduct store;
 
-    late List<ReactionDisposer> _disposers;
+    late List<ReactionDisposer> disposers;
 
     setUpAll(() {
       store = FormNewProduct();
 
-      _disposers = [
+      disposers = [
         reaction(
             (_) => store.name, (String value) => store.validateName(value)),
         reaction((_) => store.unitPrice,
@@ -22,7 +22,7 @@ void main() {
     });
 
     tearDownAll(() {
-      for (var d in _disposers) {
+      for (var d in disposers) {
         d();
       }
 
