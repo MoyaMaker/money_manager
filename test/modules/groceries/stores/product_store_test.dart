@@ -90,6 +90,18 @@ void main() {
       expect(productListStore.products.length, 1);
     });
 
+    test('restore product', () {
+      // Arrange
+      final values = [
+        ProductStore(id: '0', name: 'Cereal', unitPrice: 235.32),
+        ProductStore(id: "0123", name: "mana", unitPrice: 10.5)
+      ];
+      // Act
+      productListStore.restoreProducts(values);
+      // Assert
+      expect(productListStore.products.length, 2);
+    });
+
     test('verify box is open', () async {
       productListStore = ProductListStore();
 
@@ -112,6 +124,38 @@ void main() {
       productStore = ProductStore(id: '0', name: 'Cereal', unitPrice: 235.32);
 
       expect(productStore.unitPriceFormatted, expectedResult);
+    });
+
+    test('toString', () {
+      // Arrange
+      const jsonString = '{"id":"0123","name":"mana","unitPrice":10.5}';
+      final product = ProductStore(id: "0123", name: "mana", unitPrice: 10.5);
+      // Act
+      final productString = product.toString();
+      // Assert
+      expect(productString, jsonString);
+    });
+
+    test('toJson', () {
+      // Arrange
+      const jsonExpected = {"id": "0123", "name": "mana", "unitPrice": 10.5};
+      final product = ProductStore(id: "0123", name: "mana", unitPrice: 10.5);
+      // Act
+      final productToJson = product.toJson();
+      // Assert
+      expect(productToJson, jsonExpected);
+    });
+
+    test('fromJson', () {
+      // Arrange
+      final product = ProductStore(id: '0123', name: 'mana', unitPrice: 10.5);
+      // Act
+      final productFromJson = ProductStore.fromJson(
+          {"id": "0123", "name": "mana", "unitPrice": 10.5});
+      // Assert
+      expect(product.id, productFromJson.id);
+      expect(product.name, productFromJson.name);
+      expect(product.unitPrice, productFromJson.unitPrice);
     });
   });
 }
