@@ -2,12 +2,20 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:mobx/mobx.dart';
+import 'package:money_manager/modules/groceries/models/backup_model.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/receipt_history_store.dart';
 
 part 'security_copy_store.g.dart';
 
-class SecurityCopyStore = _SecurityCopyStore with _$SecurityCopyStore;
+class SecurityCopyStore extends _SecurityCopyStore with _$SecurityCopyStore {
+  SecurityCopyStore(
+      {required ProductListStore productListStore,
+      required ReceiptHistoryStore receiptHistoryStore})
+      : super(
+            productListStore: productListStore,
+            receiptHistoryStore: receiptHistoryStore);
+}
 
 abstract class _SecurityCopyStore with Store {
   final ProductListStore productListStore;
@@ -17,33 +25,45 @@ abstract class _SecurityCopyStore with Store {
       {required this.productListStore, required this.receiptHistoryStore});
 
   @computed
-  List<Map<String, dynamic>> get _getJsonProducts =>
-      productListStore.products.map((element) => element.toJson()).toList();
+  String get backupJsonString =>
+      BackupModel(productListStore.products, receiptHistoryStore.shoppedItems)
+          .toString();
 
-  @computed
-  List<Map<String, dynamic>> get _getJsonReceiptHistory =>
-      receiptHistoryStore.shoppedItems
-          .map((element) => element.toJson())
-          .toList();
+  @action
+  String _fileName() {
+    final date = DateTime.now();
 
-  @computed
-  Map<String, dynamic> get securityCopyJson =>
-      {"products": _getJsonProducts, "receipt_history": _getJsonReceiptHistory};
+    final day = '${date.day > 10 ? date.day : '0${date.day}'}';
+    final month = '${date.month > 10 ? date.month : '0${date.month}'}';
+
+    return '$day$month${date.year}_${date.millisecondsSinceEpoch}_backup_money_manager.json';
+  }
 
   @action
   Future<File?> downloadCopyFile() async {
     final dir = await Directory.systemTemp.createTemp();
-    File jsonFile = File(
-        '${dir.path}/${DateTime.now().millisecondsSinceEpoch}_app_security_copy.json');
+
+    File jsonFile = File('${dir.path}/$_fileName()');
 
     try {
-      final jsonString = jsonEncode(securityCopyJson);
-      final file = await jsonFile.writeAsString(jsonString);
+      final file = await jsonFile.writeAsString(backupJsonString);
 
       return file;
     } catch (e) {
-      print(e);
       return null;
     }
+  }
+
+  @action
+  Future<void> restoreBackupFile(File backupFile) async {
+    final backup = await backupFile.readAsString();
+
+    final decodedFile = jsonDecode(backup);
+
+    final backupModel = BackupModel.fromJson(decodedFile);
+
+    productListStore.restoreProducts(backupModel.productList);
+
+    receiptHistoryStore.restoreReceipts(backupModel.receiptHistory);
   }
 }

@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 
 part 'receipt_model.g.dart';
 
+@JsonSerializable()
 @HiveType(typeId: 3, adapterName: 'ReceiptAdapter')
 class Receipt {
   @HiveField(0)
@@ -58,10 +62,13 @@ class Receipt {
         .format(subtotal);
   }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'storeName': storeName,
-        'buyDate': buyDate.toString(),
-        'itemsList': itemsList.map((e) => e.toJson()).toList()
-      };
+  factory Receipt.fromJson(Map<String, dynamic> json) =>
+      _$ReceiptFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ReceiptToJson(this);
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
+  }
 }

@@ -48,3 +48,23 @@ class ReceiptAdapter extends TypeAdapter<Receipt> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Receipt _$ReceiptFromJson(Map<String, dynamic> json) => Receipt(
+      id: json['id'] as String,
+      storeName: json['storeName'] as String,
+      buyDate: DateTime.parse(json['buyDate'] as String),
+      itemsList: (json['itemsList'] as List<dynamic>)
+          .map((e) => CartItemStore.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$ReceiptToJson(Receipt instance) => <String, dynamic>{
+      'id': instance.id,
+      'storeName': instance.storeName,
+      'buyDate': instance.buyDate.toIso8601String(),
+      'itemsList': instance.itemsList,
+    };
