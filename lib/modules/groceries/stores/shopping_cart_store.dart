@@ -236,10 +236,10 @@ abstract class _ShoppingCartStore with Store {
   /// To save when item has checked
   @action
   void updateAllItemsInHive() {
-    cartItems.forEach((element) {
+    for (var element in cartItems) {
       final key = findKeyInMap(element);
       _box.put(key, element);
-    });
+    }
   }
 
   @action
