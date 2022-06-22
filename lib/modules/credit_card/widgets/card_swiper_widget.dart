@@ -50,10 +50,11 @@ class CardSwiper extends StatelessWidget {
     );
   }
 
+  // ignore: unused_element
   List<Widget> _items() {
     return cardList
         .map((e) => AnimatedPositioned(
-            child: cardWidget(e.creditName), duration: _animatedDuration))
+            duration: _animatedDuration, child: cardWidget(e.creditName)))
         .toList();
   }
 
