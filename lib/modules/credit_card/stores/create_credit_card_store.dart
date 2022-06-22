@@ -4,8 +4,8 @@ import 'package:uuid/uuid.dart';
 
 part 'create_credit_card_store.g.dart';
 
-class CreateCreditCardStore = _CreateCreditCardStore
-    with _$CreateCreditCardStore;
+class CreateCreditCardStore extends _CreateCreditCardStore
+    with _$CreateCreditCardStore {}
 
 abstract class _CreateCreditCardStore with Store {
   _CreateCreditCardStore() {
@@ -160,7 +160,8 @@ abstract class _CreateCreditCardStore with Store {
   }
 }
 
-class ErrorFormCreditCard = _ErrorFormCreditCard with _$ErrorFormCreditCard;
+class ErrorFormCreditCard extends _ErrorFormCreditCard
+    with _$ErrorFormCreditCard {}
 
 abstract class _ErrorFormCreditCard with Store {
   @observable

@@ -21,7 +21,7 @@ class CartItemWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  _CartItemWidgetState createState() => _CartItemWidgetState();
+  State<CartItemWidget> createState() => _CartItemWidgetState();
 }
 
 class _CartItemWidgetState extends State<CartItemWidget> {
@@ -282,7 +282,7 @@ class PromotionDropdown extends StatefulWidget {
       : super(key: key);
 
   @override
-  _PromotionDropdownState createState() => _PromotionDropdownState();
+  State<PromotionDropdown> createState() => _PromotionDropdownState();
 }
 
 class _PromotionDropdownState extends State<PromotionDropdown> {

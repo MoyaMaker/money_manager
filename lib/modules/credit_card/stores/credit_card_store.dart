@@ -4,7 +4,8 @@ import 'package:mobx/mobx.dart';
 
 part 'credit_card_store.g.dart';
 
-class CreditCardListStore = _CreditCardListStore with _$CreditCardListStore;
+class CreditCardListStore extends _CreditCardListStore
+    with _$CreditCardListStore {}
 
 abstract class _CreditCardListStore with Store {
   _CreditCardListStore() {
@@ -95,7 +96,20 @@ abstract class _CreditCardListStore with Store {
 }
 
 @HiveType(typeId: 4, adapterName: 'CreditCardAdapter')
-class CreditCardStore = _CreditCardStore with _$CreditCardStore;
+class CreditCardStore extends _CreditCardStore with _$CreditCardStore {
+  CreditCardStore(
+      {required String id,
+      required String creditName,
+      required double creditLimit,
+      required int dueDate,
+      required int paymentLimitDate})
+      : super(
+            id: id,
+            creditName: creditName,
+            creditLimit: creditLimit,
+            dueDate: dueDate,
+            paymentLimitDate: paymentLimitDate);
+}
 
 abstract class _CreditCardStore with Store {
   _CreditCardStore(

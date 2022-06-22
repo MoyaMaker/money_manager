@@ -7,7 +7,16 @@ import 'product_store.dart';
 
 part 'payment_store.g.dart';
 
-class PaymentStore = _PaymentStore with _$PaymentStore;
+class PaymentStore extends _PaymentStore with _$PaymentStore {
+  PaymentStore(
+      {required ReceiptHistoryStore receiptHistoryStore,
+      required ShoppingCartStore shoppingCartStore,
+      required ProductListStore productListStore})
+      : super(
+            receiptHistoryStore: receiptHistoryStore,
+            shoppingCartStore: shoppingCartStore,
+            productListStore: productListStore);
+}
 
 abstract class _PaymentStore with Store {
   _PaymentStore(
