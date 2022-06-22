@@ -43,7 +43,7 @@ abstract class _SecurityCopyStore with Store {
   Future<File?> downloadCopyFile() async {
     final dir = await Directory.systemTemp.createTemp();
 
-    File jsonFile = File('${dir.path}/$_fileName()');
+    File jsonFile = File('${dir.path}/${_fileName()}');
 
     try {
       final file = await jsonFile.writeAsString(backupJsonString);
