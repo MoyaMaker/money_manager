@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:money_manager/modules/groceries/models/backup_model.dart';
+import 'package:money_manager/modules/groceries/models/receipt_model.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/receipt_history_store.dart';
 
 part 'security_copy_store.g.dart';
 
-class SecurityCopyStore extends _SecurityCopyStore with _$SecurityCopyStore {
-  SecurityCopyStore(
+class BackupStore extends _BackupStore with _$BackupStore {
+  BackupStore(
       {required ProductListStore productListStore,
       required ReceiptHistoryStore receiptHistoryStore})
       : super(
@@ -17,17 +19,40 @@ class SecurityCopyStore extends _SecurityCopyStore with _$SecurityCopyStore {
             receiptHistoryStore: receiptHistoryStore);
 }
 
-abstract class _SecurityCopyStore with Store {
+abstract class _BackupStore with Store {
   final ProductListStore productListStore;
   final ReceiptHistoryStore receiptHistoryStore;
 
-  _SecurityCopyStore(
-      {required this.productListStore, required this.receiptHistoryStore});
+  _BackupStore(
+      {required this.productListStore, required this.receiptHistoryStore}) {
+    // _disposers = [reaction((_) => restoreFile, (f) {})];
+  }
+
+  late List<ReactionDisposer> _disposers;
+
+  // @observable
+  // File? restoreFile;
+
+  @observable
+  ObservableFuture<FilePickerResult?>? restoreFileResult;
+
+  // @observable
+  // List<ProductStore>? products;
+
+  // @observable
+  // List<Receipt>? receipts;
 
   @computed
   String get backupJsonString =>
       BackupModel(productListStore.products, receiptHistoryStore.shoppedItems)
           .toString();
+
+  @action
+  void setRestoreFileResult(Future<FilePickerResult?> value) =>
+      restoreFileResult = ObservableFuture(value);
+
+  @action
+  // void setRestoreFile(File value) => restoreFile = value;
 
   @action
   String _fileName() {
@@ -55,6 +80,18 @@ abstract class _SecurityCopyStore with Store {
   }
 
   @action
+  splitData(File restore) async {
+    final backup = await restore.readAsString();
+
+    final decodedFile = jsonDecode(backup);
+
+    final backupModel = BackupModel.fromJson(decodedFile);
+
+    // products = backupModel.productList;
+    // receipts = backupModel.receiptHistory;
+  }
+
+  @action
   Future<void> restoreBackupFile(File backupFile) async {
     final backup = await backupFile.readAsString();
 
@@ -65,5 +102,12 @@ abstract class _SecurityCopyStore with Store {
     productListStore.restoreProducts(backupModel.productList);
 
     receiptHistoryStore.restoreReceipts(backupModel.receiptHistory);
+  }
+
+  @action
+  void dispose() {
+    for (var d in _disposers) {
+      d();
+    }
   }
 }
