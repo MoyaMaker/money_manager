@@ -1,14 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
+import 'dart:convert';
 import 'package:mobx/mobx.dart';
+
 import 'package:money_manager/modules/groceries/models/backup_model.dart';
-import 'package:money_manager/modules/groceries/models/receipt_model.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/receipt_history_store.dart';
 
-part 'security_copy_store.g.dart';
+part 'backup_store.g.dart';
 
 class BackupStore extends _BackupStore with _$BackupStore {
   BackupStore(
@@ -25,37 +23,18 @@ abstract class _BackupStore with Store {
 
   _BackupStore(
       {required this.productListStore, required this.receiptHistoryStore}) {
-    // _disposers = [reaction((_) => restoreFile, (f) {})];
+    _disposers = [];
   }
 
   late List<ReactionDisposer> _disposers;
 
-  // @observable
-  // File? restoreFile;
-
-  @observable
-  ObservableFuture<FilePickerResult?>? restoreFileResult;
-
-  // @observable
-  // List<ProductStore>? products;
-
-  // @observable
-  // List<Receipt>? receipts;
-
   @computed
-  String get backupJsonString =>
+  String get securityBackupJsonString =>
       BackupModel(productListStore.products, receiptHistoryStore.shoppedItems)
           .toString();
 
   @action
-  void setRestoreFileResult(Future<FilePickerResult?> value) =>
-      restoreFileResult = ObservableFuture(value);
-
-  @action
-  // void setRestoreFile(File value) => restoreFile = value;
-
-  @action
-  String _fileName() {
+  String _securityBackupFileName() {
     final date = DateTime.now();
 
     final day = '${date.day > 10 ? date.day : '0${date.day}'}';
@@ -65,30 +44,18 @@ abstract class _BackupStore with Store {
   }
 
   @action
-  Future<File?> downloadCopyFile() async {
-    final dir = await Directory.systemTemp.createTemp();
-
-    File jsonFile = File('${dir.path}/${_fileName()}');
-
+  Future<File?> exportSecurityBackup() async {
     try {
-      final file = await jsonFile.writeAsString(backupJsonString);
+      final dir = await Directory.systemTemp.createTemp();
+
+      File jsonFile = File('${dir.path}/${_securityBackupFileName()}');
+
+      final file = await jsonFile.writeAsString(securityBackupJsonString);
 
       return file;
     } catch (e) {
       return null;
     }
-  }
-
-  @action
-  splitData(File restore) async {
-    final backup = await restore.readAsString();
-
-    final decodedFile = jsonDecode(backup);
-
-    final backupModel = BackupModel.fromJson(decodedFile);
-
-    // products = backupModel.productList;
-    // receipts = backupModel.receiptHistory;
   }
 
   @action

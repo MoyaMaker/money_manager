@@ -9,5 +9,5 @@ final groceriesRoutes = <String, Widget Function(BuildContext)>{
   'groceries': (_) => const MainGroceries(),
   'groceries/new-product': (_) => const GroceriesNewProductPage(),
   'groceries/payment': (_) => const GroceriesPaymentPage(),
-  'groceries/configuration/backup-restore': (_) => const BackupPage()
+  'groceries/configuration/backup': (_) => const BackupPage()
 };

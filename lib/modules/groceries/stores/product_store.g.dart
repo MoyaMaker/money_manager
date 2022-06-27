@@ -140,6 +140,15 @@ mixin _$ProductListStore on _ProductListStore, Store {
     });
   }
 
+  late final _$restoreProductsAsyncAction =
+      AsyncAction('_ProductListStore.restoreProducts', context: context);
+
+  @override
+  Future<Iterable<int>> restoreProducts(List<ProductStore> values) {
+    return _$restoreProductsAsyncAction
+        .run(() => super.restoreProducts(values));
+  }
+
   late final _$_initBoxAsyncAction =
       AsyncAction('_ProductListStore._initBox', context: context);
 
@@ -212,17 +221,6 @@ mixin _$ProductListStore on _ProductListStore, Store {
         name: '_ProductListStore.setSearchQuery');
     try {
       return super.setSearchQuery(value);
-    } finally {
-      _$_ProductListStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  Future<Iterable<int>> restoreProducts(List<ProductStore> values) {
-    final _$actionInfo = _$_ProductListStoreActionController.startAction(
-        name: '_ProductListStore.restoreProducts');
-    try {
-      return super.restoreProducts(values);
     } finally {
       _$_ProductListStoreActionController.endAction(_$actionInfo);
     }
