@@ -1,15 +1,15 @@
-import 'dart:convert';
 import 'dart:io';
-
+import 'dart:convert';
 import 'package:mobx/mobx.dart';
+
 import 'package:money_manager/modules/groceries/models/backup_model.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/receipt_history_store.dart';
 
-part 'security_copy_store.g.dart';
+part 'backup_store.g.dart';
 
-class SecurityCopyStore extends _SecurityCopyStore with _$SecurityCopyStore {
-  SecurityCopyStore(
+class BackupStore extends _BackupStore with _$BackupStore {
+  BackupStore(
       {required ProductListStore productListStore,
       required ReceiptHistoryStore receiptHistoryStore})
       : super(
@@ -17,20 +17,24 @@ class SecurityCopyStore extends _SecurityCopyStore with _$SecurityCopyStore {
             receiptHistoryStore: receiptHistoryStore);
 }
 
-abstract class _SecurityCopyStore with Store {
+abstract class _BackupStore with Store {
   final ProductListStore productListStore;
   final ReceiptHistoryStore receiptHistoryStore;
 
-  _SecurityCopyStore(
-      {required this.productListStore, required this.receiptHistoryStore});
+  _BackupStore(
+      {required this.productListStore, required this.receiptHistoryStore}) {
+    _disposers = [];
+  }
+
+  late List<ReactionDisposer> _disposers;
 
   @computed
-  String get backupJsonString =>
+  String get securityBackupJsonString =>
       BackupModel(productListStore.products, receiptHistoryStore.shoppedItems)
           .toString();
 
   @action
-  String _fileName() {
+  String _securityBackupFileName() {
     final date = DateTime.now();
 
     final day = '${date.day > 10 ? date.day : '0${date.day}'}';
@@ -40,13 +44,13 @@ abstract class _SecurityCopyStore with Store {
   }
 
   @action
-  Future<File?> downloadCopyFile() async {
-    final dir = await Directory.systemTemp.createTemp();
-
-    File jsonFile = File('${dir.path}/${_fileName()}');
-
+  Future<File?> exportSecurityBackup() async {
     try {
-      final file = await jsonFile.writeAsString(backupJsonString);
+      final dir = await Directory.systemTemp.createTemp();
+
+      File jsonFile = File('${dir.path}/${_securityBackupFileName()}');
+
+      final file = await jsonFile.writeAsString(securityBackupJsonString);
 
       return file;
     } catch (e) {
@@ -55,15 +59,30 @@ abstract class _SecurityCopyStore with Store {
   }
 
   @action
-  Future<void> restoreBackupFile(File backupFile) async {
+  Future<BackupRestored> restoreBackupFile(File backupFile) async {
     final backup = await backupFile.readAsString();
 
     final decodedFile = jsonDecode(backup);
 
     final backupModel = BackupModel.fromJson(decodedFile);
 
-    productListStore.restoreProducts(backupModel.productList);
+    final productList =
+        await productListStore.restoreProducts(backupModel.productList);
 
-    receiptHistoryStore.restoreReceipts(backupModel.receiptHistory);
+    final receiptList =
+        await receiptHistoryStore.restoreReceipts(backupModel.receiptHistory);
+
+    return BackupRestored(
+        productsLoaded: backupModel.productList.length,
+        productsAdded: productList.length,
+        receiptsLoaded: backupModel.receiptHistory.length,
+        receiptsAdded: receiptList.length);
+  }
+
+  @action
+  void dispose() {
+    for (var d in _disposers) {
+      d();
+    }
   }
 }

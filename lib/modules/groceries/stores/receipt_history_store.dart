@@ -90,9 +90,19 @@ abstract class _ReceiptHistoryStore with Store {
   }
 
   @action
-  Future<Iterable<int>> restoreReceipts(List<Receipt> values) {
-    shoppedItems = ObservableList.of(values);
-    return _box.addAll(values);
+  Future<Iterable<int>> restoreReceipts(List<Receipt> values) async {
+    List<int> itemsAdded = [];
+
+    for (var receipt in values) {
+      final index = findItemIndex(receipt);
+      if (index == -1) {
+        shoppedItems.add(receipt);
+        final numberKey = await _box.add(receipt);
+        itemsAdded.add(numberKey);
+      }
+    }
+
+    return itemsAdded;
   }
 
   @action

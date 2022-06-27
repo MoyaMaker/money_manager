@@ -70,9 +70,9 @@ class _MainGroceriesState extends State<MainGroceries> {
                   label: 'Historial'),
               BottomNavigationBarItem(
                   icon: _activePage == 3
-                      ? const Icon(Icons.settings)
-                      : const Icon(Icons.settings_outlined),
-                  label: 'Configuración')
+                      ? const Icon(Icons.more_horiz)
+                      : const Icon(Icons.more_horiz_outlined),
+                  label: 'Más')
             ]),
         body: PageView(
           controller: _pageController,

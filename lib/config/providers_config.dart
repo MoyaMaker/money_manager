@@ -6,8 +6,16 @@ import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart'
 import 'package:money_manager/modules/groceries/stores/receipt_history_store.dart';
 
 final providers = [
-  Provider<ProductListStore>(create: (_) => ProductListStore()),
-  Provider<ShoppingCartStore>(create: (_) => ShoppingCartStore()),
-  Provider<ReceiptHistoryStore>(create: (_) => ReceiptHistoryStore()),
-  Provider<CreditCardListStore>(create: (_) => CreditCardListStore())
+  Provider<ProductListStore>(
+      create: (_) => ProductListStore(),
+      dispose: (_, store) => store.dispose()),
+  Provider<ShoppingCartStore>(
+      create: (_) => ShoppingCartStore(),
+      dispose: (_, store) => store.dispose()),
+  Provider<ReceiptHistoryStore>(
+      create: (_) => ReceiptHistoryStore(),
+      dispose: (_, store) => store.dispose()),
+  Provider<CreditCardListStore>(
+      create: (_) => CreditCardListStore(),
+      dispose: (_, store) => store.dispose())
 ];

@@ -124,10 +124,24 @@ abstract class _ProductListStore with Store {
   @action
   void setSearchQuery(String value) => searchQuery = value;
 
+  /// ## Restore product list
+  /// Restore product list and validate if item already exist
+  ///
+  /// Return list of items added
   @action
-  Future<Iterable<int>> restoreProducts(List<ProductStore> values) {
-    products = ObservableList.of(values);
-    return _box.addAll(values);
+  Future<Iterable<int>> restoreProducts(List<ProductStore> values) async {
+    List<int> itemsAdded = [];
+
+    for (var product in values) {
+      final index = findItemIndex(product);
+      if (index == -1) {
+        products.add(product);
+        final numberKey = await _box.add(product);
+        itemsAdded.add(numberKey);
+      }
+    }
+
+    return itemsAdded;
   }
 
   @action

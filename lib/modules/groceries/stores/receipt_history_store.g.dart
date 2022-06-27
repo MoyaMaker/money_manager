@@ -48,6 +48,15 @@ mixin _$ReceiptHistoryStore on _ReceiptHistoryStore, Store {
     return _$_initBoxAsyncAction.run(() => super._initBox());
   }
 
+  late final _$restoreReceiptsAsyncAction =
+      AsyncAction('_ReceiptHistoryStore.restoreReceipts', context: context);
+
+  @override
+  Future<Iterable<int>> restoreReceipts(List<Receipt> values) {
+    return _$restoreReceiptsAsyncAction
+        .run(() => super.restoreReceipts(values));
+  }
+
   late final _$_ReceiptHistoryStoreActionController =
       ActionController(name: '_ReceiptHistoryStore', context: context);
 
@@ -102,17 +111,6 @@ mixin _$ReceiptHistoryStore on _ReceiptHistoryStore, Store {
         name: '_ReceiptHistoryStore.findKeyInMap');
     try {
       return super.findKeyInMap(receipt);
-    } finally {
-      _$_ReceiptHistoryStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  Future<Iterable<int>> restoreReceipts(List<Receipt> values) {
-    final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
-        name: '_ReceiptHistoryStore.restoreReceipts');
-    try {
-      return super.restoreReceipts(values);
     } finally {
       _$_ReceiptHistoryStoreActionController.endAction(_$actionInfo);
     }
