@@ -61,17 +61,35 @@ class BackupPage extends StatelessWidget {
 
                   final file = File(result!.files.first.path!);
 
-                  await _backupStore.restoreBackupFile(file);
+                  final resultRestore =
+                      await _backupStore.restoreBackupFile(file);
 
                   showDialog(
                       context: context,
                       builder: (_) => AlertDialog(
                             title: const Icon(Icons.check,
                                 color: Colors.green, size: 55.0),
-                            content: const Text(
-                                'Se ha restaurado la copia de seguridad',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 24.0)),
+                            content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                      'Se ha restaurado la copia de seguridad',
+                                      style: TextStyle(
+                                          fontSize: 24.0, color: Colors.black),
+                                      textAlign: TextAlign.center),
+                                  const SizedBox(height: 15.0),
+                                  Text(
+                                      '${resultRestore.productsAdded} de ${resultRestore.productsLoaded} productos restaurados',
+                                      style: const TextStyle(fontSize: 16.0),
+                                      textAlign: TextAlign.center),
+                                  const SizedBox(height: 15.0),
+                                  Text(
+                                      '${resultRestore.receiptsAdded} de ${resultRestore.productsLoaded} recibos restaurados',
+                                      style: const TextStyle(fontSize: 16.0),
+                                      textAlign: TextAlign.center)
+                                ]),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),

@@ -24,3 +24,16 @@ class BackupModel {
   @override
   String toString() => jsonEncode(toJson());
 }
+
+class BackupRestored {
+  final int productsLoaded;
+  final int receiptsLoaded;
+  final int productsAdded;
+  final int receiptsAdded;
+
+  BackupRestored(
+      {required this.productsAdded,
+      required this.receiptsAdded,
+      required this.productsLoaded,
+      required this.receiptsLoaded});
+}

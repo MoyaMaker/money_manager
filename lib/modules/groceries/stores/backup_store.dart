@@ -59,16 +59,24 @@ abstract class _BackupStore with Store {
   }
 
   @action
-  Future<void> restoreBackupFile(File backupFile) async {
+  Future<BackupRestored> restoreBackupFile(File backupFile) async {
     final backup = await backupFile.readAsString();
 
     final decodedFile = jsonDecode(backup);
 
     final backupModel = BackupModel.fromJson(decodedFile);
 
-    productListStore.restoreProducts(backupModel.productList);
+    final productList =
+        await productListStore.restoreProducts(backupModel.productList);
 
-    receiptHistoryStore.restoreReceipts(backupModel.receiptHistory);
+    final receiptList =
+        await receiptHistoryStore.restoreReceipts(backupModel.receiptHistory);
+
+    return BackupRestored(
+        productsLoaded: backupModel.productList.length,
+        productsAdded: productList.length,
+        receiptsLoaded: backupModel.receiptHistory.length,
+        receiptsAdded: receiptList.length);
   }
 
   @action

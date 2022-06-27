@@ -30,7 +30,7 @@ mixin _$BackupStore on _BackupStore, Store {
       AsyncAction('_BackupStore.restoreBackupFile', context: context);
 
   @override
-  Future<void> restoreBackupFile(File backupFile) {
+  Future<BackupRestored> restoreBackupFile(File backupFile) {
     return _$restoreBackupFileAsyncAction
         .run(() => super.restoreBackupFile(backupFile));
   }
@@ -39,22 +39,22 @@ mixin _$BackupStore on _BackupStore, Store {
       ActionController(name: '_BackupStore', context: context);
 
   @override
-  void dispose() {
+  String _securityBackupFileName() {
     final _$actionInfo = _$_BackupStoreActionController.startAction(
-        name: '_BackupStore.dispose');
+        name: '_BackupStore._securityBackupFileName');
     try {
-      return super.dispose();
+      return super._securityBackupFileName();
     } finally {
       _$_BackupStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  String _securityBackupFileName() {
+  void dispose() {
     final _$actionInfo = _$_BackupStoreActionController.startAction(
-        name: '_BackupStore._securityBackupFileName');
+        name: '_BackupStore.dispose');
     try {
-      return super._securityBackupFileName();
+      return super.dispose();
     } finally {
       _$_BackupStoreActionController.endAction(_$actionInfo);
     }
