@@ -64,8 +64,7 @@ class ReceiptHistoryPage extends StatelessWidget {
                 Text(receipt.storeName,
                     style: TextStyle(
                         fontSize: 14.0,
-                        height: lineHeight(fontSize: 14.0, height: 16.0),
-                        color: const Color(0xFF636E72)))
+                        height: lineHeight(fontSize: 14.0, height: 16.0)))
               ],
             ),
 
@@ -73,11 +72,11 @@ class ReceiptHistoryPage extends StatelessWidget {
             Text(receipt.total,
                 style: TextStyle(
                     fontSize: 14.0,
-                    height: lineHeight(fontSize: 14.0, height: 16.0),
-                    color: const Color(0xFF636E72))),
+                    height: lineHeight(fontSize: 14.0, height: 16.0))),
 
             // Icon
-            const Icon(Icons.keyboard_arrow_right, color: Colors.blue)
+            Icon(Icons.keyboard_arrow_right,
+                color: Theme.of(context).colorScheme.primary)
           ],
         ),
       ),

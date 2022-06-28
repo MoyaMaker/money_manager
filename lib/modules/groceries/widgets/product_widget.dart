@@ -125,9 +125,7 @@ class ProductWidget extends StatelessWidget {
   Widget price() {
     return Text(product.unitPriceFormatted,
         style: TextStyle(
-            fontSize: 14.0,
-            // color: Colors.blueGrey,
-            height: lineHeight(fontSize: 14.0, height: 16.0)));
+            fontSize: 14.0, height: lineHeight(fontSize: 14.0, height: 16.0)));
   }
 
   Widget button(BuildContext context) {

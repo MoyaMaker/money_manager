@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:money_manager/modules/groceries/stores/settings_store.dart';
+import 'package:money_manager/modules/groceries/stores/settings/theme_mode_store.dart';
 import 'package:money_manager/theme/theme_data_custom.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -27,15 +27,13 @@ class _MoneyManagerAppState extends State<MoneyManagerApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: providers,
-      child: Consumer<SettingsStore>(
+      child: Consumer<ThemeModeStore>(
         builder: (context, store, child) => Observer(
           builder: (_) => MaterialApp(
             title: 'Money Manager',
-            themeMode: store.darkMode ? ThemeMode.dark : ThemeMode.light,
-            // darkTheme: ThemeDataCustom.darkTheme,
-            darkTheme: ThemeData.dark(),
-            // theme: ThemeDataCustom.lightTheme,
-            theme: ThemeData.light(),
+            themeMode: store.themeMode.value,
+            darkTheme: ThemeDataCustom.darkTheme,
+            theme: ThemeDataCustom.lightTheme,
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,

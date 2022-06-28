@@ -32,7 +32,12 @@ class GroceriesShoppingCartPage extends StatelessWidget {
                         child: CheckboxListTile(
                             title: RichText(
                               text: TextSpan(
-                                  style: const TextStyle(fontSize: 16.0),
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2!
+                                          .color),
                                   text: 'Seleccionar todos ',
                                   children: [
                                     TextSpan(
@@ -42,6 +47,7 @@ class GroceriesShoppingCartPage extends StatelessWidget {
                                             fontWeight: FontWeight.bold))
                                   ]),
                             ),
+                            activeColor: Theme.of(context).colorScheme.primary,
                             controlAffinity: ListTileControlAffinity.leading,
                             contentPadding:
                                 const EdgeInsets.symmetric(horizontal: 5.0),

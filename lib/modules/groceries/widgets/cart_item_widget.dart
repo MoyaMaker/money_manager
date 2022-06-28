@@ -64,6 +64,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Checkbox(
+                    activeColor: Theme.of(context).colorScheme.primary,
                     value: widget.cartItem.hasChecked,
                     onChanged: (bool? newValue) =>
                         widget.cartItem.setHasChecked(newValue)),
@@ -126,10 +127,11 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                           padding: const EdgeInsets.all(5.0),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: Theme.of(context).cardColor,
+                              color: Theme.of(context).colorScheme.primary,
                               borderRadius: BorderRadius.circular(15.0)),
                           child: Text(widget.cartItem.quantity.toString(),
                               style: const TextStyle(
+                                  color: Colors.white,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.bold))),
                     ],
@@ -138,7 +140,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
 
                 // Edit button
                 IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.blue),
+                    icon: Icon(Icons.edit,
+                        color: Theme.of(context).colorScheme.primary),
                     onPressed: () => showDialog<void>(
                           context: context,
                           builder: (BuildContext context) {

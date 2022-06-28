@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:money_manager/modules/groceries/stores/settings/theme_mode_store.dart';
 
 class SettingsProvider {
   late Box _box;
@@ -16,9 +17,9 @@ class SettingsProvider {
     }
   }
 
-  Future<void> setDarkMode(bool value) {
-    return _box.put('darkMode', value);
-  }
+  Future<void> setThemeModeAppearance(ThemeModeAppearance mode) =>
+      _box.put('themeModeAppearance', mode);
 
-  bool get darkMode => _box.get('darkMode', defaultValue: false);
+  ThemeModeAppearance get themeModeAppearance =>
+      _box.get('themeModeAppearance', defaultValue: ThemeModeAppearance.system);
 }
