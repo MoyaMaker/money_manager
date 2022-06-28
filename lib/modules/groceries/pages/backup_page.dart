@@ -61,6 +61,21 @@ class BackupPage extends StatelessWidget {
 
                   final file = File(result!.files.first.path!);
 
+                  // Validate file, must have key products and receipt_history
+                  // Show the dialog when some of this is missing
+                  if (!await _backupStore.isValidFile(file)) {
+                    showDialog(
+                        context: context,
+                        builder: (_) => const AlertDialog(
+                            title: Icon(Icons.error,
+                                size: 55.0, color: Colors.red),
+                            content: Text(
+                                'El archivo no cumple con los requisitos de formato',
+                                style: TextStyle(fontSize: 24.0),
+                                textAlign: TextAlign.center)));
+                    return;
+                  }
+
                   final resultRestore =
                       await _backupStore.restoreBackupFile(file);
 
@@ -76,8 +91,7 @@ class BackupPage extends StatelessWidget {
                                 children: [
                                   const Text(
                                       'Se ha restaurado la copia de seguridad',
-                                      style: TextStyle(
-                                          fontSize: 24.0, color: Colors.black),
+                                      style: TextStyle(fontSize: 24.0),
                                       textAlign: TextAlign.center),
                                   const SizedBox(height: 15.0),
                                   Text(

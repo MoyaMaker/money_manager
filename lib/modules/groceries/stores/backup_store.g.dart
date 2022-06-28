@@ -26,6 +26,14 @@ mixin _$BackupStore on _BackupStore, Store {
         .run(() => super.exportSecurityBackup());
   }
 
+  late final _$isValidFileAsyncAction =
+      AsyncAction('_BackupStore.isValidFile', context: context);
+
+  @override
+  Future<bool> isValidFile(File backupFile) {
+    return _$isValidFileAsyncAction.run(() => super.isValidFile(backupFile));
+  }
+
   late final _$restoreBackupFileAsyncAction =
       AsyncAction('_BackupStore.restoreBackupFile', context: context);
 

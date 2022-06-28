@@ -59,6 +59,16 @@ abstract class _BackupStore with Store {
   }
 
   @action
+  Future<bool> isValidFile(File backupFile) async {
+    final backup = await backupFile.readAsString();
+
+    final decodedFile = jsonDecode(backup);
+
+    return decodedFile.containsKey('products') &&
+        decodedFile.containsKey('receipt_history');
+  }
+
+  @action
   Future<BackupRestored> restoreBackupFile(File backupFile) async {
     final backup = await backupFile.readAsString();
 
