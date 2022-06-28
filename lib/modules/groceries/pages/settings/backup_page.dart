@@ -102,7 +102,7 @@ class BackupPage extends StatelessWidget {
                                       textAlign: TextAlign.center),
                                   const SizedBox(height: 15.0),
                                   Text(
-                                      '${resultRestore.receiptsAdded} de ${resultRestore.productsLoaded} recibos restaurados',
+                                      '${resultRestore.receiptsAdded} de ${resultRestore.receiptsLoaded} recibos restaurados',
                                       style: const TextStyle(fontSize: 16.0),
                                       textAlign: TextAlign.center)
                                 ]),
