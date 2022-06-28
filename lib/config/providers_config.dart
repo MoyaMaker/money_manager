@@ -1,4 +1,5 @@
 import 'package:money_manager/modules/credit_card/stores/credit_card_store.dart';
+import 'package:money_manager/modules/groceries/stores/settings_store.dart';
 import 'package:provider/provider.dart';
 
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
@@ -17,5 +18,6 @@ final providers = [
       dispose: (_, store) => store.dispose()),
   Provider<CreditCardListStore>(
       create: (_) => CreditCardListStore(),
-      dispose: (_, store) => store.dispose())
+      dispose: (_, store) => store.dispose()),
+  Provider<SettingsStore>(create: (_) => SettingsStore())
 ];

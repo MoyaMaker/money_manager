@@ -82,8 +82,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                                 fontSize: 18.0, fontWeight: FontWeight.bold)),
                         // Unit price
                         Text(widget.cartItem.product.unitPriceFormatted,
-                            style: TextStyle(
-                                fontSize: 13.0, color: Colors.grey[600])),
+                            style: const TextStyle(fontSize: 13.0)),
                         // Subtotal Price
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
@@ -99,16 +98,14 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                                           decoration:
                                               TextDecoration.lineThrough,
                                           fontSize: 16.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black)),
+                                          fontWeight: FontWeight.bold)),
                                 ),
                               ),
                               // Subtotal price
                               Text(widget.cartItem.totalFormatted,
                                   style: const TextStyle(
                                       fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black)),
+                                      fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
@@ -122,16 +119,14 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                   flex: 1,
                   child: Column(
                     children: [
-                      Text('Cantidad',
-                          style: TextStyle(
-                              fontSize: 13.0, color: Colors.grey[600])),
+                      const Text('Cantidad', style: TextStyle(fontSize: 13.0)),
                       Container(
                           width: 70.0,
                           margin: const EdgeInsets.symmetric(horizontal: 5.0),
                           padding: const EdgeInsets.all(5.0),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: Colors.grey[300],
+                              color: Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(15.0)),
                           child: Text(widget.cartItem.quantity.toString(),
                               style: const TextStyle(
