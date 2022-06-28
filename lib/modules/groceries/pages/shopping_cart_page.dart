@@ -16,11 +16,10 @@ class GroceriesShoppingCartPage extends StatelessWidget {
     _shoppingCartStore = Provider.of<ShoppingCartStore>(context, listen: false);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Lista de compras'),
-      ),
-      body: Column(
-        children: [
+        appBar: AppBar(
+          title: const Text('Lista de compras'),
+        ),
+        body: Column(children: [
           Row(
             children: [
               Expanded(
@@ -67,10 +66,14 @@ class GroceriesShoppingCartPage extends StatelessWidget {
             ],
           ),
           Expanded(child: Observer(builder: (_) => listItems())),
-          bottomSheetTotal(context)
-        ],
-      ),
-    );
+          const Divider(
+            height: 0.0,
+            indent: 0.0,
+            thickness: 0.0,
+          ),
+          subtotalAndDiscount(),
+          totalAndCheckout(context)
+        ]));
   }
 
   Widget listItems() {
@@ -106,10 +109,36 @@ class GroceriesShoppingCartPage extends StatelessWidget {
         });
   }
 
-  Widget bottomSheetTotal(BuildContext context) {
+  Widget subtotalAndDiscount() {
     const subtotalStyles =
         TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, height: 1.25);
 
+    return Observer(
+      builder: (_) => Padding(
+        padding: const EdgeInsets.only(top: 5.0, right: 10.0, left: 10.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Subtotal', style: subtotalStyles),
+                Text(_shoppingCartStore.subtotal, style: subtotalStyles),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Descuento', style: subtotalStyles),
+                Text(_shoppingCartStore.discount, style: subtotalStyles),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget totalAndCheckout(BuildContext context) {
     const totalStyles =
         TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, height: 1.25);
 
@@ -119,70 +148,40 @@ class GroceriesShoppingCartPage extends StatelessWidget {
         color: Colors.white,
         height: 1.25);
 
-    return Column(
-      children: [
-        const Divider(
-          height: 0.0,
-          indent: 0.0,
-          thickness: 0.0,
-        ),
-
-        // Subtotal
-        // Discount
-        Observer(
-          builder: (_) => Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
+    return Container(
+      padding: const EdgeInsets.only(right: 10.0, bottom: 5.0, left: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Total
+          Expanded(
+            flex: 1,
+            child: Row(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Subtotal', style: subtotalStyles),
-                    Text(_shoppingCartStore.subtotal, style: subtotalStyles),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Descuento', style: subtotalStyles),
-                    Text(_shoppingCartStore.discount, style: subtotalStyles),
-                  ],
-                ),
+                const Text('Total ', style: totalStyles),
+                Observer(
+                  builder: (_) =>
+                      Text(_shoppingCartStore.total, style: totalStyles),
+                )
               ],
             ),
           ),
-        ),
 
-        // Total
-        Container(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Total', style: totalStyles),
-              Observer(
-                builder: (_) =>
-                    Text(_shoppingCartStore.total, style: totalStyles),
-              )
-            ],
-          ),
-        ),
-
-        // Checkout
-        Observer(
-            builder: (_) => Container(
-                  margin: const EdgeInsets.all(10.0),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(15.0)),
-                      onPressed: _shoppingCartStore.canCheckout
-                          ? () =>
-                              Navigator.pushNamed(context, 'groceries/payment')
-                          : null,
-                      child: const Text('Pagar', style: checkoutStyles)),
-                ))
-      ],
+          // Checkout
+          Expanded(
+            flex: 1,
+            child: Observer(
+                builder: (_) => ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(0.0)),
+                    onPressed: _shoppingCartStore.canCheckout
+                        ? () =>
+                            Navigator.pushNamed(context, 'groceries/payment')
+                        : null,
+                    child: const Text('Pagar', style: checkoutStyles))),
+          )
+        ],
+      ),
     );
   }
 }
