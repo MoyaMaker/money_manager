@@ -16,9 +16,10 @@ abstract class _ReceiptHistoryStore with Store {
         await _initBox();
 
         // Init values in list
-        final shoppedCartItemsList = _box.values;
-
-        shoppedItems = ObservableList.of(shoppedCartItemsList);
+        setReceiptList();
+      }),
+      reaction((_) => shoppedItems.length, (length) {
+        setReceiptList();
       })
     ];
   }
@@ -45,6 +46,20 @@ abstract class _ReceiptHistoryStore with Store {
     } else {
       _box = await Hive.openBox<Receipt>(boxName);
     }
+  }
+
+  @action
+  void setReceiptList() {
+    final shoppedCartItemsList = getOrderedListByDate(_box.values.toList());
+
+    shoppedItems = ObservableList.of(shoppedCartItemsList);
+  }
+
+  @action
+  List<Receipt> getOrderedListByDate(List<Receipt> values) {
+    values.sort(((a, b) => b.buyDate.compareTo(a.buyDate)));
+
+    return values;
   }
 
   @action

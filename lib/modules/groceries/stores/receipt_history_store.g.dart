@@ -61,6 +61,28 @@ mixin _$ReceiptHistoryStore on _ReceiptHistoryStore, Store {
       ActionController(name: '_ReceiptHistoryStore', context: context);
 
   @override
+  void setReceiptList() {
+    final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
+        name: '_ReceiptHistoryStore.setReceiptList');
+    try {
+      return super.setReceiptList();
+    } finally {
+      _$_ReceiptHistoryStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  List<Receipt> getOrderedListByDate(List<Receipt> values) {
+    final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
+        name: '_ReceiptHistoryStore.getOrderedListByDate');
+    try {
+      return super.getOrderedListByDate(values);
+    } finally {
+      _$_ReceiptHistoryStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void saveReceipt(String id, String storeName, DateTime buyDate,
       List<CartItemStore> cartItems) {
     final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
