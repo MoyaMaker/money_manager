@@ -1,9 +1,11 @@
 import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:money_manager/modules/credit_card/stores/credit_card_store.dart';
 import 'package:money_manager/modules/groceries/enums/promotions_enum.dart';
 import 'package:money_manager/modules/groceries/models/receipt_model.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
+import 'package:money_manager/modules/groceries/stores/settings/theme_mode_store.dart';
 
 hiveConfig() async {
   await Hive.initFlutter();
@@ -13,5 +15,6 @@ hiveConfig() async {
         ..registerAdapter(PromotionsAdapter()) // TypeId 2
         ..registerAdapter(ReceiptAdapter()) // TypeId 3
         ..registerAdapter(CreditCardAdapter()) // TypeId 4
+        ..registerAdapter(ThemeModeAdapter()) // TypeId 5
       ;
 }

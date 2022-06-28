@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
-import 'package:money_manager/modules/groceries/widgets/cart_item_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+
+import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
+import 'package:money_manager/modules/groceries/widgets/cart_item_widget.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 
 class GroceriesShoppingCartPage extends StatelessWidget {
@@ -31,8 +32,12 @@ class GroceriesShoppingCartPage extends StatelessWidget {
                         child: CheckboxListTile(
                             title: RichText(
                               text: TextSpan(
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 16.0),
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2!
+                                          .color),
                                   text: 'Seleccionar todos ',
                                   children: [
                                     TextSpan(
@@ -42,6 +47,7 @@ class GroceriesShoppingCartPage extends StatelessWidget {
                                             fontWeight: FontWeight.bold))
                                   ]),
                             ),
+                            activeColor: Theme.of(context).colorScheme.primary,
                             controlAffinity: ListTileControlAffinity.leading,
                             contentPadding:
                                 const EdgeInsets.symmetric(horizontal: 5.0),

@@ -25,12 +25,15 @@ class ProductWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(boxShadow: const [
-        BoxShadow(
-            offset: Offset(0.0, 0.0),
-            blurRadius: 10.0,
-            color: Color.fromRGBO(0, 0, 0, 0.1))
-      ], color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
+      decoration: BoxDecoration(
+          boxShadow: const [
+            BoxShadow(
+                offset: Offset(0.0, 0.0),
+                blurRadius: 10.0,
+                color: Color.fromRGBO(0, 0, 0, 0.1))
+          ],
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(10.0)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -122,9 +125,7 @@ class ProductWidget extends StatelessWidget {
   Widget price() {
     return Text(product.unitPriceFormatted,
         style: TextStyle(
-            fontSize: 14.0,
-            color: Colors.blueGrey,
-            height: lineHeight(fontSize: 14.0, height: 16.0)));
+            fontSize: 14.0, height: lineHeight(fontSize: 14.0, height: 16.0)));
   }
 
   Widget button(BuildContext context) {

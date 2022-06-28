@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:money_manager/modules/groceries/pages/groceries_page.dart';
-import 'package:money_manager/modules/groceries/pages/settings_page.dart';
+import 'package:money_manager/modules/groceries/pages/settings/settings_page.dart';
 import 'package:money_manager/modules/groceries/pages/shopping_cart_page.dart';
 import 'package:money_manager/modules/groceries/pages/receipt_history_page.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
@@ -54,6 +54,7 @@ class _MainGroceriesState extends State<MainGroceries> {
             onTap: (value) => setState(() => _pageController.jumpToPage(value)),
             iconSize: 32.0,
             type: BottomNavigationBarType.fixed,
+            selectedItemColor: Theme.of(context).colorScheme.primary,
             selectedLabelStyle: const TextStyle(fontSize: 12.0),
             unselectedLabelStyle: const TextStyle(fontSize: 12.0),
             items: [

@@ -6,7 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:money_manager/modules/groceries/stores/receipt_history_store.dart';
-import 'package:money_manager/modules/groceries/stores/backup_store.dart';
+import 'package:money_manager/modules/groceries/stores/settings/backup_store.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 
 class BackupPage extends StatelessWidget {
@@ -32,8 +32,9 @@ class BackupPage extends StatelessWidget {
           ListView(
             children: [
               ListTile(
-                leading: const Icon(Icons.file_copy,
-                    color: Colors.blue, semanticLabel: 'Security backup'),
+                leading: Icon(Icons.file_copy,
+                    color: Theme.of(context).colorScheme.primary,
+                    semanticLabel: 'Security backup'),
                 title: const Text('Copia de seguridad'),
                 onTap: () async {
                   final file = await _backupStore.exportSecurityBackup();
@@ -52,8 +53,9 @@ class BackupPage extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.restart_alt,
-                    color: Colors.blue, semanticLabel: 'Restore backup'),
+                leading: Icon(Icons.restart_alt,
+                    color: Theme.of(context).colorScheme.primary,
+                    semanticLabel: 'Restore backup'),
                 title: const Text('Restaurar copia de seguridad'),
                 onTap: () async {
                   final result = await FilePicker.platform.pickFiles(

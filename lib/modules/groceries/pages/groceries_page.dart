@@ -36,7 +36,7 @@ class GroceriesPage extends StatelessWidget {
       body: Column(
         children: [
           // Search bar
-          searchBar(),
+          searchBar(context),
           // Items list view
 
           Expanded(
@@ -47,12 +47,13 @@ class GroceriesPage extends StatelessWidget {
     );
   }
 
-  Widget searchBar() {
+  Widget searchBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: CupertinoSearchTextField(
         onChanged: (String value) => _productListStore.setSearchQuery(value),
         controller: _searchTextController,
+        style: TextStyle(color: Theme.of(context).textTheme.bodyText2!.color),
         placeholder: 'Buscar',
       ),
     );

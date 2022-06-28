@@ -62,7 +62,7 @@ class ReceiptDetailPage extends StatelessWidget {
                           tableHeader('Total.', TextAlign.right)
                         ]),
                     ...receipt.itemsList
-                        .map((element) => listItem(element))
+                        .map((element) => listItem(context, element))
                         .toList()
                   ],
                 ),
@@ -78,14 +78,22 @@ class ReceiptDetailPage extends StatelessWidget {
                 children: [
                   const Divider(),
                   // Discount
-                  bottomTotal('Subtotal:', receipt.subtotal),
+                  bottomTotal(
+                      text: 'Subtotal:',
+                      value: receipt.subtotal,
+                      textColor: Theme.of(context).textTheme.bodyText2!.color!),
                   // Subtotal
-                  bottomTotal('Descuento:', '-${receipt.discount}',
-                      const Color(0xFF0E6DFD)),
+                  bottomTotal(
+                      text: 'Descuento:',
+                      value: receipt.discount,
+                      textColor: Theme.of(context).colorScheme.primary),
                   const Divider(),
                   // Total
                   bottomTotal(
-                      'Total:', receipt.total, Colors.black, FontWeight.bold),
+                      text: 'Total:',
+                      value: receipt.total,
+                      textColor: Theme.of(context).textTheme.bodyText2!.color!,
+                      fontWeight: FontWeight.bold),
                 ],
               ),
             ),
@@ -118,13 +126,13 @@ class ReceiptDetailPage extends StatelessWidget {
     );
   }
 
-  TableRow listItem(CartItemStore cartItem) {
+  TableRow listItem(BuildContext context, CartItemStore cartItem) {
     final style = TextStyle(
         fontSize: 16.0, height: lineHeight(fontSize: 16.0, height: 20.0));
     final promotionsStyle = TextStyle(
         fontSize: 16.0,
         height: lineHeight(fontSize: 16.0, height: 20.0),
-        color: const Color(0xFF0E6DFD));
+        color: Theme.of(context).colorScheme.primary);
 
     return TableRow(
       children: [
@@ -155,7 +163,7 @@ class ReceiptDetailPage extends StatelessWidget {
                 style: style, textAlign: TextAlign.right),
             Visibility(
                 visible: cartItem.hasSomeDiscount,
-                child: Text('-${cartItem.discountAmount}',
+                child: Text('${cartItem.discountAmount}',
                     style: promotionsStyle, textAlign: TextAlign.right))
           ],
         )
@@ -163,9 +171,11 @@ class ReceiptDetailPage extends StatelessWidget {
     );
   }
 
-  Widget bottomTotal(String text, String value,
-      [Color textColor = Colors.black,
-      FontWeight fontWeight = FontWeight.normal]) {
+  Widget bottomTotal(
+      {required String text,
+      required String value,
+      required Color textColor,
+      FontWeight fontWeight = FontWeight.normal}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
