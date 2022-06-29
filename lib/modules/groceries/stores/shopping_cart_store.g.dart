@@ -284,6 +284,17 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
+  bool? thisItemIsChecked(CartItemStore item) {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.thisItemIsChecked');
+    try {
+      return super.thisItemIsChecked(item);
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void updateAllItemsInHive() {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.updateAllItemsInHive');

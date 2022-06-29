@@ -48,6 +48,24 @@ mixin _$ReceiptHistoryStore on _ReceiptHistoryStore, Store {
     return _$_initBoxAsyncAction.run(() => super._initBox());
   }
 
+  late final _$saveReceiptAsyncAction =
+      AsyncAction('_ReceiptHistoryStore.saveReceipt', context: context);
+
+  @override
+  Future<void> saveReceipt(String id, String storeName, DateTime buyDate,
+      List<CartItemStore> cartItems) {
+    return _$saveReceiptAsyncAction
+        .run(() => super.saveReceipt(id, storeName, buyDate, cartItems));
+  }
+
+  late final _$deleteAsyncAction =
+      AsyncAction('_ReceiptHistoryStore.delete', context: context);
+
+  @override
+  Future<void> delete(Receipt receipt) {
+    return _$deleteAsyncAction.run(() => super.delete(receipt));
+  }
+
   late final _$restoreReceiptsAsyncAction =
       AsyncAction('_ReceiptHistoryStore.restoreReceipts', context: context);
 
@@ -77,40 +95,6 @@ mixin _$ReceiptHistoryStore on _ReceiptHistoryStore, Store {
         name: '_ReceiptHistoryStore.getOrderedListByDate');
     try {
       return super.getOrderedListByDate(values);
-    } finally {
-      _$_ReceiptHistoryStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void saveReceipt(String id, String storeName, DateTime buyDate,
-      List<CartItemStore> cartItems) {
-    final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
-        name: '_ReceiptHistoryStore.saveReceipt');
-    try {
-      return super.saveReceipt(id, storeName, buyDate, cartItems);
-    } finally {
-      _$_ReceiptHistoryStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  Future<int> saveIntoBox(Receipt receipt) {
-    final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
-        name: '_ReceiptHistoryStore.saveIntoBox');
-    try {
-      return super.saveIntoBox(receipt);
-    } finally {
-      _$_ReceiptHistoryStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void delete(Receipt receipt) {
-    final _$actionInfo = _$_ReceiptHistoryStoreActionController.startAction(
-        name: '_ReceiptHistoryStore.delete');
-    try {
-      return super.delete(receipt);
     } finally {
       _$_ReceiptHistoryStoreActionController.endAction(_$actionInfo);
     }
