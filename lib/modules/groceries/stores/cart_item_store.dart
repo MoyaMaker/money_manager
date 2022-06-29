@@ -193,11 +193,6 @@ abstract class _CartItemStore with Store {
         return;
       }
 
-      if (value.isNaN) {
-        error.discount = 'No es un valor aceptable';
-        return;
-      }
-
       if (value <= 0) {
         error.discount = 'El descuento no puede ser menor o igual a 0';
         return;
