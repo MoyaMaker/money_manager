@@ -54,7 +54,7 @@ void main() {
       expect(receiptHistoryStore.hasItems, false);
     });
 
-    test('add item in store', () {
+    test('add item in store', () async {
       final shoppingCart = ShoppingCartStore(
           id: '0',
           storeName: 'Soriana',
@@ -65,10 +65,65 @@ void main() {
                 product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0))
           ]));
 
+      await receiptHistoryStore.saveReceipt(
+          shoppingCart.id!,
+          shoppingCart.storeName,
+          shoppingCart.buyDate,
+          shoppingCart.checkedItems);
+
+      expect(receiptHistoryStore.countItems, 1);
+    });
+
+    test('delete item from list and hive', () async {
+      // Arrange
+      final shoppingCart = ShoppingCartStore(
+          id: '1',
+          storeName: 'HEB',
+          buyDate: DateTime.now(),
+          items: ObservableList.of([
+            CartItemStore(
+                quantity: 3,
+                product: ProductStore(id: '1', name: 'Item2 ', unitPrice: 23.0))
+          ]));
+
+      // This item should be order in list, so this will be the first item in the list
       receiptHistoryStore.saveReceipt(shoppingCart.id!, shoppingCart.storeName,
           shoppingCart.buyDate, shoppingCart.checkedItems);
 
+      final receiptToDelete = receiptHistoryStore.shoppedItems[1];
+      // Act
+      expect(receiptHistoryStore.countItems, 2);
+      await receiptHistoryStore.delete(receiptToDelete);
+      // Assert
       expect(receiptHistoryStore.countItems, 1);
+      expect(receiptHistoryStore.shoppedItems.first.storeName, "HEB");
+    });
+
+    test('restore all receipts', () async {
+      // Arrange
+      const expectedReceipts = 2;
+      final list = <Receipt>[
+        Receipt(
+            id: 'abc',
+            storeName: 'Walmart',
+            buyDate: DateTime.now(),
+            itemsList: [
+              CartItemStore(
+                  quantity: 2,
+                  product:
+                      ProductStore(id: '0', name: 'Item', unitPrice: 15.0)),
+              CartItemStore(
+                  quantity: 3,
+                  product:
+                      ProductStore(id: '1', name: 'Item2 ', unitPrice: 23.0))
+            ])
+      ];
+
+      // Act
+      final intList = await receiptHistoryStore.restoreReceipts(list);
+      // Assert
+      expect(intList.length, list.length);
+      expect(receiptHistoryStore.countItems, expectedReceipts);
     });
 
     test('verify box is open', () async {

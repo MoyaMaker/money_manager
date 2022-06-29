@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+
+import 'package:money_manager/utils/font_height.dart';
 import 'package:money_manager/modules/groceries/models/receipt_model.dart';
 import 'package:money_manager/modules/groceries/pages/receipt_detail_page.dart';
 import 'package:money_manager/modules/groceries/stores/receipt_history_store.dart';
-import 'package:money_manager/utils/font_height.dart';
 
 class ReceiptHistoryPage extends StatelessWidget {
   const ReceiptHistoryPage({Key? key}) : super(key: key);

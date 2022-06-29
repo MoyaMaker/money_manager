@@ -63,25 +63,23 @@ abstract class _ReceiptHistoryStore with Store {
   }
 
   @action
-  void saveReceipt(String id, String storeName, DateTime buyDate,
-      List<CartItemStore> cartItems) {
+  Future<void> saveReceipt(String id, String storeName, DateTime buyDate,
+      List<CartItemStore> cartItems) async {
     final newReceipt = Receipt(
         id: id, storeName: storeName, buyDate: buyDate, itemsList: cartItems);
 
     shoppedItems.add(newReceipt);
-    saveIntoBox(newReceipt);
+    // Add into hive
+    await _box.add(newReceipt);
   }
 
   @action
-  Future<int> saveIntoBox(Receipt receipt) => _box.add(receipt);
-
-  @action
-  void delete(Receipt receipt) {
+  Future<void> delete(Receipt receipt) async {
     final key = findKeyInMap(receipt);
 
     shoppedItems.remove(receipt);
 
-    _box.delete(key);
+    await _box.delete(key);
   }
 
   @action
