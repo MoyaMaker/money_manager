@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobx/mobx.dart';
-import 'package:money_manager/modules/groceries/providers/settings_provider.dart';
+import 'package:money_manager/modules/groceries/providers/settings_collection.dart';
 
 part 'theme_mode_store.g.dart';
 
@@ -11,16 +11,14 @@ abstract class _ThemeModeStore with Store {
   _ThemeModeStore() {
     _disposers = [
       autorun((_) async {
-        await _settingsProvider.init();
-
-        themeMode = _settingsProvider.themeModeAppearance;
+        themeMode = _settingsCollection.themeModeAppearance;
       })
     ];
   }
 
-  late List<ReactionDisposer> _disposers;
+  final _settingsCollection = SettingsCollection();
 
-  final _settingsProvider = SettingsProvider();
+  late List<ReactionDisposer> _disposers;
 
   @observable
   ThemeModeAppearance themeMode = ThemeModeAppearance.system;
@@ -29,7 +27,7 @@ abstract class _ThemeModeStore with Store {
   void setThemeModeAppearance(ThemeModeAppearance value) {
     themeMode = value;
 
-    _settingsProvider.setThemeModeAppearance(value);
+    _settingsCollection.setThemeModeAppearance(value);
   }
 
   @action

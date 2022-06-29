@@ -1,20 +1,14 @@
 import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:money_manager/modules/groceries/stores/settings/theme_mode_store.dart';
 
-class SettingsProvider {
+class SettingsCollection {
   late Box _box;
 
-  SettingsProvider() {
-    init();
-  }
+  static String boxName = 'settings';
 
-  Future<void> init() async {
-    const boxName = 'settings';
-    if (Hive.isBoxOpen(boxName)) {
-      _box = Hive.box(boxName);
-    } else {
-      _box = await Hive.openBox(boxName);
-    }
+  SettingsCollection() {
+    _box = Hive.box(boxName);
   }
 
   Future<void> setThemeModeAppearance(ThemeModeAppearance mode) =>
