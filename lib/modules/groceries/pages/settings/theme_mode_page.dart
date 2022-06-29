@@ -14,7 +14,7 @@ class ThemeModePage extends StatelessWidget {
     _themeModeStoreStore = Provider.of<ThemeModeStore>(context);
 
     return Scaffold(
-        appBar: AppBar(title: const Text('Respaldo')),
+        appBar: AppBar(title: const Text('Apariencia')),
         body: Observer(
           builder: (_) => ListView(
             children: [
