@@ -63,12 +63,13 @@ class _CartItemWidgetState extends State<CartItemWidget> {
             builder: (_) => Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // Checkbox
                 Checkbox(
                     activeColor: Theme.of(context).colorScheme.primary,
                     value: widget.cartItem.hasChecked,
                     onChanged: (bool? newValue) =>
                         widget.cartItem.setHasChecked(newValue)),
-
+                // Name, unit price, subtotal
                 Expanded(
                   flex: 2,
                   child: Padding(

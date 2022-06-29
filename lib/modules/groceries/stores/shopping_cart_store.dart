@@ -182,7 +182,7 @@ abstract class _ShoppingCartStore with Store {
 
       final key = findKeyInMap(cartItem);
 
-      _box.put(key, cartItem);
+      _box.put(key, cartItems[indexItem]);
     }
   }
 
@@ -193,7 +193,7 @@ abstract class _ShoppingCartStore with Store {
     cartItems[index].quantity = cartItem.quantity;
     cartItems[index].product.unitPrice = cartItem.product.unitPrice;
 
-    _box.put(key, cartItem);
+    _box.put(key, cartItems[index]);
   }
 
   @action
@@ -230,6 +230,13 @@ abstract class _ShoppingCartStore with Store {
     for (var item in checkedItems) {
       removeItem(item);
     }
+  }
+
+  @action
+  bool? thisItemIsChecked(CartItemStore item) {
+    return checkedItems
+        .firstWhere((element) => element.product.id == item.product.id)
+        .hasChecked;
   }
 
   /// Update items in box
