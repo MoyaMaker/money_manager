@@ -16,14 +16,9 @@ void main() async {
   runApp(const MoneyManagerApp());
 }
 
-class MoneyManagerApp extends StatefulWidget {
+class MoneyManagerApp extends StatelessWidget {
   const MoneyManagerApp({Key? key}) : super(key: key);
 
-  @override
-  State<MoneyManagerApp> createState() => _MoneyManagerAppState();
-}
-
-class _MoneyManagerAppState extends State<MoneyManagerApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
