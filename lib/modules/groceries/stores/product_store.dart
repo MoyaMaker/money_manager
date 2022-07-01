@@ -6,6 +6,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:mobx/mobx.dart';
 import 'package:uuid/uuid.dart';
 
+import 'package:money_manager/modules/groceries/providers/products_collection.dart';
+
 part 'product_store.g.dart';
 
 class ProductListStore extends _ProductListStore with _$ProductListStore {}
@@ -15,10 +17,8 @@ abstract class _ProductListStore with Store {
     // Set reactions
     _disposers = [
       autorun((_) async {
-        await _initBox();
-
         // Init values in list
-        final productList = _box.values.toList();
+        final productList = _productsCollection.values.toList();
 
         if (productList.isEmpty) {
           feedbackMessage = 'No hay productos registrados';
@@ -36,9 +36,9 @@ abstract class _ProductListStore with Store {
     ];
   }
 
-  late List<ReactionDisposer> _disposers;
+  final _productsCollection = ProductsCollection();
 
-  late Box<ProductStore> _box;
+  late List<ReactionDisposer> _disposers;
 
   @observable
   String feedbackMessage = '';
@@ -74,7 +74,7 @@ abstract class _ProductListStore with Store {
 
   @action
   int findKeyInMap(ProductStore product) {
-    final mapProducts = _box.toMap().cast<int, ProductStore>();
+    final mapProducts = _productsCollection.toMap().cast<int, ProductStore>();
 
     int resultKey = -1;
 
@@ -95,7 +95,7 @@ abstract class _ProductListStore with Store {
     products.add(newProduct);
 
     // Save in local data
-    _box.add(newProduct);
+    _productsCollection.add(newProduct);
 
     return newProduct;
   }
@@ -109,7 +109,7 @@ abstract class _ProductListStore with Store {
     products[itemIndex] = product;
 
     // Edit in saved data
-    _box.put(key, product);
+    _productsCollection.edit(key, product);
   }
 
   @action
@@ -118,7 +118,7 @@ abstract class _ProductListStore with Store {
 
     products.remove(product);
 
-    _box.delete(key);
+    _productsCollection.delete(key);
   }
 
   @action
@@ -136,7 +136,7 @@ abstract class _ProductListStore with Store {
       final index = findItemIndex(product);
       if (index == -1) {
         products.add(product);
-        final numberKey = await _box.add(product);
+        final numberKey = await _productsCollection.add(product);
         itemsAdded.add(numberKey);
       }
     }
@@ -145,25 +145,10 @@ abstract class _ProductListStore with Store {
   }
 
   @action
-  Future<void> _initBox() async {
-    const boxName = 'products';
-    if (Hive.isBoxOpen(boxName)) {
-      _box = Hive.box<ProductStore>(boxName);
-    } else {
-      _box = await Hive.openBox<ProductStore>(boxName);
-    }
-  }
-
-  void _disposeBox() {
-    _box.close();
-  }
-
-  @action
   void dispose() {
     for (var d in _disposers) {
       d();
     }
-    _disposeBox();
   }
 }
 
