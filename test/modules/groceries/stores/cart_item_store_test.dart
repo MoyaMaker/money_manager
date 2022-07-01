@@ -9,6 +9,7 @@ void main() {
     late CartItemStore cartItemStore;
     late double itemPrice;
     late double subtotal;
+
     setUp(() {
       cartItemStore = CartItemStore(
           promotion: Promotions.p2x1,
@@ -189,6 +190,63 @@ void main() {
       cartItemStore.setDiscount(10.0);
       // Assert
       expect(cartItemStore.hasSomeDiscount, true);
+    });
+
+    test('dispose', () {
+      cartItemStore.dispose();
+    });
+  });
+
+  group('validate discount', () {
+    late CartItemStore cartItemStore;
+
+    setUp(() {
+      cartItemStore = CartItemStore(
+          promotion: Promotions.points,
+          quantity: 2,
+          product: ProductStore(id: '1', name: 'Manzana', unitPrice: 15.0));
+    });
+
+    test('null discount', () {
+      // Arrange
+      double? value;
+      // Act
+      cartItemStore.validateDiscount(value);
+
+      // Assert
+      expect(cartItemStore.error.discount != null, true);
+    });
+
+    test('discount less than 0', () {
+      // Arrange
+      double? value = 0.0;
+      // Act
+      cartItemStore.validateDiscount(value);
+
+      // Assert
+      expect(cartItemStore.error.discount != null, true);
+    });
+
+    test('discount percentage error', () {
+      // Arrange
+      cartItemStore.setPromotion(Promotions.percentage);
+      double? value = 101.0;
+      // Act
+      cartItemStore.validateDiscount(value);
+
+      // Assert
+      expect(cartItemStore.error.discount != null, true);
+    });
+
+    test('discount points error', () {
+      // Arrange
+      cartItemStore.setPromotion(Promotions.points);
+      double? value = cartItemStore.total + 1;
+      // Act
+      cartItemStore.validateDiscount(value);
+
+      // Assert
+      expect(cartItemStore.error.discount != null, true);
     });
   });
 }

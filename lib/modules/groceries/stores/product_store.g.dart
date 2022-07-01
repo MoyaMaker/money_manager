@@ -149,14 +149,6 @@ mixin _$ProductListStore on _ProductListStore, Store {
         .run(() => super.restoreProducts(values));
   }
 
-  late final _$_initBoxAsyncAction =
-      AsyncAction('_ProductListStore._initBox', context: context);
-
-  @override
-  Future<void> _initBox() {
-    return _$_initBoxAsyncAction.run(() => super._initBox());
-  }
-
   late final _$_ProductListStoreActionController =
       ActionController(name: '_ProductListStore', context: context);
 
