@@ -3,12 +3,13 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:mobx/mobx.dart';
+import 'package:money_manager/modules/groceries/providers/products_collection.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 
 void main() {
   group('product store: ', () {
     late ProductListStore productListStore;
-    const boxName = 'products';
+    final boxName = ProductsCollection.boxName;
     late Box<ProductStore> box;
 
     setUpAll(() async {
@@ -19,12 +20,13 @@ void main() {
       Hive.init(path);
       Hive.registerAdapter(ProductHiveAdapter());
 
-      productListStore = ProductListStore();
       if (Hive.isBoxOpen(boxName)) {
         box = Hive.box<ProductStore>(boxName);
       } else {
         box = await Hive.openBox<ProductStore>(boxName);
       }
+
+      productListStore = ProductListStore();
 
       // Init values in list
       productListStore.products = ObservableList.of(box.values.toList());
@@ -106,12 +108,6 @@ void main() {
       productListStore = ProductListStore();
 
       expect(box.isOpen, true);
-    });
-
-    test('dispose store', () {
-      productListStore.dispose();
-
-      expect(box.isOpen, false);
     });
   });
 
