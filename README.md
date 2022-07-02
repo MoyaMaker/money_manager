@@ -35,6 +35,19 @@ flutter pub run flutter_launcher_icons:main
 
 # Testing
 
+Generate file with all project for coverage (I used into Ubuntu)
+```
+file=test/coverage_helper_test.dart
+
+echo "// Helper file to make coverage work for all dart files\n" > $file
+
+echo "// ignore_for_file: unused_import" >> $file
+
+find lib -not -name '*.g.dart' -and -not -name 'generated_plugin_registrant.dart' -and -name '*.dart' | cut -c4- | awk -v package="money_manager" '{printf "import '\''package:%s%s'\'';\n", package, $1}' >> $file
+
+echo "void main(){}" >> $file
+```
+
 Run command `flutter test --coverage`, this will run the all test in folder `test/` and generate new file in `coverage/lcov.info`
 
 I'm generate a html files with genhtml reading the lcov.info
