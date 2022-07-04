@@ -28,5 +28,5 @@ hiveConfig() async {
   await Hive.openBox<ProductStore>(ProductsCollection.boxName);
 
   // Open box to load shopping cart
-  await ContainerShoppingCartCollection().init();
+  await ShoppingListCollection().init();
 }

@@ -1,43 +1,42 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:money_manager/modules/groceries/providers/hive_collection.dart';
-import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
+import 'package:money_manager/modules/groceries/stores/cart_list_store.dart';
 
-class ContainerShoppingCartCollection
-    implements CollectionHive<ShoppingCartStore> {
-  late Box<ShoppingCartStore> _box;
+class ShoppingListCollection implements CollectionHive<CartListStore> {
+  late Box<CartListStore> _box;
 
-  static String boxName = 'container_shopping_cart';
+  static String boxName = 'shopping_list';
 
-  ContainerShoppingCartCollection() {
+  ShoppingListCollection() {
     _box = Hive.box(boxName);
   }
 
   @override
-  Future<Box<ShoppingCartStore>> init() {
+  Future<Box<CartListStore>> init() {
     return Hive.openBox(boxName);
   }
 
   @override
-  Iterable<ShoppingCartStore> get values => _box.values;
+  Iterable<CartListStore> get values => _box.values;
 
   @override
-  Map<int, ShoppingCartStore> toMap() {
-    return _box.toMap() as Map<int, ShoppingCartStore>;
+  Map<int, CartListStore> toMap() {
+    return _box.toMap() as Map<int, CartListStore>;
   }
 
   @override
-  Future<int> add(ShoppingCartStore value) {
+  Future<int> add(CartListStore value) {
     return _box.add(value);
   }
 
   @override
-  Future<Iterable<int>> addAll(Iterable<ShoppingCartStore> values) {
+  Future<Iterable<int>> addAll(Iterable<CartListStore> values) {
     return _box.addAll(values);
   }
 
   @override
-  Future<void> edit(int key, ShoppingCartStore value) {
+  Future<void> edit(int key, CartListStore value) {
     return _box.put(key, value);
   }
 
