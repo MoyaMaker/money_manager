@@ -7,8 +7,12 @@ void main() {
   group('cart list store', () {
     late ContainerCartListStore store;
 
-    setUp(() {
+    setUpAll(() {
       store = ContainerCartListStore();
+    });
+
+    tearDownAll(() {
+      store.dispose();
     });
 
     test('create list default', () {
@@ -34,21 +38,47 @@ void main() {
       // Act
       store.containerCartList[0].editListName(newName);
       // Assert
-      expect(store.containerCartList[0].listName, newName);
+      expect(newName, store.containerCartList[0].listName);
     });
 
     test('adding item to cart', () {
       // Arrange
-      expect(store.containerCartList[0].cartList.length, 0);
+      expect(0, store.containerCartList[0].cartList.length);
 
       final cartItem = CartItemStore(
           product: ProductStore(id: 'id', name: 'name', unitPrice: 12.4),
-          quantity: 1);
+          quantity: 1.0);
       // Act
       store.containerCartList[0].add(cartItem);
 
       // Assert
-      expect(store.containerCartList[0].cartList.length, 1);
+      expect(1, store.containerCartList[0].cartList.length);
+    });
+
+    test('edit item', () {
+      // Arrange
+      expect(store.containerCartList[0].cartList[0].product.unitPrice, 12.4);
+      expect(store.containerCartList[0].cartList[0].quantity, 1.0);
+
+      final cartItem = CartItemStore(
+          product: ProductStore(id: 'id', name: 'name', unitPrice: 15.0),
+          quantity: 2);
+      // Act
+      store.containerCartList[0].edit(0, cartItem);
+      // Assert
+      expect(store.containerCartList[0].cartList[0].product.unitPrice, 15.0);
+      expect(store.containerCartList[0].cartList[0].quantity, 2.0);
+    });
+
+    test('delete item', () {
+      // Arrange
+      final cartItem = CartItemStore(
+          product: ProductStore(id: 'id', name: 'name', unitPrice: 15.0),
+          quantity: 2);
+      // Act
+      store.containerCartList[0].delete(cartItem);
+      // Assert
+      expect(0, store.containerCartList[0].cartList.length);
     });
   });
 }
