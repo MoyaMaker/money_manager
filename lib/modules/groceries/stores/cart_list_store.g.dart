@@ -78,13 +78,13 @@ mixin _$CartListStore on _CartListStore, Store {
       Atom(name: '_CartListStore.listName', context: context);
 
   @override
-  String get listName {
+  String? get listName {
     _$listNameAtom.reportRead();
     return super.listName;
   }
 
   @override
-  set listName(String value) {
+  set listName(String? value) {
     _$listNameAtom.reportWrite(value, super.listName, () {
       super.listName = value;
     });
@@ -110,11 +110,44 @@ mixin _$CartListStore on _CartListStore, Store {
       ActionController(name: '_CartListStore', context: context);
 
   @override
-  void _setId() {
+  void editListName(String name) {
     final _$actionInfo = _$_CartListStoreActionController.startAction(
-        name: '_CartListStore._setId');
+        name: '_CartListStore.editListName');
     try {
-      return super._setId();
+      return super.editListName(name);
+    } finally {
+      _$_CartListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void add(CartItemStore value) {
+    final _$actionInfo = _$_CartListStoreActionController.startAction(
+        name: '_CartListStore.add');
+    try {
+      return super.add(value);
+    } finally {
+      _$_CartListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void edit(int index, CartItemStore value) {
+    final _$actionInfo = _$_CartListStoreActionController.startAction(
+        name: '_CartListStore.edit');
+    try {
+      return super.edit(index, value);
+    } finally {
+      _$_CartListStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool delete(CartItemStore value) {
+    final _$actionInfo = _$_CartListStoreActionController.startAction(
+        name: '_CartListStore.delete');
+    try {
+      return super.delete(value);
     } finally {
       _$_CartListStoreActionController.endAction(_$actionInfo);
     }

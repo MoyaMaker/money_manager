@@ -13,8 +13,7 @@ abstract class _ContainerCartListStore with Store {
   _ContainerCartListStore() {
     _disposers = [
       autorun((_) {
-        containerCartList = ObservableList.of([]);
-
+        // If list is empty should create a default list
         if (containerCartList.isEmpty) {
           createList();
         }
@@ -23,7 +22,7 @@ abstract class _ContainerCartListStore with Store {
   }
 
   @observable
-  late ObservableList<CartListStore> containerCartList;
+  ObservableList<CartListStore> containerCartList = ObservableList.of([]);
 
   @action
   void createList() {
@@ -38,28 +37,41 @@ abstract class _ContainerCartListStore with Store {
   }
 }
 
-class CartListStore extends _CartListStore with _$CartListStore {
-  CartListStore({String listName = 'Nueva lista'}) : super(listName);
-}
+class CartListStore extends _CartListStore with _$CartListStore {}
 
 abstract class _CartListStore with Store {
   late List<ReactionDisposer> _disposers;
 
-  _CartListStore(this.listName) {
+  _CartListStore() {
     _disposers = [];
   }
 
   @observable
-  late String id;
+  String id = const Uuid().v1();
 
   @observable
-  late String listName;
+  String? listName = 'Nueva lista';
 
   @observable
   ObservableList<CartItemStore> cartList = ObservableList.of([]);
 
   @action
-  void _setId() => id = const Uuid().v1();
+  void editListName(String name) => listName = name;
+
+  @action
+  void add(CartItemStore value) {
+    return cartList.add(value);
+  }
+
+  @action
+  void edit(int index, CartItemStore value) {
+    cartList[index] = value;
+  }
+
+  @action
+  bool delete(CartItemStore value) {
+    return cartList.remove(value);
+  }
 
   @action
   void dispose() {
