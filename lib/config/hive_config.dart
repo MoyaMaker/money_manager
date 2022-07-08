@@ -3,11 +3,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:money_manager/modules/credit_card/stores/credit_card_store.dart';
 import 'package:money_manager/modules/groceries/enums/promotions_enum.dart';
 import 'package:money_manager/modules/groceries/models/receipt_model.dart';
+import 'package:money_manager/modules/groceries/providers/container_cart_list_collection.dart';
 import 'package:money_manager/modules/groceries/providers/products_collection.dart';
 import 'package:money_manager/modules/groceries/providers/settings_collection.dart';
+import 'package:money_manager/modules/groceries/providers/shopping_cart_collection.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/settings/theme_mode_store.dart';
+import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
 
 hiveConfig() async {
   await Hive.initFlutter();
@@ -25,4 +28,11 @@ hiveConfig() async {
 
   // Open box to loading products
   await Hive.openBox<ProductStore>(ProductsCollection.boxName);
+
+  // Open box to shopping cart
+  /// deprecated
+  await Hive.openBox<CartItemStore>(ShoppingCartCollection.boxName);
+
+  // New box for shopping cart
+  await Hive.openBox<ShoppingCartStore>(ContainerCartListCollection.boxName);
 }

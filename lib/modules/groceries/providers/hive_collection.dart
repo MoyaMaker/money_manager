@@ -1,10 +1,9 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class CollectionHive<T> {
-  // ignore: unused_field
-  late Box<T> _box;
-
   Future<Box<T>> init();
+
+  Future<Box<T>> openBox();
 
   Iterable<T> get values;
 
@@ -18,5 +17,5 @@ abstract class CollectionHive<T> {
 
   Future<void> delete(int key);
 
-  close();
+  void close();
 }

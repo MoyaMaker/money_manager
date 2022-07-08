@@ -32,10 +32,8 @@ abstract class _PaymentStore with Store {
 
   @action
   void createReceipt() {
-    shoppingCartStore.setId();
-
     receiptHistoryStore.saveReceipt(
-        shoppingCartStore.id!,
+        shoppingCartStore.id,
         shoppingCartStore.storeName,
         shoppingCartStore.buyDate,
         shoppingCartStore.checkedItems);
