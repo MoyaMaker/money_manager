@@ -17,4 +17,6 @@ abstract class CollectionHive<T> {
   Future<void> edit(int key, T value);
 
   Future<void> delete(int key);
+
+  close();
 }
