@@ -106,7 +106,7 @@ abstract class _ShoppingCartStore with Store {
   String id = const Uuid().v1();
 
   @observable
-  late ObservableList<CartItemStore> cartItems = ObservableList.of([]);
+  ObservableList<CartItemStore> cartItems = ObservableList.of([]);
 
   @observable
   DateTime buyDate = DateTime.now();

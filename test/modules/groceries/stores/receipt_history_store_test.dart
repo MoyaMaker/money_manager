@@ -55,15 +55,11 @@ void main() {
     });
 
     test('add item in store', () async {
-      final shoppingCart = ShoppingCartStore(
-          id: '0',
-          storeName: 'Soriana',
-          buyDate: DateTime.now(),
-          items: ObservableList.of([
-            CartItemStore(
-                quantity: 2,
-                product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0))
-          ]));
+      final shoppingCart = ShoppingCartStore(storeName: 'Soriana');
+
+      shoppingCart.addItem(CartItemStore(
+          quantity: 2,
+          product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0)));
 
       await receiptHistoryStore.saveReceipt(
           shoppingCart.id!,
@@ -76,15 +72,11 @@ void main() {
 
     test('delete item from list and hive', () async {
       // Arrange
-      final shoppingCart = ShoppingCartStore(
-          id: '1',
-          storeName: 'HEB',
-          buyDate: DateTime.now(),
-          items: ObservableList.of([
-            CartItemStore(
-                quantity: 3,
-                product: ProductStore(id: '1', name: 'Item2 ', unitPrice: 23.0))
-          ]));
+      final shoppingCart = ShoppingCartStore(storeName: 'HEB');
+
+      shoppingCart.addItem(CartItemStore(
+          quantity: 3,
+          product: ProductStore(id: '1', name: 'Item2 ', unitPrice: 23.0)));
 
       // This item should be order in list, so this will be the first item in the list
       receiptHistoryStore.saveReceipt(shoppingCart.id!, shoppingCart.storeName,

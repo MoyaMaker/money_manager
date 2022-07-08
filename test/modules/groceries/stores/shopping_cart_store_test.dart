@@ -180,10 +180,7 @@ void main() {
       });
 
       shoppingCartStore.setSelectAll(true);
-
-      shoppingCartStore.setId();
       shoppingCartStore.setStoreName('Soriana');
-      shoppingCartStore.setBuyDate(DateTime(2021, 7, 12));
       // Act
       shoppingCartStore.cleanCart();
       // Assert
