@@ -26,7 +26,6 @@ import 'package:money_manager/modules/groceries/widgets/edit_product_widget.dart
 import 'package:money_manager/modules/groceries/widgets/form_cart_item_widget.dart';
 import 'package:money_manager/modules/groceries/widgets/product_widget.dart';
 import 'package:money_manager/modules/groceries/providers/products_collection.dart';
-import 'package:money_manager/modules/groceries/providers/shopping_cart_collection.dart';
 import 'package:money_manager/modules/groceries/providers/hive_collection.dart';
 import 'package:money_manager/modules/groceries/providers/settings_collection.dart';
 import 'package:money_manager/modules/groceries/stores/payment_store.dart';
@@ -36,7 +35,6 @@ import 'package:money_manager/modules/groceries/stores/settings/theme_mode_store
 import 'package:money_manager/modules/groceries/stores/settings/backup_store.dart';
 import 'package:money_manager/modules/groceries/stores/cart_item_store.dart';
 import 'package:money_manager/modules/groceries/stores/shopping_cart_store.dart';
-import 'package:money_manager/modules/groceries/stores/cart_list_store.dart';
 import 'package:money_manager/modules/groceries/stores/product_store.dart';
 import 'package:money_manager/modules/groceries/stores/form_validation/form_cart_item_store.dart';
 import 'package:money_manager/modules/groceries/models/receipt_model.dart';
@@ -55,4 +53,5 @@ import 'package:money_manager/modules/groceries/enums/promotions_enum.dart';
 import 'package:money_manager/modules/expenses_control/models/expenses_control_model.dart';
 import 'package:money_manager/modules/expenses_control/expenses_control_page.dart';
 import 'package:money_manager/main.dart';
-void main(){}
+
+void main() {}
