@@ -1,70 +1,11 @@
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
-import 'package:money_manager/modules/groceries/providers/container_cart_list_collection.dart';
 import 'package:money_manager/modules/groceries/providers/shopping_cart_collection.dart';
 import 'package:uuid/uuid.dart';
 
 import 'cart_item_store.dart';
 
 part 'shopping_cart_store.g.dart';
-
-class ContainerCartListStore extends _ContainerCartListStore
-    with _$ContainerCartListStore {}
-
-abstract class _ContainerCartListStore with Store {
-  late List<ReactionDisposer> _disposers;
-
-  final collection = ContainerCartListCollection();
-
-  _ContainerCartListStore() {
-    _disposers = [
-      autorun((_) {
-        carts = ObservableList.of(collection.values);
-      })
-    ];
-  }
-
-  @observable
-  ObservableList<ShoppingCartStore> carts = ObservableList.of([]);
-
-  @action
-  void add(ShoppingCartStore cart) {
-    collection.add(cart);
-    carts.add(cart);
-  }
-
-  @action
-  void delete(ShoppingCartStore cart) {
-    final key = findKeyInMap(cart);
-
-    if (key >= 0) {
-      collection.delete(key);
-      carts.remove(cart);
-    }
-  }
-
-  @action
-  int findKeyInMap(ShoppingCartStore cart) {
-    final mapCartItems = collection.toMap().cast<int, ShoppingCartStore>();
-
-    int resultKey = -1;
-
-    mapCartItems.forEach((key, value) {
-      if (value.id == cart.id) {
-        resultKey = key;
-      }
-    });
-
-    return resultKey;
-  }
-
-  @action
-  void dispose() {
-    for (var d in _disposers) {
-      d();
-    }
-  }
-}
 
 class ShoppingCartStore extends _ShoppingCartStore with _$ShoppingCartStore {
   ShoppingCartStore({String storeName = ''}) : super(storeName: storeName);
