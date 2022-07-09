@@ -62,7 +62,7 @@ void main() {
           product: ProductStore(id: '0', name: 'Item', unitPrice: 15.0)));
 
       await receiptHistoryStore.saveReceipt(
-          shoppingCart.id!,
+          shoppingCart.id,
           shoppingCart.storeName,
           shoppingCart.buyDate,
           shoppingCart.checkedItems);
@@ -79,7 +79,7 @@ void main() {
           product: ProductStore(id: '1', name: 'Item2 ', unitPrice: 23.0)));
 
       // This item should be order in list, so this will be the first item in the list
-      receiptHistoryStore.saveReceipt(shoppingCart.id!, shoppingCart.storeName,
+      receiptHistoryStore.saveReceipt(shoppingCart.id, shoppingCart.storeName,
           shoppingCart.buyDate, shoppingCart.checkedItems);
 
       final receiptToDelete = receiptHistoryStore.shoppedItems[1];
