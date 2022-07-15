@@ -13,15 +13,23 @@ class CartCollection {
 
   Map<int, CartItemStore> toMap() => _box.toMap().cast<int, CartItemStore>();
 
-  Future<int> add(value) {
+  CartItemStore? getAt(int index) {
+    return _box.getAt(index);
+  }
+
+  Future<int> add(CartItemStore value) {
     return _box.add(value);
   }
 
-  Future<void> delete(key) {
+  Future<void> delete(int key) {
     return _box.delete(key);
   }
 
-  Future<void> edit(key, value) {
+  Future<void> edit(int key, CartItemStore value) {
     return _box.put(key, value);
+  }
+
+  Future<void> editAt(int index, CartItemStore value) {
+    return _box.putAt(index, value);
   }
 }
