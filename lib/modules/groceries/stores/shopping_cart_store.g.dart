@@ -151,14 +151,6 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
-  late final _$_initBoxAsyncAction =
-      AsyncAction('_ShoppingCartStore._initBox', context: context);
-
-  @override
-  Future<void> _initBox() {
-    return _$_initBoxAsyncAction.run(() => super._initBox());
-  }
-
   late final _$_ShoppingCartStoreActionController =
       ActionController(name: '_ShoppingCartStore', context: context);
 

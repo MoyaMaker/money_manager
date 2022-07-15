@@ -1,9 +1,9 @@
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import 'cart_item_store.dart';
+import 'package:money_manager/modules/groceries/providers/cart_collection.dart';
 
 part 'shopping_cart_store.g.dart';
 
@@ -26,10 +26,8 @@ abstract class _ShoppingCartStore with Store {
         cartItems = items ?? ObservableList.of([]) {
     _disposers = [
       autorun((_) async {
-        await _initBox();
-
         // Init values in list
-        cartItems = ObservableList.of(_box.values.toList());
+        cartItems = ObservableList.of(_cartCollection.values);
       }, name: 'Initialize hive box and load cart items saved'),
       reaction((_) => selectAll, (bool selected) {
         for (var item in cartItems) {
@@ -52,9 +50,9 @@ abstract class _ShoppingCartStore with Store {
     ];
   }
 
-  late Box<CartItemStore> _box;
-
   late List<ReactionDisposer> _disposers;
+
+  final _cartCollection = CartCollection();
 
   @observable
   String? id;
@@ -148,7 +146,7 @@ abstract class _ShoppingCartStore with Store {
 
   @action
   int findKeyInMap(CartItemStore cartItem) {
-    final mapCartItems = _box.toMap().cast<int, CartItemStore>();
+    final mapCartItems = _cartCollection.toMap();
 
     int resultKey = -1;
 
@@ -171,7 +169,7 @@ abstract class _ShoppingCartStore with Store {
     if (indexItem == -1) {
       cartItems.add(cartItem);
       // Save in hive
-      _box.add(cartItem);
+      _cartCollection.add(cartItem);
     } else {
       final oldItem = cartItems[indexItem];
 
@@ -182,7 +180,7 @@ abstract class _ShoppingCartStore with Store {
 
       final key = findKeyInMap(cartItem);
 
-      _box.put(key, cartItems[indexItem]);
+      _cartCollection.edit(key, cartItems[indexItem]);
     }
   }
 
@@ -193,7 +191,7 @@ abstract class _ShoppingCartStore with Store {
     cartItems[index].quantity = cartItem.quantity;
     cartItems[index].product.unitPrice = cartItem.product.unitPrice;
 
-    _box.put(key, cartItems[index]);
+    _cartCollection.edit(key, cartItems[index]);
   }
 
   @action
@@ -202,7 +200,7 @@ abstract class _ShoppingCartStore with Store {
 
     cartItems.remove(cartItem);
 
-    _box.delete(key);
+    _cartCollection.delete(key);
   }
 
   @action
@@ -245,26 +243,12 @@ abstract class _ShoppingCartStore with Store {
   void updateAllItemsInHive() {
     for (var element in cartItems) {
       final key = findKeyInMap(element);
-      _box.put(key, element);
+      _cartCollection.edit(key, element);
     }
   }
-
-  @action
-  Future<void> _initBox() async {
-    const boxName = 'shopping_cart';
-
-    if (Hive.isBoxOpen(boxName)) {
-      _box = Hive.box<CartItemStore>(boxName);
-    } else {
-      _box = await Hive.openBox<CartItemStore>(boxName);
-    }
-  }
-
-  Future<void> _disposeBox() => _box.close();
 
   @action
   void dispose() {
-    _disposeBox();
     for (var d in _disposers) {
       d();
     }
