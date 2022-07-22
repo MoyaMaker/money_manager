@@ -39,16 +39,20 @@ abstract class _ShoppingCartStore with Store {
 
         updateAllItemsInHive();
       }, name: 'Reaction for check all items in shopping cart'),
-      reaction((_) => cartItems.length, (_) => orderListForCheckedMethods(),
-          name: 'Order new item when is added'),
       reaction((_) => checkedItems.length, (length) {
         /// Block order in case select all elements.
         /// Always `length` return the length of `countItems` when "select all" change to true
         /// in that case just block order when select all
         if (length == countItems) return;
 
-        orderListForCheckedMethods();
-        updateAllItemsInHive();
+        final indexChecked =
+            cartItems.indexWhere((element) => element.hasChecked == true);
+
+        if (indexChecked >= 0) {
+          reorderItem(indexChecked, countItems);
+
+          updateAllItemsInHive();
+        }
       }, name: 'Reaction for order list when product has checked')
     ];
   }
@@ -146,8 +150,6 @@ abstract class _ShoppingCartStore with Store {
 
     final item = cartItems.removeAt(oldIndex);
     cartItems.insert(newIndex, item);
-
-    updateAllItemsInHive();
   }
 
   @action
@@ -182,9 +184,13 @@ abstract class _ShoppingCartStore with Store {
     final indexItem = findItemIndex(cartItem);
 
     if (indexItem == -1) {
-      cartItems.add(cartItem);
+      cartItems.insert(0, cartItem);
       // Save in hive
       _cartCollection.add(cartItem);
+
+      updatePositionIndex();
+
+      updateAllItemsInHive();
     } else {
       final oldItem = cartItems[indexItem];
 
@@ -225,15 +231,6 @@ abstract class _ShoppingCartStore with Store {
   void setStoreName(String value) => storeName = value;
 
   @action
-  void orderListForCheckedMethods() {
-    final copyList = cartItems;
-
-    copyList.sort(((a, b) => a.hasChecked ? 1 : -1));
-
-    cartItems = ObservableList.of(copyList);
-  }
-
-  @action
   void cleanCart() {
     id = null;
     storeName = '';
@@ -250,6 +247,15 @@ abstract class _ShoppingCartStore with Store {
     return checkedItems
         .firstWhere((element) => element.product.id == item.product.id)
         .hasChecked;
+  }
+
+  @action
+  void updatePositionIndex() {
+    // Should be doing a for in
+    // TODO: Improve this
+    for (var i = 0; i < cartItems.length; i++) {
+      cartItems[i].setPositionIndex(i);
+    }
   }
 
   /// Update items in box

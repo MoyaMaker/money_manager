@@ -265,17 +265,6 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
-  void orderListForCheckedMethods() {
-    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
-        name: '_ShoppingCartStore.orderListForCheckedMethods');
-    try {
-      return super.orderListForCheckedMethods();
-    } finally {
-      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void cleanCart() {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.cleanCart');
@@ -292,6 +281,17 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
         name: '_ShoppingCartStore.thisItemIsChecked');
     try {
       return super.thisItemIsChecked(item);
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updatePositionIndex() {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.updatePositionIndex');
+    try {
+      return super.updatePositionIndex();
     } finally {
       _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
     }
