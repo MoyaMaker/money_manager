@@ -155,6 +155,17 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
       ActionController(name: '_ShoppingCartStore', context: context);
 
   @override
+  void reorderItem(int oldIndex, int newIndex) {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.reorderItem');
+    try {
+      return super.reorderItem(oldIndex, newIndex);
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setId() {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.setId');

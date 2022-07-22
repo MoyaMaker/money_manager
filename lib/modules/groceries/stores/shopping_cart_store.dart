@@ -26,8 +26,11 @@ abstract class _ShoppingCartStore with Store {
         cartItems = items ?? ObservableList.of([]) {
     _disposers = [
       autorun((_) async {
+        final copyList = List<CartItemStore>.from(_cartCollection.values);
+
+        copyList.sort((a, b) => a.positionIndex.compareTo(b.positionIndex));
         // Init values in list
-        cartItems = ObservableList.of(_cartCollection.values);
+        cartItems = ObservableList.of(copyList);
       }, name: 'Initialize hive box and load cart items saved'),
       reaction((_) => selectAll, (bool selected) {
         for (var item in cartItems) {
@@ -133,6 +136,18 @@ abstract class _ShoppingCartStore with Store {
     }
 
     return valid;
+  }
+
+  @action
+  void reorderItem(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final item = cartItems.removeAt(oldIndex);
+    cartItems.insert(newIndex, item);
+
+    updateAllItemsInHive();
   }
 
   @action

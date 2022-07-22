@@ -21,13 +21,15 @@ class CartItemAdapter extends TypeAdapter<CartItemStore> {
       quantity: fields[1] as double,
       promotion: fields[2] as Promotions?,
       discount: fields[3] as double?,
-    )..hasChecked = fields[4] == null ? false : fields[4] as bool;
+    )
+      ..hasChecked = fields[4] == null ? false : fields[4] as bool
+      ..positionIndex = fields[5] == null ? 0 : fields[5] as int;
   }
 
   @override
   void write(BinaryWriter writer, CartItemStore obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.product)
       ..writeByte(1)
@@ -37,7 +39,9 @@ class CartItemAdapter extends TypeAdapter<CartItemStore> {
       ..writeByte(3)
       ..write(obj.discount)
       ..writeByte(4)
-      ..write(obj.hasChecked);
+      ..write(obj.hasChecked)
+      ..writeByte(5)
+      ..write(obj.positionIndex);
   }
 
   @override
@@ -64,7 +68,8 @@ CartItemStore _$CartItemStoreFromJson(Map<String, dynamic> json) =>
       discount: (json['discount'] as num?)?.toDouble(),
     )
       ..showDetails = json['showDetails'] as bool? ?? false
-      ..hasChecked = json['hasChecked'] as bool;
+      ..hasChecked = json['hasChecked'] as bool
+      ..positionIndex = json['positionIndex'] as int;
 
 Map<String, dynamic> _$CartItemStoreToJson(CartItemStore instance) =>
     <String, dynamic>{
@@ -74,6 +79,7 @@ Map<String, dynamic> _$CartItemStoreToJson(CartItemStore instance) =>
       'promotion': _$PromotionsEnumMap[instance.promotion],
       'discount': instance.discount,
       'hasChecked': instance.hasChecked,
+      'positionIndex': instance.positionIndex,
     };
 
 const _$PromotionsEnumMap = {

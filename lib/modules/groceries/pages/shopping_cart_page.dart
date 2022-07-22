@@ -81,17 +81,16 @@ class GroceriesShoppingCartPage extends StatelessWidget {
       return const Center(child: Text('No hay productos en carrito'));
     }
 
-    return ListView.separated(
+    return ReorderableListView.builder(
         itemCount: _shoppingCartStore.countItems,
-        separatorBuilder: (_, __) => const Divider(
-              thickness: 0.5,
-              indent: 0.0,
-              height: 1.0,
-              color: Colors.grey,
-            ),
-        itemBuilder: (context, index) => Observer(
-            builder: (_) =>
-                cartItem(context, index, _shoppingCartStore.cartItems[index])));
+        onReorder: _shoppingCartStore.reorderItem,
+        itemBuilder: (context, index) {
+          final item = _shoppingCartStore.cartItems[index];
+
+          item.setPositionIndex(index);
+
+          return cartItem(context, index, item);
+        });
   }
 
   Widget cartItem(BuildContext context, int index, CartItemStore cartItem) {

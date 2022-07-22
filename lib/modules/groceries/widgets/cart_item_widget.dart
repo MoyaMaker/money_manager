@@ -159,7 +159,13 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                         .setShowDetails(!widget.cartItem.showDetails),
                     icon: widget.cartItem.showDetails
                         ? const Icon(Icons.keyboard_arrow_up)
-                        : const Icon(Icons.keyboard_arrow_down))
+                        : const Icon(Icons.keyboard_arrow_down)),
+
+                ReorderableDragStartListener(
+                    index: widget.cartItem.positionIndex,
+                    child: const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Icon(Icons.drag_handle)))
               ],
             ),
           ),
