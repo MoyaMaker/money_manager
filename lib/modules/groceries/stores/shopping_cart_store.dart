@@ -1,9 +1,9 @@
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import 'cart_item_store.dart';
+import 'package:money_manager/modules/groceries/providers/cart_collection.dart';
 
 part 'shopping_cart_store.g.dart';
 
@@ -26,10 +26,11 @@ abstract class _ShoppingCartStore with Store {
         cartItems = items ?? ObservableList.of([]) {
     _disposers = [
       autorun((_) async {
-        await _initBox();
+        final copyList = List<CartItemStore>.from(_cartCollection.values);
 
+        copyList.sort((a, b) => a.positionIndex.compareTo(b.positionIndex));
         // Init values in list
-        cartItems = ObservableList.of(_box.values.toList());
+        cartItems = ObservableList.of(copyList);
       }, name: 'Initialize hive box and load cart items saved'),
       reaction((_) => selectAll, (bool selected) {
         for (var item in cartItems) {
@@ -38,23 +39,29 @@ abstract class _ShoppingCartStore with Store {
 
         updateAllItemsInHive();
       }, name: 'Reaction for check all items in shopping cart'),
-      reaction((_) => cartItems.length, (_) => orderListForCheckedMethods(),
-          name: 'Order new item when is added'),
       reaction((_) => checkedItems.length, (length) {
         /// Block order in case select all elements.
         /// Always `length` return the length of `countItems` when "select all" change to true
         /// in that case just block order when select all
         if (length == countItems) return;
 
-        orderListForCheckedMethods();
-        updateAllItemsInHive();
+        final indexChecked =
+            cartItems.indexWhere((element) => element.hasChecked == true);
+
+        if (indexChecked >= 0) {
+          reorderItem(indexChecked, countItems);
+
+          updatePositionIndex();
+
+          updateAllItemsInHive();
+        }
       }, name: 'Reaction for order list when product has checked')
     ];
   }
 
-  late Box<CartItemStore> _box;
-
   late List<ReactionDisposer> _disposers;
+
+  final _cartCollection = CartCollection();
 
   @observable
   String? id;
@@ -138,6 +145,16 @@ abstract class _ShoppingCartStore with Store {
   }
 
   @action
+  void reorderItem(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final item = cartItems.removeAt(oldIndex);
+    cartItems.insert(newIndex, item);
+  }
+
+  @action
   void setId() => id = const Uuid().v1();
 
   @action
@@ -148,7 +165,7 @@ abstract class _ShoppingCartStore with Store {
 
   @action
   int findKeyInMap(CartItemStore cartItem) {
-    final mapCartItems = _box.toMap().cast<int, CartItemStore>();
+    final mapCartItems = _cartCollection.toMap();
 
     int resultKey = -1;
 
@@ -169,9 +186,13 @@ abstract class _ShoppingCartStore with Store {
     final indexItem = findItemIndex(cartItem);
 
     if (indexItem == -1) {
-      cartItems.add(cartItem);
+      cartItems.insert(0, cartItem);
       // Save in hive
-      _box.add(cartItem);
+      _cartCollection.add(cartItem);
+
+      updatePositionIndex();
+
+      updateAllItemsInHive();
     } else {
       final oldItem = cartItems[indexItem];
 
@@ -182,7 +203,7 @@ abstract class _ShoppingCartStore with Store {
 
       final key = findKeyInMap(cartItem);
 
-      _box.put(key, cartItems[indexItem]);
+      _cartCollection.edit(key, cartItems[indexItem]);
     }
   }
 
@@ -193,7 +214,7 @@ abstract class _ShoppingCartStore with Store {
     cartItems[index].quantity = cartItem.quantity;
     cartItems[index].product.unitPrice = cartItem.product.unitPrice;
 
-    _box.put(key, cartItems[index]);
+    _cartCollection.edit(key, cartItems[index]);
   }
 
   @action
@@ -202,7 +223,7 @@ abstract class _ShoppingCartStore with Store {
 
     cartItems.remove(cartItem);
 
-    _box.delete(key);
+    _cartCollection.delete(key);
   }
 
   @action
@@ -210,15 +231,6 @@ abstract class _ShoppingCartStore with Store {
 
   @action
   void setStoreName(String value) => storeName = value;
-
-  @action
-  void orderListForCheckedMethods() {
-    final copyList = cartItems;
-
-    copyList.sort(((a, b) => a.hasChecked ? 1 : -1));
-
-    cartItems = ObservableList.of(copyList);
-  }
 
   @action
   void cleanCart() {
@@ -239,32 +251,27 @@ abstract class _ShoppingCartStore with Store {
         .hasChecked;
   }
 
+  @action
+  void updatePositionIndex() {
+    // Should be doing a for in
+    // TODO: Improve this
+    for (var i = 0; i < cartItems.length; i++) {
+      cartItems[i].setPositionIndex(i);
+    }
+  }
+
   /// Update items in box
   /// To save when item has checked
   @action
   void updateAllItemsInHive() {
     for (var element in cartItems) {
       final key = findKeyInMap(element);
-      _box.put(key, element);
+      _cartCollection.edit(key, element);
     }
   }
-
-  @action
-  Future<void> _initBox() async {
-    const boxName = 'shopping_cart';
-
-    if (Hive.isBoxOpen(boxName)) {
-      _box = Hive.box<CartItemStore>(boxName);
-    } else {
-      _box = await Hive.openBox<CartItemStore>(boxName);
-    }
-  }
-
-  Future<void> _disposeBox() => _box.close();
 
   @action
   void dispose() {
-    _disposeBox();
     for (var d in _disposers) {
       d();
     }

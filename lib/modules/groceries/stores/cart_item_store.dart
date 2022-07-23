@@ -72,6 +72,9 @@ abstract class _CartItemStore with Store {
   @observable
   bool hasChecked = false;
 
+  @HiveField(5, defaultValue: 0)
+  int positionIndex = 0;
+
   @computed
   double get total {
     if (promotion!.showTextField && discount == null) {
@@ -176,6 +179,8 @@ abstract class _CartItemStore with Store {
 
   @action
   void setDiscount(double? value) => discount = value;
+
+  void setPositionIndex(int value) => positionIndex = value;
 
   @action
   void removeDiscount() {

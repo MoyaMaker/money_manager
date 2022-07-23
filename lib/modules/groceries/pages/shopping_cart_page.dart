@@ -65,7 +65,7 @@ class GroceriesShoppingCartPage extends StatelessWidget {
               )
             ],
           ),
-          Expanded(child: Observer(builder: (_) => listItems())),
+          Expanded(child: Observer(builder: (_) => listItems(context))),
           const Divider(
             height: 0.0,
             indent: 0.0,
@@ -76,25 +76,27 @@ class GroceriesShoppingCartPage extends StatelessWidget {
         ]));
   }
 
-  Widget listItems() {
+  Widget listItems(BuildContext context) {
     if (!_shoppingCartStore.hasItems) {
       return const Center(child: Text('No hay productos en carrito'));
     }
 
-    return ListView.separated(
-        itemCount: _shoppingCartStore.countItems,
-        separatorBuilder: (_, __) => const Divider(
-              thickness: 0.5,
-              indent: 0.0,
-              height: 1.0,
-              color: Colors.grey,
-            ),
-        itemBuilder: (context, index) => Observer(
-            builder: (_) =>
-                cartItem(context, index, _shoppingCartStore.cartItems[index])));
+    return ReorderableListView(
+        onReorder: (int oldIndex, int newIndex) {
+          _shoppingCartStore.reorderItem(oldIndex, newIndex);
+
+          _shoppingCartStore.updateAllItemsInHive();
+        },
+        buildDefaultDragHandles: false,
+        children: <Widget>[
+          for (var i = 0; i < _shoppingCartStore.countItems; i++)
+            cartItem(context, i, _shoppingCartStore.cartItems[i]),
+        ]);
   }
 
   Widget cartItem(BuildContext context, int index, CartItemStore cartItem) {
+    cartItem.setPositionIndex(index);
+
     return CartItemWidget(
         key: Key(cartItem.product.id),
         cartItem: cartItem,

@@ -71,73 +71,55 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                         widget.cartItem.setHasChecked(newValue)),
                 // Name, unit price, subtotal
                 Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Name
-                        Text(widget.cartItem.product.name,
-                            style: const TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold)),
-                        // Unit price
-                        Text(widget.cartItem.product.unitPriceFormatted,
-                            style: const TextStyle(fontSize: 13.0)),
-                        // Subtotal Price
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Row(
+                    flex: 2,
+                    child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Show when has discount
-                              Visibility(
-                                visible: widget.cartItem.hasSomeDiscount,
-                                child: Container(
+                              // Name
+                              Text(widget.cartItem.product.name,
+                                  style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold)),
+                              // Unit price and quantity
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 3.0),
+                                child: Text(
+                                    '${widget.cartItem.product.unitPriceFormatted} x ${widget.cartItem.quantity}',
+                                    style: const TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w300)),
+                              ),
+                              // Subtotal Price
+                              Row(children: [
+                                // Subtotal price
+                                Container(
                                   margin: const EdgeInsets.only(right: 5.0),
-                                  child: Text(widget.cartItem.subtotalFormatted,
+                                  child: Text(widget.cartItem.totalFormatted,
                                       style: const TextStyle(
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                          fontSize: 16.0,
+                                          fontSize: 18.0,
                                           fontWeight: FontWeight.bold)),
                                 ),
-                              ),
-                              // Subtotal price
-                              Text(widget.cartItem.totalFormatted,
-                                  style: const TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // Quantity
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    children: [
-                      const Text('Cantidad', style: TextStyle(fontSize: 13.0)),
-                      Container(
-                          width: 70.0,
-                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                          padding: const EdgeInsets.all(5.0),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: BorderRadius.circular(15.0)),
-                          child: Text(widget.cartItem.quantity.toString(),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold))),
-                    ],
-                  ),
-                ),
+                                // Show when has discount
+                                Visibility(
+                                    visible: widget.cartItem.hasSomeDiscount,
+                                    child: Text(
+                                        widget.cartItem.subtotalFormatted,
+                                        style: TextStyle(
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            fontSize: 18.0,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2
+                                                ?.color!
+                                                .withOpacity(0.55),
+                                            fontWeight: FontWeight.w300)))
+                              ])
+                            ]))),
 
                 // Edit button
                 IconButton(
@@ -159,7 +141,13 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                         .setShowDetails(!widget.cartItem.showDetails),
                     icon: widget.cartItem.showDetails
                         ? const Icon(Icons.keyboard_arrow_up)
-                        : const Icon(Icons.keyboard_arrow_down))
+                        : const Icon(Icons.keyboard_arrow_down)),
+
+                ReorderableDragStartListener(
+                    index: widget.cartItem.positionIndex,
+                    child: const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Icon(Icons.drag_handle)))
               ],
             ),
           ),

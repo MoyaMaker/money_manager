@@ -151,16 +151,19 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
     });
   }
 
-  late final _$_initBoxAsyncAction =
-      AsyncAction('_ShoppingCartStore._initBox', context: context);
-
-  @override
-  Future<void> _initBox() {
-    return _$_initBoxAsyncAction.run(() => super._initBox());
-  }
-
   late final _$_ShoppingCartStoreActionController =
       ActionController(name: '_ShoppingCartStore', context: context);
+
+  @override
+  void reorderItem(int oldIndex, int newIndex) {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.reorderItem');
+    try {
+      return super.reorderItem(oldIndex, newIndex);
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setId() {
@@ -262,17 +265,6 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
   }
 
   @override
-  void orderListForCheckedMethods() {
-    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
-        name: '_ShoppingCartStore.orderListForCheckedMethods');
-    try {
-      return super.orderListForCheckedMethods();
-    } finally {
-      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void cleanCart() {
     final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
         name: '_ShoppingCartStore.cleanCart');
@@ -289,6 +281,17 @@ mixin _$ShoppingCartStore on _ShoppingCartStore, Store {
         name: '_ShoppingCartStore.thisItemIsChecked');
     try {
       return super.thisItemIsChecked(item);
+    } finally {
+      _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updatePositionIndex() {
+    final _$actionInfo = _$_ShoppingCartStoreActionController.startAction(
+        name: '_ShoppingCartStore.updatePositionIndex');
+    try {
+      return super.updatePositionIndex();
     } finally {
       _$_ShoppingCartStoreActionController.endAction(_$actionInfo);
     }
