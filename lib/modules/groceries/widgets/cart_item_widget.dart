@@ -95,25 +95,29 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                               ),
                               // Subtotal Price
                               Row(children: [
+                                // Subtotal price
+                                Container(
+                                  margin: const EdgeInsets.only(right: 5.0),
+                                  child: Text(widget.cartItem.totalFormatted,
+                                      style: const TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold)),
+                                ),
                                 // Show when has discount
                                 Visibility(
-                                  visible: widget.cartItem.hasSomeDiscount,
-                                  child: Container(
-                                    margin: const EdgeInsets.only(right: 5.0),
+                                    visible: widget.cartItem.hasSomeDiscount,
                                     child: Text(
                                         widget.cartItem.subtotalFormatted,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             decoration:
                                                 TextDecoration.lineThrough,
                                             fontSize: 18.0,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                ),
-                                // Subtotal price
-                                Text(widget.cartItem.totalFormatted,
-                                    style: const TextStyle(
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold))
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2
+                                                ?.color!
+                                                .withOpacity(0.55),
+                                            fontWeight: FontWeight.w300)))
                               ])
                             ]))),
 

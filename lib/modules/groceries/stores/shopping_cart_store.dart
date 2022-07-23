@@ -51,6 +51,8 @@ abstract class _ShoppingCartStore with Store {
         if (indexChecked >= 0) {
           reorderItem(indexChecked, countItems);
 
+          updatePositionIndex();
+
           updateAllItemsInHive();
         }
       }, name: 'Reaction for order list when product has checked')
